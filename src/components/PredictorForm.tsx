@@ -1146,7 +1146,14 @@ const ResultsDashboard = ({ estimate, formData }: { estimate: EstimateData; form
 
         <div className="flex justify-center space-x-4">
           <Button variant="outline" onClick={() => window.location.reload()}>Start New Estimate</Button>
-          <Button variant="hero"><ShoppingCart className="w-4 h-4 mr-2" />Proceed to Purchase</Button>
+          <Button
+  variant="hero"
+  onClick={() => window.location.href = "https://www.vcniti.com/collections"}
+>
+  <ShoppingCart className="w-4 h-4 mr-2" />
+  Proceed to Purchase
+</Button>
+
         </div>
       </div>
     </div>
