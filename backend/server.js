@@ -10,7 +10,8 @@ const port = process.env.PORT || 3001;
 // Middleware
 const corsOptions = {
   origin: [
-    'https://product-predictor-2.vercel.app',
+    'https://www.vcnititechnologies.com',
+    'https://vcnititechnologies.com',
     'http://localhost:5173' // Or whatever your local dev port is
   ],
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
