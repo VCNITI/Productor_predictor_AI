@@ -9,11 +9,7 @@ const port = process.env.PORT || 3001;
 
 // Middleware
 const corsOptions = {
-  origin: [
-    'https://www.vcnititechnologies.com',
-    'https://vcnititechnologies.com',
-    'http://localhost:5173' // Or whatever your local dev port is
-  ],
+  origin: '*',
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   optionsSuccessStatus: 200 // Some legacy browsers (IE11, various SmartTVs) choke on 204
 };
