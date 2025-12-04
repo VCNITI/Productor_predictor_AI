@@ -126,7 +126,7 @@ const getBrandsForMaterial = (category: string): string[] => {
    (Optional) GPT call helpers
    kept as-is from your file
 ----------------------------*/
-const OPENAI_API_KEY = import.meta.env.VITE_API_URL;
+const OPENAI_API_KEY = import.meta.env.VITE_OPENAI_API_KEY;
 const USE_MOCK_DATA = false;
 
 const generateMockEstimate = (formData: FormData): EstimateData => {
