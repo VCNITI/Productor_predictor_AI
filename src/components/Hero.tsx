@@ -257,14 +257,14 @@ const Hero = () => {
         {/* How it works */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-20">
           <div className="text-center space-y-4">
-            <div className="w-16 h-16 mx-auto gradient-hero rounded-full flex items-center justify-center text-white font-bold text-xl">
+            <div className="w-16 h-16 mx-auto bg-accent rounded-full flex items-center justify-center text-white font-bold text-xl">
               1
             </div>
             <h3 className="text-lg font-semibold">Input Project Details</h3>
             <p className="text-muted-foreground">Share your project size, type, and quality preferences</p>
           </div>
           <div className="text-center space-y-4">
-            <div className="w-16 h-16 mx-auto gradient-accent rounded-full flex items-center justify-center text-white font-bold text-xl">
+            <div className="w-16 h-16 mx-auto bg-accent rounded-full flex items-center justify-center text-white font-bold text-xl">
               2
             </div>
             <h3 className="text-lg font-semibold">Get Instant BOQ</h3>

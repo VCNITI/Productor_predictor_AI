@@ -24,9 +24,9 @@
     --secondary-foreground: 220 15% 15%;
     
     /* Steel blue accents */
-    --accent: 210 45% 45%;
+    --accent: 295 70% 68%;
     --accent-foreground: 0 0% 100%;
-    --accent-light: 210 45% 65%;
+    --accent-light: 295 70% 78%;
 
     --muted: 30 15% 95%;
     --muted-foreground: 220 10% 45%;
@@ -40,9 +40,8 @@
 
     --radius: 0.75rem;
 
-    /* Construction gradients */
-    --gradient-hero: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-glow)));
-    --gradient-accent: linear-gradient(135deg, hsl(var(--accent)), hsl(var(--accent-light)));
+    --gradient-hero: hsl(var(--primary));
+    --gradient-accent: hsl(var(--accent));
     --gradient-surface: linear-gradient(180deg, hsl(var(--background)), hsl(var(--muted)));
     
     /* Shadows */
@@ -72,9 +71,9 @@
     --secondary: 220 15% 15%;
     --secondary-foreground: 0 0% 95%;
 
-    --accent: 210 45% 55%;
+    --accent: 295 70% 78%;
     --accent-foreground: 0 0% 100%;
-    --accent-light: 210 45% 70%;
+    --accent-light: 295 70% 83%;
 
     --muted: 220 15% 12%;
     --muted-foreground: 220 10% 65%;
@@ -86,8 +85,8 @@
     --input: 220 15% 18%;
     --ring: 321 70% 60%;
 
-    --gradient-hero: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-glow)));
-    --gradient-accent: linear-gradient(135deg, hsl(var(--accent)), hsl(var(--accent-light)));
+    --gradient-hero: hsl(var(--primary));
+    --gradient-accent: hsl(var(--accent));
     --gradient-surface: linear-gradient(180deg, hsl(var(--background)), hsl(var(--muted)));
     
     --shadow-construction: 0 10px 30px -10px hsl(var(--primary) / 0.4);
