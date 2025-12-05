@@ -126,7 +126,6 @@ const getBrandsForMaterial = (category: string): string[] => {
    (Optional) GPT call helpers
    kept as-is from your file
 ----------------------------*/
-const OPENAI_API_KEY = import.meta.env.VITE_OPENAI_API_KEY;
 const USE_MOCK_DATA = false;
 
 const generateMockEstimate = (formData: FormData): EstimateData => {
@@ -267,58 +266,21 @@ Validation Requirements:
 Deliver exactly one JSON object as specified.`;
 
   try {
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+    const response = await fetch('/api/estimate', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${OPENAI_API_KEY}`,
-        'User-Agent': 'Construction-Estimator/1.0'
       },
-      body: JSON.stringify({
-        model: 'gpt-4o-mini',
-        messages: [
-          {
-            role: 'system',
-            content: 'You are a construction cost estimation expert for India. Respond only with valid JSON.'
-          },
-          {
-            role: 'user', 
-            content: prompt
-          }
-        ],
-        temperature: 0.2,
-        max_tokens: 1500,
-        top_p: 1,
-        frequency_penalty: 0,
-        presence_penalty: 0
-      })
+      body: JSON.stringify({ prompt }),
     });
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.error('OpenAI API Error:', response.status, errorText);
-      throw new Error(`OpenAI API error: ${response.status}`);
+      console.error('API Error:', response.status, errorText);
+      throw new Error(`API error: ${response.status}`);
     }
 
-    const data = await response.json();
-    
-    if (!data.choices || !data.choices[0] || !data.choices[0].message) {
-      throw new Error('Invalid API response structure');
-    }
-
-    const gptResponse = data.choices[0].message.content;
-
-    let parsedResponse;
-    try {
-      const cleanedResponse = gptResponse.trim();
-      const jsonMatch = cleanedResponse.match(/\{[\s\S]*\}/);
-      const jsonString = jsonMatch ? jsonMatch[0] : cleanedResponse;
-      parsedResponse = JSON.parse(jsonString);
-    } catch (parseError) {
-      console.error('JSON Parse Error:', parseError);
-      console.error('GPT Response:', gptResponse);
-      throw new Error('Could not parse AI response as JSON');
-    }
+    const parsedResponse = await response.json();
 
     if (!parsedResponse.materials || !Array.isArray(parsedResponse.materials)) {
       throw new Error('Invalid materials data from AI');
@@ -349,7 +311,7 @@ Deliver exactly one JSON object as specified.`;
     };
 
   } catch (error) {
-    console.error('GPT-4 API call failed:', error);
+    console.error('API call failed:', error);
     console.log('Falling back to enhanced mock data...');
     return generateMockEstimate(formData);
   }

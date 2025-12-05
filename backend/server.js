@@ -67,7 +67,7 @@ app.post('/api/contact', (req, res) => {
 // You might need to install 'node-fetch' if you are using an older version of Node.js
 // const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
 app.post('/api/estimate', async (req, res) => {
-    const { formData, prompt } = req.body;
+    const { prompt } = req.body;
     
     try {
       // Assuming 'fetch' is available (Node.js 18+)
@@ -92,7 +92,20 @@ app.post('/api/estimate', async (req, res) => {
       });
       
       const data = await response.json();
-      res.json({ content: data.choices[0].message.content });
+      const gptResponse = data.choices[0].message.content;
+
+      let parsedResponse;
+      try {
+        const cleanedResponse = gptResponse.trim();
+        const jsonMatch = cleanedResponse.match(/\{[\s\S]*\}/);
+        const jsonString = jsonMatch ? jsonMatch[0] : cleanedResponse;
+        parsedResponse = JSON.parse(jsonString);
+        res.json(parsedResponse);
+      } catch (parseError) {
+        console.error('JSON Parse Error:', parseError);
+        console.error('GPT Response:', gptResponse);
+        res.status(500).json({ error: 'Could not parse AI response as JSON' });
+      }
     } catch (error) {
       console.error('AI estimation failed:', error);
       res.status(500).json({ error: 'AI estimation failed' });
