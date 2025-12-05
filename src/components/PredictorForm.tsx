@@ -440,13 +440,13 @@ const MaterialSelectionStep = ({
         ))}
       </div>
 
-      <div className="flex justify-between items-center pt-4">
-        <Button variant="outline" onClick={onPrev} className="flex items-center">
+      <div className="flex flex-col md:flex-row justify-between items-center pt-4 gap-4 md:gap-2">
+        <Button variant="outline" onClick={onPrev} className="flex items-center w-full md:w-auto justify-center">
           <ArrowLeft className="w-4 h-4 mr-2" />
           Previous
         </Button>
 
-        <Button variant="hero" onClick={onNext} disabled={selectedMaterials.length === 0} className="flex items-center">
+        <Button variant="hero" onClick={onNext} disabled={selectedMaterials.length === 0} className="flex items-center w-full md:w-auto justify-center">
           Generate Final Estimate
           <ArrowRight className="w-4 h-4 ml-2" />
         </Button>
@@ -458,7 +458,7 @@ const MaterialSelectionStep = ({
 /* ---------------------------
    PredictorForm (main)
 ----------------------------*/
-const PredictorForm = () => {
+const PredictorForm = ({ id }: { id?: string }) => {
   const [currentStep, setCurrentStep] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState<FormData>({
@@ -761,7 +761,7 @@ const PredictorForm = () => {
   }
 
   return (
-    <section id="predictor" className="py-12 px-4">
+    <section id={id || "prediction-form"} className="py-12 px-4">
       <div className="max-w-4xl mx-auto">
         <Card className="shadow-lg">
           <CardHeader className="text-center space-y-4">
@@ -1106,16 +1106,16 @@ const ResultsDashboard = ({ estimate, formData }: { estimate: EstimateData; form
           </CardContent>
         </Card>
 
-        <div className="flex justify-center space-x-4">
-          <Button variant="outline" onClick={() => window.location.reload()}>Start New Estimate</Button>
+        <div className="flex flex-col md:flex-row justify-center items-center space-y-4 md:space-y-0 md:space-x-4">
+          <Button variant="outline" onClick={() => window.location.reload()} className="w-full md:w-auto">Start New Estimate</Button>
           <Button
-  variant="hero"
-  onClick={() => window.location.href = "https://www.vcniti.com/collections"}
->
-  <ShoppingCart className="w-4 h-4 mr-2" />
-  Proceed to Purchase
-</Button>
-
+            variant="hero"
+            onClick={() => window.location.href = "https://www.vcniti.com/collections"}
+            className="w-full md:w-auto"
+          >
+            <ShoppingCart className="w-4 h-4 mr-2" />
+            Proceed to Purchase
+          </Button>
         </div>
       </div>
     </div>
@@ -1133,4 +1133,4 @@ const App = () => {
   );
 };
 
-export default App;
+export default PredictorForm;

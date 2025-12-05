@@ -213,7 +213,7 @@ const Hero = () => {
             size="xl" 
             className="w-full sm:w-auto"
             onClick={() => {
-              const predictorSection = document.getElementById('predictor');
+              const predictorSection = document.getElementById('prediction-form');
               predictorSection?.scrollIntoView({ behavior: 'smooth' });
             }}
           >

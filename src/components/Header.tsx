@@ -1,9 +1,21 @@
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const handleGetStartedClick = () => {
+    setMobileMenuOpen(false); // Close mobile menu if open
+    if (location.pathname === "/") {
+      document.getElementById("prediction-form")?.scrollIntoView({ behavior: "smooth" });
+    } else {
+      navigate("/#prediction-form");
+    }
+  };
 
   const navigation = [
     { name: 'Home', href: '/' },
@@ -17,30 +29,30 @@ const Header = () => {
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center h-16">
           {/* Logo and Company Name */}
-          <div className="flex items-center space-x-4">
+          <a href="/" className="flex items-center space-x-4">
             <img 
               src="https://www.vcniti.in/cdn/shop/files/VCNITI_2_53328262-9352-4b08-89a8-5a8bf0b584d4.png?v=1751636432&width=70" 
               alt="Vcniti Logo" 
               className="h-10 w-10"
             />
             <div>
-              <h1 className="text-xl font-bold text-primary">Vcniti </h1>
+              <h1 className="text-xl font-bold text-primary">VCNITI </h1>
               <p className="text-sm text-muted-foreground hidden sm:block">Powering the Future of Buying Construction Materials</p>
             </div>
-          </div>
+          </a>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-6">
             {navigation.map((item) => (
-              <a
+              <Link
                 key={item.name}
-                href={item.href}
+                to={item.href}
                 className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
               >
                 {item.name}
-              </a>
+              </Link>
             ))}
-            <Button variant="hero" size="sm">
+            <Button variant="hero" size="sm" onClick={handleGetStartedClick}>
               Get Started
             </Button>
           </nav>
@@ -66,16 +78,16 @@ const Header = () => {
           <div className="md:hidden py-4 border-t">
             <nav className="flex flex-col space-y-4">
               {navigation.map((item) => (
-                <a
+                <Link
                   key={item.name}
-                  href={item.href}
+                  to={item.href}
                   className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   {item.name}
-                </a>
+                </Link>
               ))}
-              <Button variant="hero" size="sm" className="w-fit">
+              <Button variant="hero" size="sm" className="w-fit" onClick={handleGetStartedClick}>
                 Get Started
               </Button>
             </nav>

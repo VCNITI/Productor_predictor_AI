@@ -14,6 +14,12 @@ const Index = () => {
       const hash = window.location.hash.slice(1);
       if (hash === 'results') {
         setCurrentView('results');
+      } else if (hash === 'prediction-form') {
+        setCurrentView('home');
+        // Use a timeout to ensure the component is rendered before scrolling
+        setTimeout(() => {
+          document.getElementById('prediction-form')?.scrollIntoView({ behavior: 'smooth' });
+        }, 100);
       } else {
         setCurrentView('home');
       }
@@ -42,7 +48,7 @@ const Index = () => {
       <Header />
       <div className="flex-1">
         <Hero />
-        <PredictorForm />
+        <PredictorForm id="prediction-form" />
       </div>
       <Footer />
     </div>
