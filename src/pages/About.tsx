@@ -70,7 +70,7 @@ const About = () => {
             <motion.div variants={itemVariants}>
               <Badge variant="secondary" className="px-6 py-2">
                 <Target className="w-4 h-4 mr-2" />
-                About Vcniti
+                About VCNITI
               </Badge>
             </motion.div>
             
@@ -106,9 +106,9 @@ const About = () => {
           <div className="max-w-6xl mx-auto">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
               <div className="space-y-6">
-                <h2 className="text-3xl font-bold">About Vcniti Technologies</h2>
+                <h2 className="text-3xl font-bold">About VCNITI Technologies</h2>
                 <p className="text-lg text-muted-foreground">
-                  Vcniti Technologies Private Limited is pioneering the future of construction 
+                  VCNITI Technologies Private Limited is pioneering the future of construction 
                   material procurement through innovative technology solutions. Our AI-powered 
                   platform transforms how builders, contractors, and project managers estimate, 
                   source, and procure construction materials.

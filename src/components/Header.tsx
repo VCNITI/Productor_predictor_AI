@@ -41,6 +41,9 @@ const Header = () => {
     exit: { opacity: 0, y: -20 },
   };
 
+
+
+  
   return (
     <motion.header
       variants={headerVariants}

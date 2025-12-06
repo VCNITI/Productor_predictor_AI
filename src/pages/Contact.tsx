@@ -107,12 +107,12 @@ const Contact = () => {
             
             <motion.h1 variants={itemVariants} className="text-4xl md:text-6xl font-bold tracking-tight">
               Contact
-              <span className="text-primary gradient-hero bg-clip-text text-transparent"> Vcniti</span>
+              <span className="text-primary gradient-hero bg-clip-text text-transparent"> VCNITI</span>
             </motion.h1>
             
             <motion.p variants={itemVariants} className="text-xl text-muted-foreground max-w-2xl mx-auto">
               Ready to transform your construction material sourcing? Get in touch with our team 
-              and discover how Vcniti can streamline your projects.
+              and discover how VCNITI can streamline your projects.
             </motion.p>
           </div>
         </motion.section>
