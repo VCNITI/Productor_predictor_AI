@@ -1157,7 +1157,7 @@ const ResultsDashboard = ({
     const margin = 40;
 
     // Fetch logo and convert to base64
-    const response = await fetch("/src/components/logo.avif");
+    const response = await fetch("/logo.avif");
     const blob = await response.blob();
     const reader = new FileReader();
     const dataUrl = await new Promise<string>((resolve) => {

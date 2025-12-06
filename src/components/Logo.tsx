@@ -1,6 +1,5 @@
 // Logo.tsx
 import React from 'react';
-import logo from './logo.avif';
 
 interface LogoProps {
   className?: string;
@@ -9,7 +8,7 @@ interface LogoProps {
 const Logo: React.FC<LogoProps> = ({ className }) => {
   return (
     <img
-      src={logo}
+      src="/logo.avif"
       alt="Vcniti Logo"
       className={`h-12 w-auto ${className}`}
     />
