@@ -83,11 +83,10 @@ const About = () => {
 
             <motion.h1
               variants={itemVariants}
-              className="text-4xl md:text-6xl font-bold tracking-tight"
+              className="text-4xl md:text-6xl font-bold tracking-tight font-poppins"
             >
-              Transforming Construction
+              Transforming Construction{" "}
               <span className="text-primary gradient-hero bg-clip-text text-transparent">
-                {" "}
                 Material Sourcing
               </span>
             </motion.h1>
@@ -122,7 +121,7 @@ const About = () => {
           <div className="max-w-6xl mx-auto">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
               <div className="space-y-6">
-                <h2 className="text-3xl font-bold">
+                <h2 className="text-3xl font-bold font-poppins">
                   About VCNITI Technologies
                 </h2>
                 <p className="text-lg text-muted-foreground">
@@ -143,7 +142,7 @@ const About = () => {
                 <div className="grid grid-cols-2 gap-6 pt-4">
                   <div>
                     <div className="text-2xl font-bold text-primary">
-                      10,000+
+                      100+
                     </div>
                     <div className="text-sm text-muted-foreground">
                       Projects Estimated
@@ -189,7 +188,7 @@ const About = () => {
         >
           <div className="max-w-6xl mx-auto">
             <div className="text-center space-y-4 mb-16">
-              <h2 className="text-3xl font-bold">Our Services</h2>
+              <h2 className="text-3xl font-bold font-poppins">Our Services</h2>
               <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
                 Comprehensive solutions for all your construction material needs
               </p>
@@ -204,7 +203,7 @@ const About = () => {
                         <div className="w-16 h-16 mx-auto gradient-hero rounded-full flex items-center justify-center mb-4">
                           <service.icon className="w-8 h-8 text-white" />
                         </div>
-                        <CardTitle className="text-lg">
+                        <CardTitle className="text-lg font-poppins">
                           {service.title}
                         </CardTitle>
                       </CardHeader>
@@ -231,7 +230,7 @@ const About = () => {
         >
           <div className="max-w-6xl mx-auto">
             <div className="text-center space-y-4 mb-16">
-              <h2 className="text-3xl font-bold">Platform Features</h2>
+              <h2 className="text-3xl font-bold font-poppins">Platform Features</h2>
               <p className="text-lg text-muted-foreground">
                 Everything you need for efficient construction material
                 management
@@ -243,7 +242,7 @@ const About = () => {
                 <AnimatedCard>
                   <Card className="shadow-card h-full">
                     <CardHeader>
-                      <CardTitle>BOQ Generator</CardTitle>
+                      <CardTitle className="font-poppins">BOQ Generator</CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-4">
                       <p className="text-muted-foreground">
@@ -266,7 +265,7 @@ const About = () => {
                 <AnimatedCard>
                   <Card className="shadow-card h-full">
                     <CardHeader>
-                      <CardTitle>AI Cost Calculator</CardTitle>
+                      <CardTitle className="font-poppins">AI Cost Calculator</CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-4">
                       <p className="text-muted-foreground">
@@ -289,7 +288,7 @@ const About = () => {
                 <AnimatedCard>
                   <Card className="shadow-card h-full">
                     <CardHeader>
-                      <CardTitle>Brand Matching</CardTitle>
+                      <CardTitle className="font-poppins">Brand Matching</CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-4">
                       <p className="text-muted-foreground">
@@ -312,7 +311,7 @@ const About = () => {
                 <AnimatedCard>
                   <Card className="shadow-card h-full">
                     <CardHeader>
-                      <CardTitle>Eco-Friendly Alternatives</CardTitle>
+                      <CardTitle className="font-poppins">Eco-Friendly Alternatives</CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-4">
                       <p className="text-muted-foreground">
