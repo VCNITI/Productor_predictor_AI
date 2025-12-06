@@ -152,9 +152,6 @@ const About = () => {
                     <div className="text-2xl font-bold text-primary">
                       1,000+
                     </div>
-                    <div className="text-sm text-muted-foreground">
-                      Verified Suppliers
-                    </div>
                   </div>
                 </div>
               </div>
