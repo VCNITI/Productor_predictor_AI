@@ -34,7 +34,7 @@ const brandRecommendations: Record<string, string[]> = {
   Tiles: ["Kajaria", "Somany", "Johnson"],
   Plywood: ["Century Ply", "Greenply", "Kitply"],
   Electrical: ["Havells", "Anchor", "Legrand"],
-  Plumbing: ["Jaquar", "Hindware", "Cera"]
+  Plumbing: ["Jaquar", "Hindware", "Cera"],
 };
 
 const ResultsDashboard: React.FC = () => {
@@ -47,7 +47,7 @@ const ResultsDashboard: React.FC = () => {
       parsed.materials = parsed.materials.map((m) => ({
         ...m,
         selected: true,
-        brand: brandRecommendations[m.category]?.[0] || "Generic"
+        brand: brandRecommendations[m.category]?.[0] || "Generic",
       }));
       setEstimate(parsed);
     }
@@ -74,7 +74,7 @@ const ResultsDashboard: React.FC = () => {
     new Intl.NumberFormat("en-IN", {
       style: "currency",
       currency: "INR",
-      maximumFractionDigits: 0
+      maximumFractionDigits: 0,
     }).format(amount);
 
   const toggleMaterial = (index: number) => {
@@ -83,10 +83,10 @@ const ResultsDashboard: React.FC = () => {
         ? {
             ...prev,
             materials: prev.materials.map((m, i) =>
-              i === index ? { ...m, selected: !m.selected } : m
-            )
+              i === index ? { ...m, selected: !m.selected } : m,
+            ),
           }
-        : prev
+        : prev,
     );
   };
 
@@ -96,10 +96,10 @@ const ResultsDashboard: React.FC = () => {
         ? {
             ...prev,
             materials: prev.materials.map((m, i) =>
-              i === index ? { ...m, brand } : m
-            )
+              i === index ? { ...m, brand } : m,
+            ),
           }
-        : prev
+        : prev,
     );
   };
 
@@ -112,13 +112,20 @@ const ResultsDashboard: React.FC = () => {
 
   const total = calcTotal();
 
-  const colors = ["#ff6b35", "#004e89", "#009639", "#fccc04", "#a852e5", "#e74c3c"];
+  const colors = [
+    "#ff6b35",
+    "#004e89",
+    "#009639",
+    "#fccc04",
+    "#a852e5",
+    "#e74c3c",
+  ];
   const pieData = estimate.materials
     .filter((m) => m.selected)
     .map((m, i) => ({
       name: m.category,
       value: Math.round((m.priceLow + m.priceHigh) / 2),
-      color: colors[i % colors.length]
+      color: colors[i % colors.length],
     }));
 
   const downloadEstimateReport = () => {
@@ -128,20 +135,24 @@ const ResultsDashboard: React.FC = () => {
 
     doc.setFontSize(12);
     doc.text(`Confidence: ${estimate.confidence}%`, 14, 30);
-    doc.text(`Total Range: ${formatCurrency(total.low)} – ${formatCurrency(total.high)}`, 14, 40);
+    doc.text(
+      `Total Range: ${formatCurrency(total.low)} – ${formatCurrency(total.high)}`,
+      14,
+      40,
+    );
 
-    const selectedMaterials = estimate.materials.filter(m => m.selected);
+    const selectedMaterials = estimate.materials.filter((m) => m.selected);
     if (selectedMaterials.length > 0) {
       autoTable(doc, {
         startY: 50,
-        head: [['Material', 'Brand', 'Qty', 'Cost Range']],
-        body: selectedMaterials.map(m => [
+        head: [["Material", "Brand", "Qty", "Cost Range"]],
+        body: selectedMaterials.map((m) => [
           m.category,
           m.brand,
           `${m.qty} ${m.unit}`,
-          `${formatCurrency(m.priceLow)} – ${formatCurrency(m.priceHigh)}`
+          `${formatCurrency(m.priceLow)} – ${formatCurrency(m.priceHigh)}`,
         ]),
-        theme: 'grid',
+        theme: "grid",
         headStyles: { fillColor: [0, 123, 255] },
       });
     }
@@ -165,7 +176,9 @@ const ResultsDashboard: React.FC = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <Card>
-            <CardHeader><CardTitle>Total Range</CardTitle></CardHeader>
+            <CardHeader>
+              <CardTitle>Total Range</CardTitle>
+            </CardHeader>
             <CardContent className="text-center">
               <div className="text-2xl font-bold">
                 {formatCurrency(total.low)} – {formatCurrency(total.high)}
@@ -174,7 +187,9 @@ const ResultsDashboard: React.FC = () => {
           </Card>
 
           <Card>
-            <CardHeader><CardTitle>Confidence</CardTitle></CardHeader>
+            <CardHeader>
+              <CardTitle>Confidence</CardTitle>
+            </CardHeader>
             <CardContent className="space-y-2">
               <div className="text-xl font-bold">{estimate.confidence}%</div>
               <Progress value={estimate.confidence} />
@@ -182,13 +197,15 @@ const ResultsDashboard: React.FC = () => {
           </Card>
 
           <Card>
-            <CardHeader><CardTitle>Actions</CardTitle></CardHeader>
+            <CardHeader>
+              <CardTitle>Actions</CardTitle>
+            </CardHeader>
             <CardContent className="space-y-2">
               <Button onClick={downloadEstimateReport}>
-                <Download className="w-4 h-4 mr-2"/> PDF
+                <Download className="w-4 h-4 mr-2" /> PDF
               </Button>
               <Button variant="outline">
-                <Share2 className="w-4 h-4 mr-2"/> Share
+                <Share2 className="w-4 h-4 mr-2" /> Share
               </Button>
             </CardContent>
           </Card>
@@ -203,7 +220,9 @@ const ResultsDashboard: React.FC = () => {
 
           <TabsContent value="materials">
             <Card>
-              <CardHeader><CardTitle>Bill of Quantities (BOQ)</CardTitle></CardHeader>
+              <CardHeader>
+                <CardTitle>Bill of Quantities (BOQ)</CardTitle>
+              </CardHeader>
               <CardContent>
                 <table className="w-full border">
                   <thead>
@@ -219,7 +238,11 @@ const ResultsDashboard: React.FC = () => {
                     {estimate.materials.map((m, i) => (
                       <tr key={i}>
                         <td className="text-center">
-                          <input type="checkbox" checked={m.selected} onChange={() => toggleMaterial(i)} />
+                          <input
+                            type="checkbox"
+                            checked={m.selected}
+                            onChange={() => toggleMaterial(i)}
+                          />
                         </td>
                         <td className="p-2">{m.category}</td>
                         <td className="p-2">
@@ -229,14 +252,19 @@ const ResultsDashboard: React.FC = () => {
                             className="border rounded px-2 py-1"
                           >
                             {brandRecommendations[m.category]?.map((b) => (
-                              <option key={b} value={b}>{b}</option>
+                              <option key={b} value={b}>
+                                {b}
+                              </option>
                             ))}
                             <option value="Generic">Generic</option>
                           </select>
                         </td>
-                        <td className="p-2">{m.qty} {m.unit}</td>
                         <td className="p-2">
-                          {formatCurrency(m.priceLow)} – {formatCurrency(m.priceHigh)}
+                          {m.qty} {m.unit}
+                        </td>
+                        <td className="p-2">
+                          {formatCurrency(m.priceLow)} –{" "}
+                          {formatCurrency(m.priceHigh)}
                         </td>
                       </tr>
                     ))}
@@ -249,21 +277,34 @@ const ResultsDashboard: React.FC = () => {
           <TabsContent value="chart">
             <ResponsiveContainer width="100%" height={300}>
               <PieChart>
-                <Pie data={pieData} cx="50%" cy="50%" outerRadius={120} dataKey="value">
-                  {pieData.map((p,i)=><Cell key={i} fill={p.color}/>)}
+                <Pie
+                  data={pieData}
+                  cx="50%"
+                  cy="50%"
+                  outerRadius={120}
+                  dataKey="value"
+                >
+                  {pieData.map((p, i) => (
+                    <Cell key={i} fill={p.color} />
+                  ))}
                 </Pie>
-                <Tooltip formatter={(val)=>formatCurrency(Number(val))}/>
+                <Tooltip formatter={(val) => formatCurrency(Number(val))} />
               </PieChart>
             </ResponsiveContainer>
           </TabsContent>
 
           <TabsContent value="insights">
-            <Card><CardContent>
-              <p className="text-sm">
-                Adjusting brands or deselecting materials instantly updates your estimate.
-                Final cost: <strong>{formatCurrency(total.low)} – {formatCurrency(total.high)}</strong>
-              </p>
-            </CardContent></Card>
+            <Card>
+              <CardContent>
+                <p className="text-sm">
+                  Adjusting brands or deselecting materials instantly updates
+                  your estimate. Final cost:{" "}
+                  <strong>
+                    {formatCurrency(total.low)} – {formatCurrency(total.high)}
+                  </strong>
+                </p>
+              </CardContent>
+            </Card>
           </TabsContent>
         </Tabs>
       </div>

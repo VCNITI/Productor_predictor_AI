@@ -1,7 +1,14 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Building, Calculator, Users, Award, Target, Lightbulb } from "lucide-react";
+import {
+  Building,
+  Calculator,
+  Users,
+  Award,
+  Target,
+  Lightbulb,
+} from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import constructionHero from "@/assets/construction-hero.jpg";
@@ -13,23 +20,23 @@ const About = () => {
     {
       icon: Calculator,
       title: "Cost Calculator",
-      description: "AI-powered estimation for accurate project costing"
+      description: "AI-powered estimation for accurate project costing",
     },
     {
       icon: Building,
       title: "Material Sourcing",
-      description: "Connect with verified suppliers and get best rates"
+      description: "Connect with verified suppliers and get best rates",
     },
     {
       icon: Users,
       title: "Supplier Network",
-      description: "Access to 1000+ trusted suppliers across India"
+      description: "Access to 1000+ trusted suppliers across India",
     },
     {
       icon: Award,
       title: "Project Management",
-      description: "End-to-end project tracking and management tools"
-    }
+      description: "End-to-end project tracking and management tools",
+    },
   ];
 
   const containerVariants = {
@@ -57,7 +64,7 @@ const About = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
-      
+
       <main className="flex-1">
         {/* Hero Section */}
         <motion.section
@@ -73,15 +80,24 @@ const About = () => {
                 About VCNITI
               </Badge>
             </motion.div>
-            
-            <motion.h1 variants={itemVariants} className="text-4xl md:text-6xl font-bold tracking-tight">
+
+            <motion.h1
+              variants={itemVariants}
+              className="text-4xl md:text-6xl font-bold tracking-tight"
+            >
               Transforming Construction
-              <span className="text-primary gradient-hero bg-clip-text text-transparent"> Material Sourcing</span>
+              <span className="text-primary gradient-hero bg-clip-text text-transparent">
+                {" "}
+                Material Sourcing
+              </span>
             </motion.h1>
-            
-            <motion.p variants={itemVariants} className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              AI-powered Q-commerce platform revolutionizing how construction materials are sourced, 
-              estimated, and procured across India.
+
+            <motion.p
+              variants={itemVariants}
+              className="text-xl text-muted-foreground max-w-2xl mx-auto"
+            >
+              AI-powered Q-commerce platform revolutionizing how construction
+              materials are sourced, estimated, and procured across India.
             </motion.p>
 
             <motion.div variants={itemVariants}>
@@ -106,28 +122,40 @@ const About = () => {
           <div className="max-w-6xl mx-auto">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
               <div className="space-y-6">
-                <h2 className="text-3xl font-bold">About VCNITI Technologies</h2>
+                <h2 className="text-3xl font-bold">
+                  About VCNITI Technologies
+                </h2>
                 <p className="text-lg text-muted-foreground">
-                  VCNITI Technologies Private Limited is pioneering the future of construction 
-                  material procurement through innovative technology solutions. Our AI-powered 
-                  platform transforms how builders, contractors, and project managers estimate, 
-                  source, and procure construction materials.
+                  VCNITI Technologies Private Limited is pioneering the future
+                  of construction material procurement through innovative
+                  technology solutions. Our AI-powered platform transforms how
+                  builders, contractors, and project managers estimate, source,
+                  and procure construction materials.
                 </p>
                 <p className="text-muted-foreground">
-                  Founded with the vision to digitize and streamline the construction supply 
-                  chain, we combine advanced algorithms with real-time market data to provide 
-                  accurate cost estimates, connect buyers with trusted suppliers, and enable 
-                  seamless project execution.
+                  Founded with the vision to digitize and streamline the
+                  construction supply chain, we combine advanced algorithms with
+                  real-time market data to provide accurate cost estimates,
+                  connect buyers with trusted suppliers, and enable seamless
+                  project execution.
                 </p>
-                
+
                 <div className="grid grid-cols-2 gap-6 pt-4">
                   <div>
-                    <div className="text-2xl font-bold text-primary">10,000+</div>
-                    <div className="text-sm text-muted-foreground">Projects Estimated</div>
+                    <div className="text-2xl font-bold text-primary">
+                      10,000+
+                    </div>
+                    <div className="text-sm text-muted-foreground">
+                      Projects Estimated
+                    </div>
                   </div>
                   <div>
-                    <div className="text-2xl font-bold text-primary">1,000+</div>
-                    <div className="text-sm text-muted-foreground">Verified Suppliers</div>
+                    <div className="text-2xl font-bold text-primary">
+                      1,000+
+                    </div>
+                    <div className="text-sm text-muted-foreground">
+                      Verified Suppliers
+                    </div>
                   </div>
                 </div>
               </div>
@@ -139,9 +167,9 @@ const About = () => {
                 transition={{ duration: 0.5 }}
                 className="relative"
               >
-                <img 
-                  src={constructionHero} 
-                  alt="Construction site" 
+                <img
+                  src={constructionHero}
+                  alt="Construction site"
                   className="rounded-lg shadow-xl"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-primary/20 to-transparent rounded-lg"></div>
@@ -176,10 +204,14 @@ const About = () => {
                         <div className="w-16 h-16 mx-auto gradient-hero rounded-full flex items-center justify-center mb-4">
                           <service.icon className="w-8 h-8 text-white" />
                         </div>
-                        <CardTitle className="text-lg">{service.title}</CardTitle>
+                        <CardTitle className="text-lg">
+                          {service.title}
+                        </CardTitle>
                       </CardHeader>
                       <CardContent>
-                        <p className="text-muted-foreground text-sm">{service.description}</p>
+                        <p className="text-muted-foreground text-sm">
+                          {service.description}
+                        </p>
                       </CardContent>
                     </Card>
                   </AnimatedCard>
@@ -201,7 +233,8 @@ const About = () => {
             <div className="text-center space-y-4 mb-16">
               <h2 className="text-3xl font-bold">Platform Features</h2>
               <p className="text-lg text-muted-foreground">
-                Everything you need for efficient construction material management
+                Everything you need for efficient construction material
+                management
               </p>
             </div>
 
@@ -214,8 +247,9 @@ const About = () => {
                     </CardHeader>
                     <CardContent className="space-y-4">
                       <p className="text-muted-foreground">
-                        Generate detailed Bill of Quantities with accurate material requirements, 
-                        recommended brands, and cost estimations based on real-time market data.
+                        Generate detailed Bill of Quantities with accurate
+                        material requirements, recommended brands, and cost
+                        estimations based on real-time market data.
                       </p>
                       <ul className="text-sm text-muted-foreground space-y-1">
                         <li>• Automated quantity calculations</li>
@@ -236,8 +270,9 @@ const About = () => {
                     </CardHeader>
                     <CardContent className="space-y-4">
                       <p className="text-muted-foreground">
-                        Advanced AI algorithms analyze project specifications and market conditions 
-                        to provide highly accurate cost estimates with confidence levels.
+                        Advanced AI algorithms analyze project specifications
+                        and market conditions to provide highly accurate cost
+                        estimates with confidence levels.
                       </p>
                       <ul className="text-sm text-muted-foreground space-y-1">
                         <li>• Machine learning-powered estimations</li>
@@ -258,8 +293,9 @@ const About = () => {
                     </CardHeader>
                     <CardContent className="space-y-4">
                       <p className="text-muted-foreground">
-                        Intelligent brand recommendation system that matches the best available 
-                        brands for each material type based on quality, availability, and pricing.
+                        Intelligent brand recommendation system that matches the
+                        best available brands for each material type based on
+                        quality, availability, and pricing.
                       </p>
                       <ul className="text-sm text-muted-foreground space-y-1">
                         <li>• Trusted brand partnerships</li>
@@ -280,8 +316,9 @@ const About = () => {
                     </CardHeader>
                     <CardContent className="space-y-4">
                       <p className="text-muted-foreground">
-                        Discover sustainable and environmentally friendly material alternatives 
-                        that reduce carbon footprint without compromising on quality or cost.
+                        Discover sustainable and environmentally friendly
+                        material alternatives that reduce carbon footprint
+                        without compromising on quality or cost.
                       </p>
                       <ul className="text-sm text-muted-foreground space-y-1">
                         <li>• Green material options</li>

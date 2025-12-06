@@ -6,7 +6,14 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Badge } from "@/components/ui/badge";
 import { Phone, Mail, MapPin, Clock, Send, MessageCircle } from "lucide-react";
 import Header from "@/components/Header";
@@ -21,7 +28,10 @@ const formSchema = z.object({
   phone: z.string().optional(),
   company: z.string().optional(),
   subject: z.string().min(5, "Subject is too short"),
-  message: z.string().min(10, "Message is too short").max(500, "Message is too long"),
+  message: z
+    .string()
+    .min(10, "Message is too short")
+    .max(500, "Message is too long"),
 });
 
 const Contact = () => {
@@ -42,11 +52,11 @@ const Contact = () => {
     const toastId = toast.loading("Sending your message...");
 
     try {
-      const apiUrl = import.meta.env.VITE_API_URL.replace(/\/$/, '');
+      const apiUrl = import.meta.env.VITE_API_URL.replace(/\/$/, "");
       const response = await fetch(`${apiUrl}/api/contact`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(values),
       });
@@ -59,7 +69,10 @@ const Contact = () => {
       form.reset();
     } catch (error) {
       console.error("Contact form error:", error);
-      toast.error(error instanceof Error ? error.message : "An unknown error occurred.", { id: toastId });
+      toast.error(
+        error instanceof Error ? error.message : "An unknown error occurred.",
+        { id: toastId },
+      );
     }
   };
 
@@ -88,7 +101,7 @@ const Contact = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
-      
+
       <main className="flex-1">
         {/* Hero Section */}
         <motion.section
@@ -104,15 +117,25 @@ const Contact = () => {
                 Get in Touch
               </Badge>
             </motion.div>
-            
-            <motion.h1 variants={itemVariants} className="text-4xl md:text-6xl font-bold tracking-tight">
+
+            <motion.h1
+              variants={itemVariants}
+              className="text-4xl md:text-6xl font-bold tracking-tight"
+            >
               Contact
-              <span className="text-primary gradient-hero bg-clip-text text-transparent"> VCNITI</span>
+              <span className="text-primary gradient-hero bg-clip-text text-transparent">
+                {" "}
+                VCNITI
+              </span>
             </motion.h1>
-            
-            <motion.p variants={itemVariants} className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Ready to transform your construction material sourcing? Get in touch with our team 
-              and discover how VCNITI can streamline your projects.
+
+            <motion.p
+              variants={itemVariants}
+              className="text-xl text-muted-foreground max-w-2xl mx-auto"
+            >
+              Ready to transform your construction material sourcing? Get in
+              touch with our team and discover how VCNITI can streamline your
+              projects.
             </motion.p>
           </div>
         </motion.section>
@@ -128,7 +151,6 @@ const Contact = () => {
         >
           <div className="max-w-6xl mx-auto">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-              
               {/* Contact Information */}
               <motion.div
                 variants={containerVariants}
@@ -140,8 +162,9 @@ const Contact = () => {
                 <motion.div variants={itemVariants}>
                   <h2 className="text-3xl font-bold mb-4">Let's Connect</h2>
                   <p className="text-lg text-muted-foreground">
-                    Have questions about our services or need assistance with your project estimation? 
-                    Our team is here to help you get started with Vcniti's innovative solutions.
+                    Have questions about our services or need assistance with
+                    your project estimation? Our team is here to help you get
+                    started with Vcniti's innovative solutions.
                   </p>
                 </motion.div>
 
@@ -157,8 +180,10 @@ const Contact = () => {
                           <div>
                             <h3 className="font-semibold mb-2">Our Address</h3>
                             <p className="text-muted-foreground">
-                              48, Church St, Haridevpur<br />
-                              Shanthala Nagar, Ashok Nagar<br />
+                              48, Church St, Haridevpur
+                              <br />
+                              Shanthala Nagar, Ashok Nagar
+                              <br />
                               Bengaluru, Karnataka 560001
                             </p>
                           </div>
@@ -199,12 +224,16 @@ const Contact = () => {
                   <CardHeader>
                     <CardTitle>Send us a Message</CardTitle>
                     <p className="text-muted-foreground">
-                      Fill out the form below and we'll get back to you as soon as possible.
+                      Fill out the form below and we'll get back to you as soon
+                      as possible.
                     </p>
                   </CardHeader>
                   <CardContent>
                     <Form {...form}>
-                      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                      <form
+                        onSubmit={form.handleSubmit(onSubmit)}
+                        className="space-y-6"
+                      >
                         <motion.div
                           variants={containerVariants}
                           initial="hidden"
@@ -219,7 +248,10 @@ const Contact = () => {
                                 <FormItem>
                                   <FormLabel>First Name</FormLabel>
                                   <FormControl>
-                                    <Input placeholder="Enter your first name" {...field} />
+                                    <Input
+                                      placeholder="Enter your first name"
+                                      {...field}
+                                    />
                                   </FormControl>
                                   <FormMessage />
                                 </FormItem>
@@ -234,7 +266,10 @@ const Contact = () => {
                                 <FormItem>
                                   <FormLabel>Last Name</FormLabel>
                                   <FormControl>
-                                    <Input placeholder="Enter your last name" {...field} />
+                                    <Input
+                                      placeholder="Enter your last name"
+                                      {...field}
+                                    />
                                   </FormControl>
                                   <FormMessage />
                                 </FormItem>
@@ -250,7 +285,11 @@ const Contact = () => {
                               <FormItem>
                                 <FormLabel>Email Address</FormLabel>
                                 <FormControl>
-                                  <Input type="email" placeholder="Enter your email address" {...field} />
+                                  <Input
+                                    type="email"
+                                    placeholder="Enter your email address"
+                                    {...field}
+                                  />
                                 </FormControl>
                                 <FormMessage />
                               </FormItem>
@@ -265,7 +304,11 @@ const Contact = () => {
                               <FormItem>
                                 <FormLabel>Phone Number</FormLabel>
                                 <FormControl>
-                                  <Input type="tel" placeholder="Enter your phone number" {...field} />
+                                  <Input
+                                    type="tel"
+                                    placeholder="Enter your phone number"
+                                    {...field}
+                                  />
                                 </FormControl>
                                 <FormMessage />
                               </FormItem>
@@ -280,7 +323,10 @@ const Contact = () => {
                               <FormItem>
                                 <FormLabel>Company/Organization</FormLabel>
                                 <FormControl>
-                                  <Input placeholder="Enter your company name (optional)" {...field} />
+                                  <Input
+                                    placeholder="Enter your company name (optional)"
+                                    {...field}
+                                  />
                                 </FormControl>
                                 <FormMessage />
                               </FormItem>
@@ -295,7 +341,10 @@ const Contact = () => {
                               <FormItem>
                                 <FormLabel>Subject</FormLabel>
                                 <FormControl>
-                                  <Input placeholder="What is this regarding?" {...field} />
+                                  <Input
+                                    placeholder="What is this regarding?"
+                                    {...field}
+                                  />
                                 </FormControl>
                                 <FormMessage />
                               </FormItem>
@@ -322,15 +371,24 @@ const Contact = () => {
                           />
                         </motion.div>
                         <motion.div variants={itemVariants}>
-                          <Button type="submit" variant="hero" className="w-full" size="lg" disabled={form.formState.isSubmitting}>
+                          <Button
+                            type="submit"
+                            variant="hero"
+                            className="w-full"
+                            size="lg"
+                            disabled={form.formState.isSubmitting}
+                          >
                             <Send className="w-4 h-4 mr-2" />
-                            {form.formState.isSubmitting ? "Sending..." : "Send Message"}
+                            {form.formState.isSubmitting
+                              ? "Sending..."
+                              : "Send Message"}
                           </Button>
                         </motion.div>
                       </form>
                     </Form>
                     <div className="text-sm text-muted-foreground text-center mt-6">
-                      By submitting this form, you agree to our privacy policy and terms of service.
+                      By submitting this form, you agree to our privacy policy
+                      and terms of service.
                     </div>
                   </CardContent>
                 </Card>

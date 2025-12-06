@@ -8,17 +8,17 @@ The most likely cause is an incorrect configuration of the email-sending service
 
 1.  **Open `backend/.env`:** Locate the `.env` file in the `backend` directory.
 2.  **Verify Credentials:** Ensure the following variables are set correctly:
-    *   `EMAIL_USER`: Your full Gmail address (e.g., `your.email@gmail.com`).
-    *   `EMAIL_PASS`: A Gmail "App Password". This is **not** your regular Google account password. You need to generate a specific password for this application.
-    *   `EMAIL_RECIPIENT`: The email address where you want to receive contact form submissions.
+    - `EMAIL_USER`: Your full Gmail address (e.g., `your.email@gmail.com`).
+    - `EMAIL_PASS`: A Gmail "App Password". This is **not** your regular Google account password. You need to generate a specific password for this application.
+    - `EMAIL_RECIPIENT`: The email address where you want to receive contact form submissions.
 
 3.  **Generate a Gmail App Password:**
-    *   Go to your Google Account settings: [https://myaccount.google.com/](https://myaccount.google.com/)
-    *   Navigate to **Security**.
-    *   Under "Signing in to Google," click on **2-Step Verification** and enable it if you haven't already.
-    *   Go back to the Security page and click on **App passwords**.
-    *   Select "Mail" for the app and "Other (Custom name)" for the device. Give it a name like "ProductPredictor" and click **Generate**.
-    *   Copy the 16-character password and paste it into the `EMAIL_PASS` field in your `.env` file.
+    - Go to your Google Account settings: [https://myaccount.google.com/](https://myaccount.google.com/)
+    - Navigate to **Security**.
+    - Under "Signing in to Google," click on **2-Step Verification** and enable it if you haven't already.
+    - Go back to the Security page and click on **App passwords**.
+    - Select "Mail" for the app and "Other (Custom name)" for the device. Give it a name like "ProductPredictor" and click **Generate**.
+    - Copy the 16-character password and paste it into the `EMAIL_PASS` field in your `.env` file.
 
 **Example `backend/.env` file:**
 
