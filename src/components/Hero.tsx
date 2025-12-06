@@ -223,7 +223,7 @@ const Hero = () => {
         {/* Heading */}
         <motion.div variants={itemVariants} className="space-y-6">
           <h1 className="text-5xl md:text-7xl font-bold tracking-tight">
-            Vcniti Building Material Predictor
+            VCNITI Building Material Predictor
           </h1>
           <h2 className="text-3xl md:text-4xl font-semibold text-primary">
             Estimate materials & cost in{" "}
