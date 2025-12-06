@@ -777,7 +777,7 @@ const PredictorForm = ({ id }: { id?: string }) => {
                     <div className="max-w-md mx-auto space-y-4">
                       <div className="space-y-2">
                         <Label htmlFor="city">City</Label>
-                        <Select value={formData.city} onValueChange={(value) => { updateFormData("city", value); setTimeout(() => nextStep(), 200); }}>
+                        <Select value={formData.city} onValueChange={(value) => { updateFormData("city", value); }}>
                           <SelectTrigger>
                             <SelectValue placeholder="Select your city" />
                           </SelectTrigger>
@@ -807,6 +807,18 @@ const PredictorForm = ({ id }: { id?: string }) => {
                           </div>
                         </div>
                       </Card>
+
+                      <div className="flex justify-end items-center pt-4">
+                        <Button
+                          onClick={nextStep}
+                          disabled={!formData.city}
+                          variant="hero"
+                          className="flex items-center"
+                        >
+                          Next
+                          <ArrowRight className="w-4 h-4 ml-2" />
+                        </Button>
+                      </div>
                     </div>
                   </div>
                 );

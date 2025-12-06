@@ -112,7 +112,7 @@ const ResultsDashboard: React.FC = () => {
 
   const total = calcTotal();
 
-  const colors = ["#ff6b35","#004e89","#009639","#fccc04","#8e44ad","#e74c3c"];
+  const colors = ["#ff6b35", "#004e89", "#009639", "#fccc04", "#a852e5", "#e74c3c"];
   const pieData = estimate.materials
     .filter((m) => m.selected)
     .map((m, i) => ({

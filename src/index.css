@@ -27,9 +27,9 @@
     --secondary-foreground: 220 15% 15%;
     
     /* Steel blue accents */
-    --accent: 295 70% 68%;
+    --accent: 274 79% 61%;
     --accent-foreground: 0 0% 100%;
-    --accent-light: 295 70% 78%;
+    --accent-light: 274 79% 71%;
 
     --muted: 30 15% 95%;
     --muted-foreground: 220 10% 45%;
@@ -74,9 +74,9 @@
     --secondary: 220 15% 15%;
     --secondary-foreground: 0 0% 95%;
 
-    --accent: 295 70% 78%;
+    --accent: 274 79% 71%;
     --accent-foreground: 0 0% 100%;
-    --accent-light: 295 70% 83%;
+    --accent-light: 274 79% 81%;
 
     --muted: 220 15% 12%;
     --muted-foreground: 220 10% 65%;
