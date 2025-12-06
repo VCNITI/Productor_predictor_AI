@@ -18,9 +18,9 @@
     --popover-foreground: 220 15% 15%;
 
     /* Orange construction theme */
-    --primary: 321 70% 64%;
+    --primary: 274 79% 61%;
     --primary-foreground: 0 0% 100%;
-    --primary-glow: 321 100% 70%;
+    --primary-glow: 274 79% 71%;
     
     /* Construction earth tones */
     --secondary: 30 15% 90%;
@@ -39,7 +39,7 @@
 
     --border: 30 15% 85%;
     --input: 30 15% 85%;
-    --ring: 321 70% 64%;
+    --ring: 274 79% 61%;
 
     --radius: 0.75rem;
 
@@ -67,9 +67,9 @@
     --popover: 220 20% 10%;
     --popover-foreground: 0 0% 95%;
 
-    --primary: 321 70% 60%;
+    --primary: 274 79% 55%;
     --primary-foreground: 0 0% 100%;
-    --primary-glow: 321 100% 72%;
+    --primary-glow: 274 79% 65%;
 
     --secondary: 220 15% 15%;
     --secondary-foreground: 0 0% 95%;
@@ -86,7 +86,7 @@
 
     --border: 220 15% 18%;
     --input: 220 15% 18%;
-    --ring: 321 70% 60%;
+    --ring: 274 79% 55%;
 
     --gradient-hero: hsl(var(--primary));
     --gradient-accent: hsl(var(--accent));
