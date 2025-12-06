@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Calculator, Clock, Shield } from "lucide-react";
+import { AnimatedCard } from "./ui/AnimatedCard";
 
 const Hero = () => {
   const [isPdfReady, setIsPdfReady] = useState(false);
@@ -179,18 +181,47 @@ const Hero = () => {
     doc.save("vcniti-construction-estimate.pdf");
   };
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: {
+        type: "spring",
+        stiffness: 100,
+      },
+    },
+  };
+
   return (
     <section className="relative min-h-screen flex flex-col justify-center items-center gradient-surface px-4 py-20">
       {/* Hero Content */}
-      <div className="max-w-4xl mx-auto text-center space-y-8">
+      <motion.div
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+        className="max-w-4xl mx-auto text-center space-y-8"
+      >
         {/* Badge */}
-        <Badge variant="secondary" className="px-6 py-2 text-sm font-medium">
-          <Shield className="w-4 h-4 mr-2" />
-          Trusted by 10,000+ builders across India
-        </Badge>
+        <motion.div variants={itemVariants}>
+          <Badge variant="secondary" className="px-6 py-2 text-sm font-medium">
+            <Shield className="w-4 h-4 mr-2" />
+            Trusted by 10,000+ builders across India
+          </Badge>
+        </motion.div>
 
         {/* Heading */}
-        <div className="space-y-6">
+        <motion.div variants={itemVariants} className="space-y-6">
           <h1 className="text-5xl md:text-7xl font-bold tracking-tight">
             Vcniti Building Material Predictor
           </h1>
@@ -204,10 +235,13 @@ const Hero = () => {
             AI-powered Q-commerce platform transforming construction material sourcing. 
             Get accurate BOQ and pricing with brand recommendations, eco-friendly alternatives, and instant supplier connections.
           </p>
-        </div>
+        </motion.div>
 
         {/* CTA Buttons */}
-        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+        <motion.div
+          variants={itemVariants}
+          className="flex flex-col sm:flex-row gap-4 justify-center items-center"
+        >
           <Button 
             variant="hero" 
             size="xl" 
@@ -230,62 +264,89 @@ const Hero = () => {
             <Clock className="w-5 h-5 mr-2" />
             {isPdfReady ? "View Sample Report" : "Loading Report..."}
           </Button>
-        </div>
+        </motion.div>
 
         {/* Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-16">
-          <Card className="p-6 shadow-card hover:shadow-accent transition-smooth">
-            <div className="text-center space-y-2">
-              <div className="text-3xl font-bold text-primary">92%</div>
-              <div className="text-sm text-muted-foreground">Accuracy Rate</div>
-            </div>
-          </Card>
-          <Card className="p-6 shadow-card hover:shadow-accent transition-smooth">
-            <div className="text-center space-y-2">
-              <div className="text-3xl font-bold text-primary">₹2.5L</div>
-              <div className="text-sm text-muted-foreground">Avg. Savings</div>
-            </div>
-          </Card>
-          <Card className="p-6 shadow-card hover:shadow-accent transition-smooth">
-            <div className="text-center space-y-2">
-              <div className="text-3xl font-bold text-primary">24hrs</div>
-              <div className="text-sm text-muted-foreground">Fresh Pricing</div>
-            </div>
-          </Card>
-        </div>
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.5 }}
+          className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-16"
+        >
+          <AnimatedCard>
+            <Card className="p-6 shadow-card hover:shadow-accent transition-smooth">
+              <div className="text-center space-y-2">
+                <div className="text-3xl font-bold text-primary">92%</div>
+                <div className="text-sm text-muted-foreground">Accuracy Rate</div>
+              </div>
+            </Card>
+          </AnimatedCard>
+          <AnimatedCard>
+            <Card className="p-6 shadow-card hover:shadow-accent transition-smooth">
+              <div className="text-center space-y-2">
+                <div className="text-3xl font-bold text-primary">₹2.5L</div>
+                <div className="text-sm text-muted-foreground">Avg. Savings</div>
+              </div>
+            </Card>
+          </AnimatedCard>
+          <AnimatedCard>
+            <Card className="p-6 shadow-card hover:shadow-accent transition-smooth">
+              <div className="text-center space-y-2">
+                <div className="text-3xl font-bold text-primary">24hrs</div>
+                <div className="text-sm text-muted-foreground">Fresh Pricing</div>
+              </div>
+            </Card>
+          </AnimatedCard>
+        </motion.div>
 
         {/* How it works */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-20">
-          <div className="text-center space-y-4">
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.5 }}
+          className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-20"
+        >
+          <motion.div variants={itemVariants} className="text-center space-y-4">
             <div className="w-16 h-16 mx-auto bg-accent rounded-full flex items-center justify-center text-white font-bold text-xl">
               1
             </div>
             <h3 className="text-lg font-semibold">Input Project Details</h3>
             <p className="text-muted-foreground">Share your project size, type, and quality preferences</p>
-          </div>
-          <div className="text-center space-y-4">
+          </motion.div>
+          <motion.div variants={itemVariants} className="text-center space-y-4">
             <div className="w-16 h-16 mx-auto bg-accent rounded-full flex items-center justify-center text-white font-bold text-xl">
               2
             </div>
             <h3 className="text-lg font-semibold">Get Instant BOQ</h3>
             <p className="text-muted-foreground">AI generates detailed material quantities and cost ranges</p>
-          </div>
-          <div className="text-center space-y-4">
+          </motion.div>
+          <motion.div variants={itemVariants} className="text-center space-y-4">
             <div className="w-16 h-16 mx-auto bg-accent rounded-full flex items-center justify-center text-white font-bold text-xl">
               3
             </div>
             <h3 className="text-lg font-semibold">Compare & Procure</h3>
             <p className="text-muted-foreground">View scenarios, find suppliers, and add to cart</p>
-          </div>
-        </div>
-      </div>
+          </motion.div>
+        </motion.div>
+      </motion.div>
 
       {/* Scroll indicator */}
-      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-pulse-glow">
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.5, duration: 1 }}
+        className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
+      >
         <div className="w-6 h-10 border-2 border-primary rounded-full flex justify-center">
-          <div className="w-1 h-3 bg-primary rounded-full mt-2 animate-bounce-subtle"></div>
+          <motion.div
+            animate={{ y: [0, 10, 0] }}
+            transition={{ repeat: Infinity, duration: 1.5 }}
+            className="w-1 h-3 bg-primary rounded-full mt-2"
+          ></motion.div>
         </div>
-      </div>
+      </motion.div>
     </section>
   );
 };

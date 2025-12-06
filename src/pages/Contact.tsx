@@ -11,6 +11,8 @@ import { Badge } from "@/components/ui/badge";
 import { Phone, Mail, MapPin, Clock, Send, MessageCircle } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { motion } from "framer-motion";
+import { AnimatedCard } from "@/components/ui/AnimatedCard";
 
 const formSchema = z.object({
   firstName: z.string().min(2, "First name is too short").max(50),
@@ -61,87 +63,138 @@ const Contact = () => {
     }
   };
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: {
+        type: "spring",
+        stiffness: 100,
+      },
+    },
+  };
+
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
       
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="py-20 px-4 gradient-surface">
+        <motion.section
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+          className="py-20 px-4 gradient-surface"
+        >
           <div className="max-w-4xl mx-auto text-center space-y-8">
-            <Badge variant="secondary" className="px-6 py-2">
-              <MessageCircle className="w-4 h-4 mr-2" />
-              Get in Touch
-            </Badge>
+            <motion.div variants={itemVariants}>
+              <Badge variant="secondary" className="px-6 py-2">
+                <MessageCircle className="w-4 h-4 mr-2" />
+                Get in Touch
+              </Badge>
+            </motion.div>
             
-            <h1 className="text-4xl md:text-6xl font-bold tracking-tight">
+            <motion.h1 variants={itemVariants} className="text-4xl md:text-6xl font-bold tracking-tight">
               Contact
               <span className="text-primary gradient-hero bg-clip-text text-transparent"> Vcniti</span>
-            </h1>
+            </motion.h1>
             
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+            <motion.p variants={itemVariants} className="text-xl text-muted-foreground max-w-2xl mx-auto">
               Ready to transform your construction material sourcing? Get in touch with our team 
               and discover how Vcniti can streamline your projects.
-            </p>
+            </motion.p>
           </div>
-        </section>
+        </motion.section>
 
         {/* Contact Information & Form */}
-        <section id="contact" className="py-20 px-4">
+        <motion.section
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.5 }}
+          id="contact"
+          className="py-20 px-4"
+        >
           <div className="max-w-6xl mx-auto">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
               
               {/* Contact Information */}
-              <div className="space-y-8">
-                <div>
+              <motion.div
+                variants={containerVariants}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, amount: 0.2 }}
+                className="space-y-8"
+              >
+                <motion.div variants={itemVariants}>
                   <h2 className="text-3xl font-bold mb-4">Let's Connect</h2>
                   <p className="text-lg text-muted-foreground">
                     Have questions about our services or need assistance with your project estimation? 
                     Our team is here to help you get started with Vcniti's innovative solutions.
                   </p>
-                </div>
+                </motion.div>
 
                 {/* Contact Details Cards... */}
-                <div className="space-y-6">
-                  <Card className="shadow-card">
-                    <CardContent className="p-6">
-                      <div className="flex items-start space-x-4">
-                        <div className="w-12 h-12 gradient-hero rounded-full flex items-center justify-center flex-shrink-0">
-                          <MapPin className="w-6 h-6 text-white" />
+                <motion.div variants={itemVariants} className="space-y-6">
+                  <AnimatedCard>
+                    <Card className="shadow-card h-full">
+                      <CardContent className="p-6">
+                        <div className="flex items-start space-x-4">
+                          <div className="w-12 h-12 gradient-hero rounded-full flex items-center justify-center flex-shrink-0">
+                            <MapPin className="w-6 h-6 text-white" />
+                          </div>
+                          <div>
+                            <h3 className="font-semibold mb-2">Our Address</h3>
+                            <p className="text-muted-foreground">
+                              48, Church St, Haridevpur<br />
+                              Shanthala Nagar, Ashok Nagar<br />
+                              Bengaluru, Karnataka 560001
+                            </p>
+                          </div>
                         </div>
-                        <div>
-                          <h3 className="font-semibold mb-2">Our Address</h3>
-                          <p className="text-muted-foreground">
-                            48, Church St, Haridevpur<br />
-                            Shanthala Nagar, Ashok Nagar<br />
-                            Bengaluru, Karnataka 560001
-                          </p>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
+                      </CardContent>
+                    </Card>
+                  </AnimatedCard>
 
-                  <Card className="shadow-card">
-                    <CardContent className="p-6">
-                      <div className="flex items-start space-x-4">
-                        <div className="w-12 h-12 gradient-hero rounded-full flex items-center justify-center flex-shrink-0">
-                          <Phone className="w-6 h-6 text-white" />
+                  <AnimatedCard>
+                    <Card className="shadow-card h-full">
+                      <CardContent className="p-6">
+                        <div className="flex items-start space-x-4">
+                          <div className="w-12 h-12 gradient-hero rounded-full flex items-center justify-center flex-shrink-0">
+                            <Phone className="w-6 h-6 text-white" />
+                          </div>
+                          <div>
+                            <h3 className="font-semibold mb-2">Phone Number</h3>
+                            <p className="text-muted-foreground">9740059699</p>
+                            <p className="text-sm text-muted-foreground mt-1">
+                              Available Monday - Saturday, 9 AM - 6 PM
+                            </p>
+                          </div>
                         </div>
-                        <div>
-                          <h3 className="font-semibold mb-2">Phone Number</h3>
-                          <p className="text-muted-foreground">9740059699</p>
-                          <p className="text-sm text-muted-foreground mt-1">
-                            Available Monday - Saturday, 9 AM - 6 PM
-                          </p>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </div>
-              </div>
+                      </CardContent>
+                    </Card>
+                  </AnimatedCard>
+                </motion.div>
+              </motion.div>
 
               {/* Contact Form */}
-              <div>
+              <motion.div
+                variants={itemVariants}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, amount: 0.2 }}
+              >
                 <Card className="shadow-card">
                   <CardHeader>
                     <CardTitle>Send us a Message</CardTitle>
@@ -152,107 +205,128 @@ const Contact = () => {
                   <CardContent>
                     <Form {...form}>
                       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <motion.div
+                          variants={containerVariants}
+                          initial="hidden"
+                          animate="visible"
+                          className="grid grid-cols-1 md:grid-cols-2 gap-4"
+                        >
+                          <motion.div variants={itemVariants}>
+                            <FormField
+                              control={form.control}
+                              name="firstName"
+                              render={({ field }) => (
+                                <FormItem>
+                                  <FormLabel>First Name</FormLabel>
+                                  <FormControl>
+                                    <Input placeholder="Enter your first name" {...field} />
+                                  </FormControl>
+                                  <FormMessage />
+                                </FormItem>
+                              )}
+                            />
+                          </motion.div>
+                          <motion.div variants={itemVariants}>
+                            <FormField
+                              control={form.control}
+                              name="lastName"
+                              render={({ field }) => (
+                                <FormItem>
+                                  <FormLabel>Last Name</FormLabel>
+                                  <FormControl>
+                                    <Input placeholder="Enter your last name" {...field} />
+                                  </FormControl>
+                                  <FormMessage />
+                                </FormItem>
+                              )}
+                            />
+                          </motion.div>
+                        </motion.div>
+                        <motion.div variants={itemVariants}>
                           <FormField
                             control={form.control}
-                            name="firstName"
+                            name="email"
                             render={({ field }) => (
                               <FormItem>
-                                <FormLabel>First Name</FormLabel>
+                                <FormLabel>Email Address</FormLabel>
                                 <FormControl>
-                                  <Input placeholder="Enter your first name" {...field} />
+                                  <Input type="email" placeholder="Enter your email address" {...field} />
                                 </FormControl>
                                 <FormMessage />
                               </FormItem>
                             )}
                           />
+                        </motion.div>
+                        <motion.div variants={itemVariants}>
                           <FormField
                             control={form.control}
-                            name="lastName"
+                            name="phone"
                             render={({ field }) => (
                               <FormItem>
-                                <FormLabel>Last Name</FormLabel>
+                                <FormLabel>Phone Number</FormLabel>
                                 <FormControl>
-                                  <Input placeholder="Enter your last name" {...field} />
+                                  <Input type="tel" placeholder="Enter your phone number" {...field} />
                                 </FormControl>
                                 <FormMessage />
                               </FormItem>
                             )}
                           />
-                        </div>
-                        <FormField
-                          control={form.control}
-                          name="email"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Email Address</FormLabel>
-                              <FormControl>
-                                <Input type="email" placeholder="Enter your email address" {...field} />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                        <FormField
-                          control={form.control}
-                          name="phone"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Phone Number</FormLabel>
-                              <FormControl>
-                                <Input type="tel" placeholder="Enter your phone number" {...field} />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                        <FormField
-                          control={form.control}
-                          name="company"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Company/Organization</FormLabel>
-                              <FormControl>
-                                <Input placeholder="Enter your company name (optional)" {...field} />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                        <FormField
-                          control={form.control}
-                          name="subject"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Subject</FormLabel>
-                              <FormControl>
-                                <Input placeholder="What is this regarding?" {...field} />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                        <FormField
-                          control={form.control}
-                          name="message"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Message</FormLabel>
-                              <FormControl>
-                                <Textarea
-                                  placeholder="Tell us more about your project or inquiry..."
-                                  rows={4}
-                                  {...field}
-                                />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                        <Button type="submit" variant="hero" className="w-full" size="lg" disabled={form.formState.isSubmitting}>
-                          <Send className="w-4 h-4 mr-2" />
-                          {form.formState.isSubmitting ? "Sending..." : "Send Message"}
-                        </Button>
+                        </motion.div>
+                        <motion.div variants={itemVariants}>
+                          <FormField
+                            control={form.control}
+                            name="company"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Company/Organization</FormLabel>
+                                <FormControl>
+                                  <Input placeholder="Enter your company name (optional)" {...field} />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                        </motion.div>
+                        <motion.div variants={itemVariants}>
+                          <FormField
+                            control={form.control}
+                            name="subject"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Subject</FormLabel>
+                                <FormControl>
+                                  <Input placeholder="What is this regarding?" {...field} />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                        </motion.div>
+                        <motion.div variants={itemVariants}>
+                          <FormField
+                            control={form.control}
+                            name="message"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Message</FormLabel>
+                                <FormControl>
+                                  <Textarea
+                                    placeholder="Tell us more about your project or inquiry..."
+                                    rows={4}
+                                    {...field}
+                                  />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                        </motion.div>
+                        <motion.div variants={itemVariants}>
+                          <Button type="submit" variant="hero" className="w-full" size="lg" disabled={form.formState.isSubmitting}>
+                            <Send className="w-4 h-4 mr-2" />
+                            {form.formState.isSubmitting ? "Sending..." : "Send Message"}
+                          </Button>
+                        </motion.div>
                       </form>
                     </Form>
                     <div className="text-sm text-muted-foreground text-center mt-6">
@@ -260,10 +334,10 @@ const Contact = () => {
                     </div>
                   </CardContent>
                 </Card>
-              </div>
+              </motion.div>
             </div>
           </div>
-        </section>
+        </motion.section>
       </main>
       <Footer />
     </div>

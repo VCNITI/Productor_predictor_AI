@@ -5,6 +5,8 @@ import { Building, Calculator, Users, Award, Target, Lightbulb } from "lucide-re
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import constructionHero from "@/assets/construction-hero.jpg";
+import { motion } from "framer-motion";
+import { AnimatedCard } from "@/components/ui/AnimatedCard";
 
 const About = () => {
   const services = [
@@ -30,40 +32,77 @@ const About = () => {
     }
   ];
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: {
+        type: "spring",
+        stiffness: 100,
+      },
+    },
+  };
+
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
       
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="py-20 px-4 gradient-surface">
+        <motion.section
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+          className="py-20 px-4 gradient-surface"
+        >
           <div className="max-w-4xl mx-auto text-center space-y-8">
-            <Badge variant="secondary" className="px-6 py-2">
-              <Target className="w-4 h-4 mr-2" />
-              About Vcniti
-            </Badge>
+            <motion.div variants={itemVariants}>
+              <Badge variant="secondary" className="px-6 py-2">
+                <Target className="w-4 h-4 mr-2" />
+                About Vcniti
+              </Badge>
+            </motion.div>
             
-            <h1 className="text-4xl md:text-6xl font-bold tracking-tight">
+            <motion.h1 variants={itemVariants} className="text-4xl md:text-6xl font-bold tracking-tight">
               Transforming Construction
               <span className="text-primary gradient-hero bg-clip-text text-transparent"> Material Sourcing</span>
-            </h1>
+            </motion.h1>
             
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+            <motion.p variants={itemVariants} className="text-xl text-muted-foreground max-w-2xl mx-auto">
               AI-powered Q-commerce platform revolutionizing how construction materials are sourced, 
               estimated, and procured across India.
-            </p>
+            </motion.p>
 
-            <Button variant="hero" size="lg" asChild>
-              <a href="https://www.vcniti.com/">
-                <Lightbulb className="w-5 h-5 mr-2" />
-                Explore Our Platform
-              </a>
-            </Button>
+            <motion.div variants={itemVariants}>
+              <Button variant="hero" size="lg" asChild>
+                <a href="https://www.vcniti.com/">
+                  <Lightbulb className="w-5 h-5 mr-2" />
+                  Explore Our Platform
+                </a>
+              </Button>
+            </motion.div>
           </div>
-        </section>
+        </motion.section>
 
         {/* Company Overview */}
-        <section className="py-20 px-4">
+        <motion.section
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.5 }}
+          className="py-20 px-4"
+        >
           <div className="max-w-6xl mx-auto">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
               <div className="space-y-6">
@@ -93,20 +132,33 @@ const About = () => {
                 </div>
               </div>
 
-              <div className="relative">
+              <motion.div
+                initial={{ scale: 0.95, opacity: 0 }}
+                whileInView={{ scale: 1, opacity: 1 }}
+                viewport={{ once: true, amount: 0.5 }}
+                transition={{ duration: 0.5 }}
+                className="relative"
+              >
                 <img 
                   src={constructionHero} 
                   alt="Construction site" 
                   className="rounded-lg shadow-xl"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-primary/20 to-transparent rounded-lg"></div>
-              </div>
+              </motion.div>
             </div>
           </div>
-        </section>
+        </motion.section>
 
         {/* Services Section */}
-        <section id="services" className="py-20 px-4 bg-muted/30">
+        <motion.section
+          id="services"
+          initial="hidden"
+          whileInView="visible"
+          variants={containerVariants}
+          viewport={{ once: true, amount: 0.2 }}
+          className="py-20 px-4 bg-muted/30"
+        >
           <div className="max-w-6xl mx-auto">
             <div className="text-center space-y-4 mb-16">
               <h2 className="text-3xl font-bold">Our Services</h2>
@@ -117,24 +169,34 @@ const About = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {services.map((service, index) => (
-                <Card key={index} className="text-center shadow-card hover:shadow-accent transition-smooth">
-                  <CardHeader>
-                    <div className="w-16 h-16 mx-auto gradient-hero rounded-full flex items-center justify-center mb-4">
-                      <service.icon className="w-8 h-8 text-white" />
-                    </div>
-                    <CardTitle className="text-lg">{service.title}</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-muted-foreground text-sm">{service.description}</p>
-                  </CardContent>
-                </Card>
+                <motion.div key={index} variants={itemVariants}>
+                  <AnimatedCard>
+                    <Card className="text-center shadow-card h-full">
+                      <CardHeader>
+                        <div className="w-16 h-16 mx-auto gradient-hero rounded-full flex items-center justify-center mb-4">
+                          <service.icon className="w-8 h-8 text-white" />
+                        </div>
+                        <CardTitle className="text-lg">{service.title}</CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <p className="text-muted-foreground text-sm">{service.description}</p>
+                      </CardContent>
+                    </Card>
+                  </AnimatedCard>
+                </motion.div>
               ))}
             </div>
           </div>
-        </section>
+        </motion.section>
 
         {/* Features Section */}
-        <section className="py-20 px-4">
+        <motion.section
+          initial="hidden"
+          whileInView="visible"
+          variants={containerVariants}
+          viewport={{ once: true, amount: 0.2 }}
+          className="py-20 px-4"
+        >
           <div className="max-w-6xl mx-auto">
             <div className="text-center space-y-4 mb-16">
               <h2 className="text-3xl font-bold">Platform Features</h2>
@@ -144,80 +206,96 @@ const About = () => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <Card className="shadow-card">
-                <CardHeader>
-                  <CardTitle>BOQ Generator</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <p className="text-muted-foreground">
-                    Generate detailed Bill of Quantities with accurate material requirements, 
-                    recommended brands, and cost estimations based on real-time market data.
-                  </p>
-                  <ul className="text-sm text-muted-foreground space-y-1">
-                    <li>• Automated quantity calculations</li>
-                    <li>• Brand recommendations from trusted suppliers</li>
-                    <li>• Real-time pricing updates</li>
-                    <li>• Downloadable detailed reports</li>
-                  </ul>
-                </CardContent>
-              </Card>
+              <motion.div variants={itemVariants}>
+                <AnimatedCard>
+                  <Card className="shadow-card h-full">
+                    <CardHeader>
+                      <CardTitle>BOQ Generator</CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      <p className="text-muted-foreground">
+                        Generate detailed Bill of Quantities with accurate material requirements, 
+                        recommended brands, and cost estimations based on real-time market data.
+                      </p>
+                      <ul className="text-sm text-muted-foreground space-y-1">
+                        <li>• Automated quantity calculations</li>
+                        <li>• Brand recommendations from trusted suppliers</li>
+                        <li>• Real-time pricing updates</li>
+                        <li>• Downloadable detailed reports</li>
+                      </ul>
+                    </CardContent>
+                  </Card>
+                </AnimatedCard>
+              </motion.div>
 
-              <Card className="shadow-card">
-                <CardHeader>
-                  <CardTitle>AI Cost Calculator</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <p className="text-muted-foreground">
-                    Advanced AI algorithms analyze project specifications and market conditions 
-                    to provide highly accurate cost estimates with confidence levels.
-                  </p>
-                  <ul className="text-sm text-muted-foreground space-y-1">
-                    <li>• Machine learning-powered estimations</li>
-                    <li>• Location-based pricing variations</li>
-                    <li>• Quality grade considerations</li>
-                    <li>• Scenario comparison tools</li>
-                  </ul>
-                </CardContent>
-              </Card>
+              <motion.div variants={itemVariants}>
+                <AnimatedCard>
+                  <Card className="shadow-card h-full">
+                    <CardHeader>
+                      <CardTitle>AI Cost Calculator</CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      <p className="text-muted-foreground">
+                        Advanced AI algorithms analyze project specifications and market conditions 
+                        to provide highly accurate cost estimates with confidence levels.
+                      </p>
+                      <ul className="text-sm text-muted-foreground space-y-1">
+                        <li>• Machine learning-powered estimations</li>
+                        <li>• Location-based pricing variations</li>
+                        <li>• Quality grade considerations</li>
+                        <li>• Scenario comparison tools</li>
+                      </ul>
+                    </CardContent>
+                  </Card>
+                </AnimatedCard>
+              </motion.div>
 
-              <Card className="shadow-card">
-                <CardHeader>
-                  <CardTitle>Brand Matching</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <p className="text-muted-foreground">
-                    Intelligent brand recommendation system that matches the best available 
-                    brands for each material type based on quality, availability, and pricing.
-                  </p>
-                  <ul className="text-sm text-muted-foreground space-y-1">
-                    <li>• Trusted brand partnerships</li>
-                    <li>• Quality-based recommendations</li>
-                    <li>• Regional availability mapping</li>
-                    <li>• Price comparison across brands</li>
-                  </ul>
-                </CardContent>
-              </Card>
+              <motion.div variants={itemVariants}>
+                <AnimatedCard>
+                  <Card className="shadow-card h-full">
+                    <CardHeader>
+                      <CardTitle>Brand Matching</CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      <p className="text-muted-foreground">
+                        Intelligent brand recommendation system that matches the best available 
+                        brands for each material type based on quality, availability, and pricing.
+                      </p>
+                      <ul className="text-sm text-muted-foreground space-y-1">
+                        <li>• Trusted brand partnerships</li>
+                        <li>• Quality-based recommendations</li>
+                        <li>• Regional availability mapping</li>
+                        <li>• Price comparison across brands</li>
+                      </ul>
+                    </CardContent>
+                  </Card>
+                </AnimatedCard>
+              </motion.div>
 
-              <Card className="shadow-card">
-                <CardHeader>
-                  <CardTitle>Eco-Friendly Alternatives</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <p className="text-muted-foreground">
-                    Discover sustainable and environmentally friendly material alternatives 
-                    that reduce carbon footprint without compromising on quality or cost.
-                  </p>
-                  <ul className="text-sm text-muted-foreground space-y-1">
-                    <li>• Green material options</li>
-                    <li>• Carbon footprint analysis</li>
-                    <li>• Sustainability scoring</li>
-                    <li>• Eco-certification verification</li>
-                  </ul>
-                </CardContent>
-              </Card>
+              <motion.div variants={itemVariants}>
+                <AnimatedCard>
+                  <Card className="shadow-card h-full">
+                    <CardHeader>
+                      <CardTitle>Eco-Friendly Alternatives</CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      <p className="text-muted-foreground">
+                        Discover sustainable and environmentally friendly material alternatives 
+                        that reduce carbon footprint without compromising on quality or cost.
+                      </p>
+                      <ul className="text-sm text-muted-foreground space-y-1">
+                        <li>• Green material options</li>
+                        <li>• Carbon footprint analysis</li>
+                        <li>• Sustainability scoring</li>
+                        <li>• Eco-certification verification</li>
+                      </ul>
+                    </CardContent>
+                  </Card>
+                </AnimatedCard>
+              </motion.div>
             </div>
           </div>
-        </section>
+        </motion.section>
       </main>
 
       <Footer />

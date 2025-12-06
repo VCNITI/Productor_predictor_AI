@@ -1,5 +1,6 @@
 // PredictorForm.tsx
 import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -25,6 +26,7 @@ import {
 } from "lucide-react";
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
+import { AnimatedCard } from "./ui/AnimatedCard";
 
 /* ---------------------------
    Types
@@ -350,40 +352,65 @@ const MaterialSelectionStep = ({
   const totalLow = selectedMaterials.reduce((sum, m) => sum + m.priceLow * m.qty, 0);
   const totalHigh = selectedMaterials.reduce((sum, m) => sum + m.priceHigh * m.qty, 0);
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+    },
+  };
+
   return (
-    <div className="space-y-6">
-      <div className="text-center space-y-2">
+    <motion.div
+      variants={containerVariants}
+      initial="hidden"
+      animate="visible"
+      className="space-y-6"
+    >
+      <motion.div variants={itemVariants} className="text-center space-y-2">
         <h3 className="text-2xl font-semibold">AI-Generated Materials List</h3>
         <p className="text-muted-foreground">Review, customize, and select your materials</p>
         <Badge variant="secondary" className="mt-2">
           <Bot className="w-4 h-4 mr-1" />
           Powered by GPT
         </Badge>
-      </div>
+      </motion.div>
 
-      <Card className="bg-gradient-to-r from-blue-50 to-purple-50 border-primary/20">
-        <CardContent className="p-6">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
-            <div>
-              <p className="text-sm text-muted-foreground">Selected Items</p>
-              <p className="text-2xl font-bold text-primary">{selectedMaterials.length}</p>
-            </div>
-            <div>
-              <p className="text-sm text-muted-foreground">Total Cost Range</p>
-              <div className="text-lg font-bold break-words">
-                <div>{formatCurrencyCompact(totalLow)}</div>
-                <div className="text-sm">to {formatCurrencyCompact(totalHigh)}</div>
+      <motion.div variants={itemVariants}>
+        <Card className="bg-gradient-to-r from-blue-50 to-purple-50 border-primary/20">
+          <CardContent className="p-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+              <div>
+                <p className="text-sm text-muted-foreground">Selected Items</p>
+                <p className="text-2xl font-bold text-primary">{selectedMaterials.length}</p>
+              </div>
+              <div>
+                <p className="text-sm text-muted-foreground">Total Cost Range</p>
+                <div className="text-lg font-bold break-words">
+                  <div>{formatCurrencyCompact(totalLow)}</div>
+                  <div className="text-sm">to {formatCurrencyCompact(totalHigh)}</div>
+                </div>
+              </div>
+              <div>
+                <p className="text-sm text-muted-foreground">Avg. Cost</p>
+                <p className="text-lg font-bold text-green-600">{formatCurrencyCompact((totalLow + totalHigh) / 2)}</p>
               </div>
             </div>
-            <div>
-              <p className="text-sm text-muted-foreground">Avg. Cost</p>
-              <p className="text-lg font-bold text-green-600">{formatCurrencyCompact((totalLow + totalHigh) / 2)}</p>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+      </motion.div>
 
-      <div className="space-y-4 max-h-96 overflow-y-auto">
+      <motion.div variants={itemVariants} className="space-y-4 max-h-96 overflow-y-auto">
         {materials.map((material) => (
           <Card key={material.id} className={`transition-all ${material.selected ? "border-primary shadow-md" : "border-muted opacity-60"}`}>
             <CardContent className="p-4">
@@ -405,7 +432,12 @@ const MaterialSelectionStep = ({
                   </div>
 
                   {material.selected && (
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                    <motion.div
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: "auto" }}
+                      exit={{ opacity: 0, height: 0 }}
+                      className="grid grid-cols-1 md:grid-cols-3 gap-3"
+                    >
                       <div>
                         <Label className="text-xs">Quantity</Label>
                         <Input
@@ -431,16 +463,16 @@ const MaterialSelectionStep = ({
                           </SelectContent>
                         </Select>
                       </div>
-                    </div>
+                    </motion.div>
                   )}
                 </div>
               </div>
             </CardContent>
           </Card>
         ))}
-      </div>
+      </motion.div>
 
-      <div className="flex flex-col md:flex-row justify-between items-center pt-4 gap-4 md:gap-2">
+      <motion.div variants={itemVariants} className="flex flex-col md:flex-row justify-between items-center pt-4 gap-4 md:gap-2">
         <Button variant="outline" onClick={onPrev} className="flex items-center w-full md:w-auto justify-center">
           <ArrowLeft className="w-4 h-4 mr-2" />
           Previous
@@ -450,8 +482,8 @@ const MaterialSelectionStep = ({
           Generate Final Estimate
           <ArrowRight className="w-4 h-4 ml-2" />
         </Button>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 };
 
@@ -550,210 +582,239 @@ const PredictorForm = ({ id }: { id?: string }) => {
       );
     }
 
-    switch (currentStep) {
-      case 1:
-        return (
-          <div className="space-y-6">
-            <div className="text-center space-y-2">
-              <h3 className="text-2xl font-semibold">Project Stage</h3>
-              <p className="text-muted-foreground">What stage is your project in?</p>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {[
-                { value: "foundation", label: "Foundation", desc: "Excavation to plinth level", icon: Layers },
-                { value: "structure", label: "Structure", desc: "Columns, beams, slabs", icon: Building },
-                { value: "finishing", label: "Finishing", desc: "Plastering, flooring, painting", icon: Home },
-                { value: "interiors", label: "Interiors", desc: "Fixtures, fittings, furnishing", icon: Star }
-              ].map((s) => (
-                <Card
-                  key={s.value}
-                  className={`cursor-pointer transition-all ${formData.stage === s.value ? "border-primary shadow-lg" : "hover:border-primary/50 hover:shadow-md"}`}
-                  onClick={() => {
-                    updateFormData("stage", s.value);
-                    setTimeout(() => nextStep(), 200);
-                  }}
-                >
-                  <CardContent className="p-6 text-center space-y-3">
-                    <s.icon className="w-8 h-8 mx-auto text-primary" />
-                    <div>
-                      <h4 className="font-semibold">{s.label}</h4>
-                      <p className="text-sm text-muted-foreground">{s.desc}</p>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </div>
-        );
+    const stepVariants = {
+      hidden: { opacity: 0, x: 50 },
+      visible: { opacity: 1, x: 0 },
+      exit: { opacity: 0, x: -50 },
+    };
 
-      case 2:
-        return (
-          <div className="space-y-6">
-            <div className="text-center space-y-2">
-              <h3 className="text-2xl font-semibold">Building Type</h3>
-              <p className="text-muted-foreground">What type of building are you constructing?</p>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {[
-                { value: "residential", label: "Residential", desc: "Houses, apartments" },
-                { value: "commercial", label: "Commercial", desc: "Offices, shops, warehouses" },
-                { value: "mixed", label: "Mixed-use", desc: "Residential + commercial" }
-              ].map((t) => (
-                <Card
-                  key={t.value}
-                  className={`cursor-pointer transition-all ${formData.buildingType === t.value ? "border-primary shadow-lg" : "hover:border-primary/50 hover:shadow-md"}`}
-                  onClick={() => {
-                    updateFormData("buildingType", t.value);
-                    setTimeout(() => nextStep(), 200);
-                  }}
-                >
-                  <CardContent className="p-6 text-center space-y-3">
-                    <Building className="w-8 h-8 mx-auto text-primary" />
-                    <div>
-                      <h4 className="font-semibold">{t.label}</h4>
-                      <p className="text-sm text-muted-foreground">{t.desc}</p>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </div>
-        );
-
-     case 3:
-  return (
-    <div className="space-y-6">
-      <div className="text-center space-y-2">
-        <h3 className="text-2xl font-semibold">Project Size</h3>
-        <p className="text-muted-foreground">Enter your project dimensions</p>
-      </div>
-      <div className="max-w-md mx-auto space-y-4">
-        <div className="space-y-2">
-          <Label htmlFor="area">Total Area (sq ft)</Label>
-          <Input 
-            id="area" 
-            type="number" 
-            placeholder="e.g., 1200" 
-            value={formData.totalAreaSqft} 
-            onChange={(e) => updateFormData("totalAreaSqft", e.target.value)} 
-            className="text-center text-lg" 
-          />
-          <p className="text-xs text-muted-foreground">Minimum 100 sq ft</p>
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="floors">Number of Floors</Label>
-          <Select
-            value={formData.floors}
-            onValueChange={(value) => updateFormData("floors", value)}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Select floors" />
-            </SelectTrigger>
-            <SelectContent>
-              {[1, 2, 3, 4, 5, 6].map((floor) => (
-                <SelectItem key={floor} value={floor.toString()}>
-                  {floor} Floor{floor > 1 ? "s" : ""}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-      </div>
-      
-      <div className="flex justify-end items-center pt-4">
-        
-        <Button 
-          onClick={nextStep}
-          disabled={!formData.totalAreaSqft || !formData.floors || parseInt(formData.totalAreaSqft) < 100}
-          variant="hero"
-          className="flex items-center"
+    return (
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={currentStep}
+          variants={stepVariants}
+          initial="hidden"
+          animate="visible"
+          exit="exit"
+          transition={{ type: "tween" }}
         >
-          Continue
-          <ArrowRight className="w-4 h-4 ml-2" />
-        </Button>
-      </div>
-    </div>
-  );
-      case 4:
-        return (
-          <div className="space-y-6">
-            <div className="text-center space-y-2">
-              <h3 className="text-2xl font-semibold">Quality Level</h3>
-              <p className="text-muted-foreground">Choose your material quality preference</p>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {[
-                { value: "economy", label: "Economy", desc: "Basic quality, budget-friendly", price: "₹800-1200/sq ft" },
-                { value: "standard", label: "Standard", desc: "Good quality, balanced cost", price: "₹1200-1800/sq ft" },
-                { value: "premium", label: "Premium", desc: "High quality, superior finish", price: "₹1800-2500/sq ft" },
-                { value: "sustainable", label: "Sustainable", desc: "Eco-friendly, green materials", price: "₹1500-2200/sq ft" }
-              ].map((q) => (
-                <Card key={q.value} className={`cursor-pointer transition-all ${formData.quality === q.value ? "border-primary shadow-lg" : "hover:border-primary/50 hover:shadow-md"}`} onClick={() => { updateFormData("quality", q.value); setTimeout(() => nextStep(), 200); }}>
-                  <CardContent className="p-6 space-y-3">
-                    <div className="flex items-start justify-between">
-                      <div className="space-y-1">
-                        <h4 className="font-semibold">{q.label}</h4>
-                        <p className="text-sm text-muted-foreground">{q.desc}</p>
-                      </div>
-                      <Badge variant="secondary" className="text-xs">{q.price}</Badge>
+          {(() => {
+            switch (currentStep) {
+              case 1:
+                return (
+                  <div className="space-y-6">
+                    <div className="text-center space-y-2">
+                      <h3 className="text-2xl font-semibold">Project Stage</h3>
+                      <p className="text-muted-foreground">What stage is your project in?</p>
                     </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </div>
-        );
-
-      case 5:
-        return (
-          <div className="space-y-6">
-            <div className="text-center space-y-2">
-              <h3 className="text-2xl font-semibold">Location & Additional Requirements</h3>
-              <p className="text-muted-foreground">Final details for AI analysis</p>
-            </div>
-            <div className="max-w-md mx-auto space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="city">City</Label>
-                <Select value={formData.city} onValueChange={(value) => { updateFormData("city", value); setTimeout(() => nextStep(), 200); }}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select your city" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="bengaluru">Bengaluru</SelectItem>
-                    <SelectItem value="mumbai">Mumbai</SelectItem>
-                    <SelectItem value="delhi">Delhi</SelectItem>
-                    <SelectItem value="hyderabad">Hyderabad</SelectItem>
-                    <SelectItem value="pune">Pune</SelectItem>
-                    <SelectItem value="chennai">Chennai</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="requirements">Additional Requirements (Optional)</Label>
-                <Input id="requirements" placeholder="e.g., Swimming pool, Solar panels" value={formData.additionalRequirements} onChange={(e) => updateFormData("additionalRequirements", e.target.value)} />
-                <p className="text-xs text-muted-foreground">Help AI provide more accurate estimates</p>
-              </div>
-
-              <Card className="p-4 bg-gradient-to-r from-blue-50 to-purple-50">
-                <div className="flex items-start space-x-3">
-                  <Bot className="w-5 h-5 text-primary mt-0.5" />
-                  <div className="text-sm">
-                    <p className="font-medium">AI Analysis Ready</p>
-                    <p className="text-muted-foreground">VCNITI AI will analyze your requirements and suggest optimal materials</p>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {[
+                        { value: "foundation", label: "Foundation", desc: "Excavation to plinth level", icon: Layers },
+                        { value: "structure", label: "Structure", desc: "Columns, beams, slabs", icon: Building },
+                        { value: "finishing", label: "Finishing", desc: "Plastering, flooring, painting", icon: Home },
+                        { value: "interiors", label: "Interiors", desc: "Fixtures, fittings, furnishing", icon: Star }
+                      ].map((s) => (
+                        <AnimatedCard
+                          key={s.value}
+                          onClick={() => {
+                            updateFormData("stage", s.value);
+                            setTimeout(() => nextStep(), 200);
+                          }}
+                        >
+                          <Card
+                            className={`cursor-pointer transition-all h-full ${formData.stage === s.value ? "border-primary shadow-lg" : "hover:border-primary/50 hover:shadow-md"}`}
+                          >
+                            <CardContent className="p-6 text-center space-y-3">
+                              <s.icon className="w-8 h-8 mx-auto text-primary" />
+                              <div>
+                                <h4 className="font-semibold">{s.label}</h4>
+                                <p className="text-sm text-muted-foreground">{s.desc}</p>
+                              </div>
+                            </CardContent>
+                          </Card>
+                        </AnimatedCard>
+                      ))}
+                    </div>
                   </div>
-                </div>
-              </Card>
-            </div>
-          </div>
-        );
+                );
 
-      case 6:
-        return <MaterialSelectionStep materials={aiGeneratedMaterials} onMaterialsChange={setAiGeneratedMaterials} onNext={nextStep} onPrev={() => setCurrentStep(5)} />;
+              case 2:
+                return (
+                  <div className="space-y-6">
+                    <div className="text-center space-y-2">
+                      <h3 className="text-2xl font-semibold">Building Type</h3>
+                      <p className="text-muted-foreground">What type of building are you constructing?</p>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      {[
+                        { value: "residential", label: "Residential", desc: "Houses, apartments" },
+                        { value: "commercial", label: "Commercial", desc: "Offices, shops, warehouses" },
+                        { value: "mixed", label: "Mixed-use", desc: "Residential + commercial" }
+                      ].map((t) => (
+                        <AnimatedCard
+                          key={t.value}
+                          onClick={() => {
+                            updateFormData("buildingType", t.value);
+                            setTimeout(() => nextStep(), 200);
+                          }}
+                        >
+                          <Card
+                            className={`cursor-pointer transition-all h-full ${formData.buildingType === t.value ? "border-primary shadow-lg" : "hover:border-primary/50 hover:shadow-md"}`}
+                          >
+                            <CardContent className="p-6 text-center space-y-3">
+                              <Building className="w-8 h-8 mx-auto text-primary" />
+                              <div>
+                                <h4 className="font-semibold">{t.label}</h4>
+                                <p className="text-sm text-muted-foreground">{t.desc}</p>
+                              </div>
+                            </CardContent>
+                          </Card>
+                        </AnimatedCard>
+                      ))}
+                    </div>
+                  </div>
+                );
 
-      default:
-        return null;
-    }
+              case 3:
+                return (
+                  <div className="space-y-6">
+                    <div className="text-center space-y-2">
+                      <h3 className="text-2xl font-semibold">Project Size</h3>
+                      <p className="text-muted-foreground">Enter your project dimensions</p>
+                    </div>
+                    <div className="max-w-md mx-auto space-y-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="area">Total Area (sq ft)</Label>
+                        <Input
+                          id="area"
+                          type="number"
+                          placeholder="e.g., 1200"
+                          value={formData.totalAreaSqft}
+                          onChange={(e) => updateFormData("totalAreaSqft", e.target.value)}
+                          className="text-center text-lg"
+                        />
+                        <p className="text-xs text-muted-foreground">Minimum 100 sq ft</p>
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="floors">Number of Floors</Label>
+                        <Select
+                          value={formData.floors}
+                          onValueChange={(value) => updateFormData("floors", value)}
+                        >
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select floors" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {[1, 2, 3, 4, 5, 6].map((floor) => (
+                              <SelectItem key={floor} value={floor.toString()}>
+                                {floor} Floor{floor > 1 ? "s" : ""}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+
+                    <div className="flex justify-end items-center pt-4">
+
+                      <Button
+                        onClick={nextStep}
+                        disabled={!formData.totalAreaSqft || !formData.floors || parseInt(formData.totalAreaSqft) < 100}
+                        variant="hero"
+                        className="flex items-center"
+                      >
+                        Continue
+                        <ArrowRight className="w-4 h-4 ml-2" />
+                      </Button>
+                    </div>
+                  </div>
+                );
+              case 4:
+                return (
+                  <div className="space-y-6">
+                    <div className="text-center space-y-2">
+                      <h3 className="text-2xl font-semibold">Quality Level</h3>
+                      <p className="text-muted-foreground">Choose your material quality preference</p>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {[
+                        { value: "economy", label: "Economy", desc: "Basic quality, budget-friendly", price: "₹800-1200/sq ft" },
+                        { value: "standard", label: "Standard", desc: "Good quality, balanced cost", price: "₹1200-1800/sq ft" },
+                        { value: "premium", label: "Premium", desc: "High quality, superior finish", price: "₹1800-2500/sq ft" },
+                        { value: "sustainable", label: "Sustainable", desc: "Eco-friendly, green materials", price: "₹1500-2200/sq ft" }
+                      ].map((q) => (
+                        <AnimatedCard key={q.value} onClick={() => { updateFormData("quality", q.value); setTimeout(() => nextStep(), 200); }}>
+                          <Card className={`cursor-pointer transition-all h-full ${formData.quality === q.value ? "border-primary shadow-lg" : "hover:border-primary/50 hover:shadow-md"}`}>
+                            <CardContent className="p-6 space-y-3">
+                              <div className="flex items-start justify-between">
+                                <div className="space-y-1">
+                                  <h4 className="font-semibold">{q.label}</h4>
+                                  <p className="text-sm text-muted-foreground">{q.desc}</p>
+                                </div>
+                                <Badge variant="secondary" className="text-xs">{q.price}</Badge>
+                              </div>
+                            </CardContent>
+                          </Card>
+                        </AnimatedCard>
+                      ))}
+                    </div>
+                  </div>
+                );
+
+              case 5:
+                return (
+                  <div className="space-y-6">
+                    <div className="text-center space-y-2">
+                      <h3 className="text-2xl font-semibold">Location & Additional Requirements</h3>
+                      <p className="text-muted-foreground">Final details for AI analysis</p>
+                    </div>
+                    <div className="max-w-md mx-auto space-y-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="city">City</Label>
+                        <Select value={formData.city} onValueChange={(value) => { updateFormData("city", value); setTimeout(() => nextStep(), 200); }}>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select your city" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="bengaluru">Bengaluru</SelectItem>
+                            <SelectItem value="mumbai">Mumbai</SelectItem>
+                            <SelectItem value="delhi">Delhi</SelectItem>
+                            <SelectItem value="hyderabad">Hyderabad</SelectItem>
+                            <SelectItem value="pune">Pune</SelectItem>
+                            <SelectItem value="chennai">Chennai</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="requirements">Additional Requirements (Optional)</Label>
+                        <Input id="requirements" placeholder="e.g., Swimming pool, Solar panels" value={formData.additionalRequirements} onChange={(e) => updateFormData("additionalRequirements", e.target.value)} />
+                        <p className="text-xs text-muted-foreground">Help AI provide more accurate estimates</p>
+                      </div>
+
+                      <Card className="p-4 bg-gradient-to-r from-blue-50 to-purple-50">
+                        <div className="flex items-start space-x-3">
+                          <Bot className="w-5 h-5 text-primary mt-0.5" />
+                          <div className="text-sm">
+                            <p className="font-medium">AI Analysis Ready</p>
+                            <p className="text-muted-foreground">VCNITI AI will analyze your requirements and suggest optimal materials</p>
+                          </div>
+                        </div>
+                      </Card>
+                    </div>
+                  </div>
+                );
+
+              case 6:
+                return <MaterialSelectionStep materials={aiGeneratedMaterials} onMaterialsChange={setAiGeneratedMaterials} onNext={nextStep} onPrev={() => setCurrentStep(5)} />;
+
+              default:
+                return null;
+            }
+          })()}
+        </motion.div>
+      </AnimatePresence>
+    );
   };
 
   if (showResults && finalEstimate) {
@@ -763,7 +824,7 @@ const PredictorForm = ({ id }: { id?: string }) => {
   return (
     <section id={id || "prediction-form"} className="py-12 px-4">
       <div className="max-w-4xl mx-auto">
-        <Card className="shadow-lg">
+        <Card className="shadow-lg overflow-hidden">
           <CardHeader className="text-center space-y-4">
             <div className="flex items-center justify-center space-x-2">
               <Badge variant="outline" className="text-xs">Step {currentStep} of {totalSteps}</Badge>
@@ -773,9 +834,9 @@ const PredictorForm = ({ id }: { id?: string }) => {
           <CardContent className="p-8">
             {renderStep()}
 
-            {currentStep < 6 && (
+            {currentStep > 1 && currentStep < 6 && (
               <div className="flex justify-start items-center mt-8">
-                <Button variant="outline" onClick={() => setCurrentStep((c) => Math.max(1, c - 1))} disabled={currentStep === 1} className="flex items-center">
+                <Button variant="outline" onClick={prevStep} className="flex items-center">
                   <ArrowLeft className="w-4 h-4 mr-2" /> Previous
                 </Button>
               </div>
@@ -989,124 +1050,159 @@ const ResultsDashboard = ({ estimate, formData }: { estimate: EstimateData; form
     }
   };
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+    },
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 py-12 px-4">
-      <div className="max-w-7xl mx-auto space-y-8">
-        <div className="text-center space-y-4">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 py-12 px-4"
+    >
+      <motion.div
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+        className="max-w-7xl mx-auto space-y-8"
+      >
+        <motion.div variants={itemVariants} className="text-center space-y-4">
           <Badge variant="secondary" className="px-4 py-2">
             <Bot className="w-4 h-4 mr-2" />
             AI-Generated Estimate
           </Badge>
           <h1 className="text-4xl font-bold">Your Customized Project Estimate</h1>
           <p className="text-muted-foreground max-w-2xl mx-auto">{estimate.reasoning}</p>
-        </div>
+        </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <Card className="shadow-lg border-primary/20">
-            <CardHeader className="text-center">
-              <CardTitle className="text-lg">Total Cost Range</CardTitle>
-            </CardHeader>
-            <CardContent className="text-center space-y-2">
-              <div className="text-2xl font-bold text-primary break-words">
-                <div>{formatCurrencyCompact(estimate.totalLow)}</div>
-                <div className="text-lg">to {formatCurrencyCompact(estimate.totalHigh)}</div>
-              </div>
-              <p className="text-sm text-muted-foreground">{estimate.materials.length} selected materials</p>
-            </CardContent>
-          </Card>
+        <motion.div variants={itemVariants} className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <AnimatedCard>
+            <Card className="shadow-lg border-primary/20 h-full">
+              <CardHeader className="text-center">
+                <CardTitle className="text-lg">Total Cost Range</CardTitle>
+              </CardHeader>
+              <CardContent className="text-center space-y-2">
+                <div className="text-2xl font-bold text-primary break-words">
+                  <div>{formatCurrencyCompact(estimate.totalLow)}</div>
+                  <div className="text-lg">to {formatCurrencyCompact(estimate.totalHigh)}</div>
+                </div>
+                <p className="text-sm text-muted-foreground">{estimate.materials.length} selected materials</p>
+              </CardContent>
+            </Card>
+          </AnimatedCard>
 
-          <Card className="shadow-lg border-green-200">
-            <CardHeader className="text-center">
-              <CardTitle className="text-lg">AI Confidence</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="text-center">
-                <div className="text-3xl font-bold text-green-600">{estimate.confidence}%</div>
-              </div>
-              <Progress value={estimate.confidence} className="h-3" />
-              <p className="text-xs text-muted-foreground text-center">Based on your selections & market data</p>
-            </CardContent>
-          </Card>
+          <AnimatedCard>
+            <Card className="shadow-lg border-green-200 h-full">
+              <CardHeader className="text-center">
+                <CardTitle className="text-lg">AI Confidence</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="text-center">
+                  <div className="text-3xl font-bold text-green-600">{estimate.confidence}%</div>
+                </div>
+                <Progress value={estimate.confidence} className="h-3" />
+                <p className="text-xs text-muted-foreground text-center">Based on your selections & market data</p>
+              </CardContent>
+            </Card>
+          </AnimatedCard>
 
-          <Card className="shadow-lg border-purple-200">
-            <CardHeader className="text-center">
-              <CardTitle className="text-lg">Actions</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              <Button asChild variant="hero" className="w-full" size="sm">
-  <a href="https://www.vcniti.com/collections" target="_blank" rel="noopener noreferrer">
-    <ShoppingCart className="w-4 h-4 mr-2" />
-    Proceed to Purchase
-  </a>
-</Button>
-
-              <div className="grid grid-cols-2 gap-2">
-                <Button variant="outline" size="sm" onClick={downloadEstimatePDF}>
-                  <Download className="w-4 h-4 mr-1" /> Export
+          <AnimatedCard>
+            <Card className="shadow-lg border-purple-200 h-full">
+              <CardHeader className="text-center">
+                <CardTitle className="text-lg">Actions</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <Button asChild variant="hero" className="w-full" size="sm">
+                  <a href="https://www.vcniti.com/collections" target="_blank" rel="noopener noreferrer">
+                    <ShoppingCart className="w-4 h-4 mr-2" />
+                    Proceed to Purchase
+                  </a>
                 </Button>
-                <Button variant="outline" size="sm" onClick={shareEstimate}>
-                  <Share2 className="w-4 h-4 mr-1" /> Share
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
 
-        <Card className="shadow-lg">
-          <CardHeader>
-            <CardTitle>Selected Materials with Brands</CardTitle>
-            <p className="text-sm text-muted-foreground">Your customized bill of quantities</p>
-          </CardHeader>
-          <CardContent>
-            <div className="overflow-x-auto">
-              <table className="w-full border-collapse">
-                <thead>
-                  <tr className="border-b">
-                    <th className="text-left p-3 font-semibold">S.No.</th>
-                    <th className="text-left p-3 font-semibold">Material</th>
-                    <th className="text-left p-3 font-semibold">Selected Brand</th>
-                    <th className="text-left p-3 font-semibold">Quantity</th>
-                    <th className="text-left p-3 font-semibold">Unit Cost</th>
-                    <th className="text-left p-3 font-semibold">Total Cost</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {estimate.materials.map((material, index) => (
-                    <tr key={material.id} className="border-b hover:bg-muted/20">
-                      <td className="p-3">{index + 1}</td>
-                      <td className="p-3">
-                        <div>
-                          <div className="font-medium">{material.category}</div>
-                          {material.description && <div className="text-xs text-muted-foreground">{material.description}</div>}
-                        </div>
-                      </td>
-                      <td className="p-3">
-                        <Badge variant="secondary">{material.selectedBrand}</Badge>
-                      </td>
-                      <td className="p-3">
-                        <span>{material.qty} {material.unit}</span>
-                      </td>
-                      <td className="p-3">
-                        <div className="text-sm">{formatCurrencyCompact(material.priceLow)} - {formatCurrencyCompact(material.priceHigh)}</div>
-                      </td>
-                      <td className="p-3">
-                        <div className="font-semibold text-primary">{formatCurrencyCompact(((material.priceLow + material.priceHigh) / 2) * material.qty)}</div>
-                      </td>
+                <div className="grid grid-cols-2 gap-2">
+                  <Button variant="outline" size="sm" onClick={downloadEstimatePDF}>
+                    <Download className="w-4 h-4 mr-1" /> Export
+                  </Button>
+                  <Button variant="outline" size="sm" onClick={shareEstimate}>
+                    <Share2 className="w-4 h-4 mr-1" /> Share
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </AnimatedCard>
+        </motion.div>
+
+        <motion.div variants={itemVariants}>
+          <Card className="shadow-lg">
+            <CardHeader>
+              <CardTitle>Selected Materials with Brands</CardTitle>
+              <p className="text-sm text-muted-foreground">Your customized bill of quantities</p>
+            </CardHeader>
+            <CardContent>
+              <div className="overflow-x-auto">
+                <table className="w-full border-collapse">
+                  <thead>
+                    <tr className="border-b">
+                      <th className="text-left p-3 font-semibold">S.No.</th>
+                      <th className="text-left p-3 font-semibold">Material</th>
+                      <th className="text-left p-3 font-semibold">Selected Brand</th>
+                      <th className="text-left p-3 font-semibold">Quantity</th>
+                      <th className="text-left p-3 font-semibold">Unit Cost</th>
+                      <th className="text-left p-3 font-semibold">Total Cost</th>
                     </tr>
-                  ))}
-                </tbody>
-                <tfoot>
-                  <tr className="border-t-2 font-bold">
-                    <td colSpan={5} className="p-3 text-right">Total Estimate:</td>
-                    <td className="p-3 text-primary text-lg">{formatCurrencyCompact((estimate.totalLow + estimate.totalHigh) / 2)}</td>
-                  </tr>
-                </tfoot>
-              </table>
-            </div>
-          </CardContent>
-        </Card>
+                  </thead>
+                  <tbody>
+                    {estimate.materials.map((material, index) => (
+                      <tr key={material.id} className="border-b hover:bg-muted/20">
+                        <td className="p-3">{index + 1}</td>
+                        <td className="p-3">
+                          <div>
+                            <div className="font-medium">{material.category}</div>
+                            {material.description && <div className="text-xs text-muted-foreground">{material.description}</div>}
+                          </div>
+                        </td>
+                        <td className="p-3">
+                          <Badge variant="secondary">{material.selectedBrand}</Badge>
+                        </td>
+                        <td className="p-3">
+                          <span>{material.qty} {material.unit}</span>
+                        </td>
+                        <td className="p-3">
+                          <div className="text-sm">{formatCurrencyCompact(material.priceLow)} - {formatCurrencyCompact(material.priceHigh)}</div>
+                        </td>
+                        <td className="p-3">
+                          <div className="font-semibold text-primary">{formatCurrencyCompact(((material.priceLow + material.priceHigh) / 2) * material.qty)}</div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                  <tfoot>
+                    <tr className="border-t-2 font-bold">
+                      <td colSpan={5} className="p-3 text-right">Total Estimate:</td>
+                      <td className="p-3 text-primary text-lg">{formatCurrencyCompact((estimate.totalLow + estimate.totalHigh) / 2)}</td>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
+            </CardContent>
+          </Card>
+        </motion.div>
 
-        <div className="flex flex-col md:flex-row justify-center items-center space-y-4 md:space-y-0 md:space-x-4">
+        <motion.div variants={itemVariants} className="flex flex-col md:flex-row justify-center items-center space-y-4 md:space-y-0 md:space-x-4">
           <Button variant="outline" onClick={() => window.location.reload()} className="w-full md:w-auto">Start New Estimate</Button>
           <Button
             variant="hero"
@@ -1116,11 +1212,12 @@ const ResultsDashboard = ({ estimate, formData }: { estimate: EstimateData; form
             <ShoppingCart className="w-4 h-4 mr-2" />
             Proceed to Purchase
           </Button>
-        </div>
-      </div>
-    </div>
+        </motion.div>
+      </motion.div>
+    </motion.div>
   );
 };
+
 
 /* ---------------------------
    App wrapper
