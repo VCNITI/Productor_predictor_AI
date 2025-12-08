@@ -714,19 +714,6 @@ const PredictorForm = ({ id }: { id?: string }) => {
                         </Select>
                       </div>
                     </div>
-
-                    <div className="flex justify-end items-center pt-4">
-
-                      <Button
-                        onClick={nextStep}
-                        disabled={!formData.totalAreaSqft || !formData.floors || parseInt(formData.totalAreaSqft) < 100}
-                        variant="hero"
-                        className="flex items-center"
-                      >
-                        Continue
-                        <ArrowRight className="w-4 h-4 ml-2" />
-                      </Button>
-                    </div>
                   </div>
                 );
               case 4:
@@ -843,10 +830,21 @@ const PredictorForm = ({ id }: { id?: string }) => {
             {renderStep()}
 
             {currentStep > 1 && currentStep < 6 && (
-              <div className="flex justify-start items-center mt-8">
+              <div className="flex justify-between items-center mt-8">
                 <Button variant="outline" onClick={prevStep} className="flex items-center">
                   <ArrowLeft className="w-4 h-4 mr-2" /> Previous
                 </Button>
+                {currentStep === 3 && (
+                  <Button
+                    onClick={nextStep}
+                    disabled={!formData.totalAreaSqft || !formData.floors || parseInt(formData.totalAreaSqft) < 100}
+                    variant="hero"
+                    className="flex items-center"
+                  >
+                    Continue
+                    <ArrowRight className="w-4 h-4 ml-2" />
+                  </Button>
+                )}
               </div>
             )}
           </CardContent>
