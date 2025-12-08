@@ -925,7 +925,7 @@ const ResultsDashboard = ({ estimate, formData }: { estimate: EstimateData; form
 
     // Prepare table data with proper serial numbers and fixed currency formatting
     const tableRows = estimate.materials.map((material, index) => {
-      const unitCost = `₹${material.priceLow.toLocaleString('en-IN')} – ₹${material.priceHigh.toLocaleString('en-IN')}`;
+      const unitCost = `Rs. ${material.priceLow.toLocaleString('en-IN')} – Rs. ${material.priceHigh.toLocaleString('en-IN')}`;
       const totalCost = ((material.priceLow + material.priceHigh) / 2) * material.qty;
       
       return [
@@ -934,7 +934,7 @@ const ResultsDashboard = ({ estimate, formData }: { estimate: EstimateData; form
         material.selectedBrand || 'Generic',
         `${material.qty} ${material.unit}`,
         unitCost,
-        `₹${totalCost.toLocaleString('en-IN')}`
+        `Rs. ${totalCost.toLocaleString('en-IN')}`
       ];
     });
 
@@ -986,7 +986,7 @@ const ResultsDashboard = ({ estimate, formData }: { estimate: EstimateData; form
     doc.setFontSize(11);
     doc.setFont("helvetica", "normal");
     doc.text(`Total Materials: ${estimate.materials.length} items`, margin + 10, finalY + 40);
-    doc.text(`Estimated Cost Range: ₹${estimate.totalLow.toLocaleString('en-IN')} – ₹${estimate.totalHigh.toLocaleString('en-IN')}`, margin + 10, finalY + 55);
+    doc.text(`Estimated Cost Range: Rs. ${estimate.totalLow.toLocaleString('en-IN')} – Rs. ${estimate.totalHigh.toLocaleString('en-IN')}`, margin + 10, finalY + 55);
     doc.text(`AI Confidence Level: ${estimate.confidence}%`, margin + 10, finalY + 70);
 
     // Add disclaimer
