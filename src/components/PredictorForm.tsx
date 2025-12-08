@@ -186,18 +186,18 @@ const generateMockEstimate = (formData: FormData): EstimateData => {
 };
 
 const callGPT4ForEstimate = async (formData: FormData): Promise<EstimateData> => {
-  const prompt = `You are a senior construction cost estimation expert for the Indian market. Analyze the project details and produce a bill of materials tailored to the specified stage, quality, city, and area, using current (2025) market rates for the given city in INR.
+  const prompt = `You are a Senior Construction Cost Estimation Expert (India, 2025) with extensive expertise in RCC structures, city-wise material rates, IS norms, and quantity estimations.
 
-Project Details:
+PROJECT INPUT VARIABLES:
 - Stage: ${formData.stage}
 - Building Type: ${formData.buildingType}
-- Total Area: ${formData.totalAreaSqft} sq ft
+- Total Built-up Area: ${formData.totalAreaSqft} sq ft
 - Floors: ${formData.floors}
 - Quality Level: ${formData.quality}
 - Location: ${formData.city}, India
 - Additional Requirements: ${formData.additionalRequirements || 'None'}
 
-Output Requirements — respond ONLY with VALID JSON matching EXACTLY this schema:
+OUTPUT FORMAT (STRICT) — RETURN ONLY THIS JSON:
 {
   "materials": [
     {
@@ -215,57 +215,62 @@ Output Requirements — respond ONLY with VALID JSON matching EXACTLY this schem
   "confidence": number
 }
 
-Strict Rules:
-1) Use city-specific 2025 Indian market rates for ${formData.city}. Prices must be material-only (exclude labor) and before GST. Note GST assumptions in reasoning if relevant.
+MUST FOLLOW PRICE RULES (EXTREMELY STRICT):
+1. Use accurate 2025 city-specific market prices for ${formData.city}, India.
+2. Prices must be material-only (NO labor, NO GST).
+3. Use realistic 2025 min–max price ranges with two decimals.
+4. Follow regional cost variations (Tier-1, Tier-2, Tier-3 cities).
+5. Use correct brand–quality mappings:
+   - Economy: Penna, Zuari, Chettinad (cement), Fe500 steel, CPVC SDR 13.5, FR wires.
+   - Standard: ACC, Ultratech, JSW, Fe500D, CPVC SDR 11, FRLS wires.
+   - Premium: Ultratech Super, Ramco, Fe550D, CPVC SDR 7.4, FRLSH wires.
+6. Every material must include correct IS codes and grade specs.
 
-2) Include at least 20–25 detailed material categories relevant to the ${formData.stage} stage only. 
-   - Cover structural, finishing, MEP, and auxiliary items where applicable.
-   - Each category must be unique and non-overlapping (no merging cement & concrete together).
-   - Always expand beyond basics to include sub-categories like primers, waterproofing, adhesives, insulation, hardware, fixtures, etc.
+QUANTITY RULES — HIGH ACCURACY:
+- Cement (bags): 0.45–0.55 per sq ft of RCC; 0.15–0.20 for masonry walling.
+- Steel: 3.5–4.5 kg per sq ft RCC + 12–15% wastage.
+- Sand: 0.04–0.05 m³ per sq ft RCC.
+- Aggregates: 0.07–0.09 m³ per sq ft RCC.
+- AAC Blocks: 1 m³ = 25–30 blocks depending on density.
+- Tiles: Convert sq ft → m² + 5–8% wastage.
+- Wiring: 1.8–2.2 rmt per sq ft.
+- Conduits: 0.45–0.55 rmt per sq ft.
+- Plumbing CPVC: 20–30 rmt per bathroom; 60–100 rmt per kitchen.
 
-3) Quantities must be realistic for ${formData.totalAreaSqft} sq ft and ${formData.floors} floors, using standard thumb rules:
-   - Cement bags = 50 kg
-   - Steel in kg/tonne
-   - Aggregates/sand in m³
-   - Bricks in numbers
-   - Tiles in m² with 5–10% wastage
-   State key quantity assumptions in reasoning.
+ASSUMPTIONS (USE INTERNALLY ONLY):
+- Floor height = 3.0 m
+- Slab thickness = 150–200 mm
+- Steel wastage = 12–15%
+- Tile wastage = 5–8%
 
-4) Match quality level ${formData.quality}:
-   - Economy: basic brands/specs, M20 concrete, AAC 600–650 kg/m³, Fe500 steel, CPVC SDR 13.5, FR PVC wires
-   - Standard: mid-tier brands/specs, M25 concrete, AAC 550–600 kg/m³, Fe500D steel, CPVC SDR 11, FRLS wires
-   - Premium: top-tier brands/specs, M30 concrete, AAC 500–550 kg/m³, Fe550D steel, CPVC SDR 7.4, FRLSH wires
-   Reflect chosen quality in each description.
+MATERIAL CATEGORY REQUIREMENTS:
+Include 20–25+ unique materials relevant ONLY to ${formData.stage}.
+Each item MUST be unique and non-overlapping.
+Stage-specific examples:
+- Foundation/RCC: cement, steel, RMC, sand, aggregates, shuttering, spacers, binding wire, waterproofing, termite chemical.
+- Masonry: AAC blocks, block adhesive, lintel concrete, sand, waterproofing slurry.
+- Finishing: tiles, adhesives, putty, primer, interior paint, exterior paint, waterproofing, grout.
+- Electrical: FR/FRLS/FRLSH wires, conduits, switches, MCBs, DB boxes.
+- Plumbing: CPVC pipes, fittings, UPVC drainage, valves, traps, clamps.
 
-5) Each material description must include clear grade/specification (e.g., "OPC 43 Grade", "TMT Fe500D IS 1786", "M25 ready-mix concrete", "CPVC SDR 11 IS 15778", "Ceramic tile 600×600 mm PEI 4").
+PRICE VALIDATION RULES:
+- Ensure qty × priceLow = correct calculation.
+- Ensure qty × priceHigh = correct calculation.
+- Ensure totalLow < totalHigh.
+- Ensure units are correct: bag, kg, tonne, m³, m², rmt, nos.
+- Ensure no repeated categories.
+- Ensure prices match 2025 city-specific ranges.
 
-6) priceLow/priceHigh: realistic min–max price per unit (two decimals).
+PRIORITY RULE:
+- High: RCC, steel, waterproofing, cement, concrete.
+- Medium: adhesives, primers, consumables.
+- Low: aesthetic or optional items.
 
-7) Calculate totalLow/totalHigh as sum of (qty × priceLow/priceHigh). Ensure arithmetic accuracy.
+CONFIDENCE SCORE (0–1):
+Based on data clarity, market volatility, and assumptions required.
 
-8) Set priority based on stage-criticality:
-   - Structural materials = high
-   - Consumables/additives = medium
-   - Optional enhancements = low
-
-9) confidence score [0-1]: reflect data freshness, market volatility, stage clarity, and assumption load.
-
-10) For missing/ambiguous inputs, use conservative industry-standard assumptions:
-    - 3.0 m floor height
-    - 150–200 mm slab thickness
-    - 12–15% wastage for steel/formwork
-    - 5–8% wastage for tiles
-    List assumptions in reasoning.
-11) multiply the quantity with the price of each product:
-      - if cement cost 100 if the quantity is 750 the total cement price which is added should be 750 * 100.
-
-Validation Requirements:
-- Use Indian standard units (bag, kg, tonne, m³, m², rmt, nos)
-- Valid JSON format only
-- Totals must equal sum of line items along with their quantity
-- No additional keys in JSON structure
-
-Deliver exactly one JSON object as specified.`;
+FINAL INSTRUCTION:
+Return ONLY the JSON object. No explanations or text outside JSON.`;
 
   try {
     const response = await fetch('/api/estimate', {
