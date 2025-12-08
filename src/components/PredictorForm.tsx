@@ -62,6 +62,16 @@ interface EstimateData {
   reasoning?: string;
 }
 
+interface AiMaterialResponseItem {
+  category?: string;
+  qty?: number;
+  unit?: string;
+  priceLow?: number;
+  priceHigh?: number;
+  description?: string;
+  priority?: "high" | "medium" | "low";
+}
+
 /* ---------------------------
    Currency formatting helpers
 ----------------------------*/
@@ -293,7 +303,7 @@ Return ONLY the JSON object. No explanations or text outside JSON.`;
       throw new Error('Invalid materials data from AI');
     }
 
-    const materials: Material[] = parsedResponse.materials.map((item: any, index: number) => ({
+    const materials: Material[] = parsedResponse.materials.map((item: AiMaterialResponseItem, index: number) => ({
       id: (index + 1).toString(),
       category: item.category || 'Unknown Material',
       qty: Number(item.qty) || 1,
@@ -975,27 +985,34 @@ const ResultsDashboard = ({ estimate, formData }: { estimate: EstimateData; form
     });
 
     // Add final summary
-    const finalY = (doc as any).lastAutoTable ? (doc as any).lastAutoTable.finalY + 20 : 400;
+    let summaryStartY = doc.lastAutoTable ? doc.lastAutoTable.finalY + 20 : 400;
     
-    if (finalY > pageHeight - 120) {
+    if (summaryStartY > pageHeight - 120) { // Check if summary overflows to the next page
       doc.addPage();
       addHeader();
+      summaryStartY = 100; // Reset Y for new page, after header
     }
 
     doc.setFillColor(230, 247, 255);
-    doc.rect(margin, finalY, pageWidth - 2 * margin, 80, 'F');
+    doc.rect(margin, summaryStartY, pageWidth - 2 * margin, 80, 'F');
     doc.setFontSize(12);
     doc.setFont("helvetica", "bold");
-    doc.text("Final Estimate Summary", margin + 10, finalY + 20);
+    doc.text("Final Estimate Summary", margin + 10, summaryStartY + 20);
     
     doc.setFontSize(11);
     doc.setFont("helvetica", "normal");
-    doc.text(`Total Materials: ${estimate.materials.length} items`, margin + 10, finalY + 40);
-    doc.text(`Estimated Cost Range: Rs. ${estimate.totalLow.toLocaleString('en-IN')} – Rs. ${estimate.totalHigh.toLocaleString('en-IN')}`, margin + 10, finalY + 55);
-    doc.text(`AI Confidence Level: ${estimate.confidence}%`, margin + 10, finalY + 70);
+    doc.text(`Total Materials: ${estimate.materials.length} items`, margin + 10, summaryStartY + 40);
+    doc.text(`Estimated Cost Range: Rs. ${estimate.totalLow.toLocaleString('en-IN')} – Rs. ${estimate.totalHigh.toLocaleString('en-IN')}`, margin + 10, summaryStartY + 55);
+    doc.text(`AI Confidence Level: ${estimate.confidence}%`, margin + 10, summaryStartY + 70);
 
     // Add disclaimer
-    const disclaimerY = finalY + 100;
+    let disclaimerY = summaryStartY + 100;
+    // If the disclaimer itself goes off page, add another page
+    if (disclaimerY > pageHeight - margin) {
+      doc.addPage();
+      addHeader();
+      disclaimerY = 100; // Reset Y for new page, after header
+    }
     doc.setFontSize(8);
     doc.setFont("helvetica", "italic");
     doc.text("Note: This estimate is generated using AI analysis and current market rates. Actual costs may vary based on", margin, disclaimerY);
@@ -1004,23 +1021,13 @@ const ResultsDashboard = ({ estimate, formData }: { estimate: EstimateData; form
     return doc.output("blob");
   };
 
-  // Download (Safari-safe)
-  const downloadEstimatePDF = async () => {
-    try {
-      const blob = await buildPdfBlob();
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "vcniti-construction-estimate.pdf";
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-    } catch (err) {
-      console.error("Download failed:", err);
-      alert("Failed to export PDF. See console for details.");
-    }
-  };
+  // Define a simple interface for ShareData to avoid 'any'
+  interface CustomShareData {
+    title: string;
+    text: string;
+    url: string;
+    files?: File[];
+  }
 
   // Share (Web Share API with file when possible, fallback to copy/prompt)
   const shareEstimate = async () => {
@@ -1028,13 +1035,15 @@ const ResultsDashboard = ({ estimate, formData }: { estimate: EstimateData; form
       const blob = await buildPdfBlob();
       const file = new File([blob], "vcniti-construction-estimate.pdf", { type: "application/pdf" });
       const pageUrl = window.location.href;
-      const shareData: any = {
+      const shareData: CustomShareData = {
         title: "Construction Estimate",
         text: `Estimate: ${formatCurrency(estimate.totalLow)} – ${formatCurrency(estimate.totalHigh)}`,
         url: pageUrl
       };
 
-      if ((navigator as any).canShare && (navigator as any).canShare({ files: [file] })) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      if (navigator.canShare && (navigator as any).canShare({ files: [file] })) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         await (navigator as any).share({ ...shareData, files: [file] });
         return;
       }
@@ -1058,7 +1067,7 @@ const ResultsDashboard = ({ estimate, formData }: { estimate: EstimateData; form
         try {
           await navigator.clipboard.writeText(window.location.href);
           alert("URL copied to clipboard");
-        } catch {}
+        } catch (copyError) { /* Intentionally ignore if clipboard write fails */ }
       } else {
         prompt("Copy this URL:", window.location.href);
       }
