@@ -758,7 +758,7 @@ const PredictorForm = ({ id }: { id?: string }) => {
                     <div className="max-w-md mx-auto space-y-4">
                       <div className="space-y-2">
                         <Label htmlFor="city">City</Label>
-                        <Select value={formData.city} onValueChange={(value) => { updateFormData("city", value); setTimeout(() => nextStep(), 200); }}>
+                        <Select value={formData.city} onValueChange={(value) => updateFormData("city", value)}>
                           <SelectTrigger>
                             <SelectValue placeholder="Select your city" />
                           </SelectTrigger>
@@ -786,14 +786,7 @@ const PredictorForm = ({ id }: { id?: string }) => {
                             <p className="font-medium">AI Analysis Ready</p>
                             <p className="text-muted-foreground">VCNITI AI will analyze your requirements and suggest optimal materials</p>
                           </div>
-                          <div className="flex justify-end items-center pt-4">
-                            <Button onClick={nextStep} variant="hero"
-                            className="flex items-center"
-                            >
-                              Next
-                              <ArrowRight className="w-4 h-4 ml-2" />
-                            </Button>
-                          </div>
+                          
                         </div>
                       </Card>
                     </div>
@@ -842,6 +835,17 @@ const PredictorForm = ({ id }: { id?: string }) => {
                     className="flex items-center"
                   >
                     Continue
+                    <ArrowRight className="w-4 h-4 ml-2" />
+                  </Button>
+                )}
+                {currentStep === 5 && (
+                  <Button
+                    onClick={nextStep}
+                    disabled={!formData.city}
+                    variant="hero"
+                    className="flex items-center"
+                  >
+                    Start Estimate
                     <ArrowRight className="w-4 h-4 ml-2" />
                   </Button>
                 )}
