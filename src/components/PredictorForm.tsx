@@ -962,7 +962,7 @@ const ResultsDashboard = ({ estimate, formData }: { estimate: EstimateData; form
     // Add materials table
     autoTable(doc, {
       startY: 230,
-      head: [['S.No.', 'Material', 'Brand', 'Quantity', 'Unit Cost Range', 'Total Cost (Avg)']],
+      margin: { top: 130, left: margin, right: margin, bottom: 60 },
       body: tableRows,
       theme: 'grid',
       styles: { 
@@ -977,7 +977,7 @@ const ResultsDashboard = ({ estimate, formData }: { estimate: EstimateData; form
       alternateRowStyles: {
         fillColor: [250, 250, 250]
       },
-      margin: { left: margin, right: margin },
+      head: [['S.No.', 'Material', 'Brand', 'Quantity', 'Unit Cost Range', 'Total Cost (Avg)']],
       didDrawPage: (data) => {
         const pageNumber = doc.internal.getCurrentPageInfo().pageNumber;
         const totalPages = doc.internal.getNumberOfPages();
