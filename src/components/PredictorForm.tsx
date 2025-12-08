@@ -822,7 +822,7 @@ const PredictorForm = ({ id }: { id?: string }) => {
           <CardContent className="p-8">
             {renderStep()}
 
-            {currentStep > 1 && currentStep < 6 && (
+            {!isLoading && currentStep > 1 && currentStep < 6 && (
               <div className="flex justify-between items-center mt-8">
                 <Button variant="outline" onClick={prevStep} className="flex items-center">
                   <ArrowLeft className="w-4 h-4 mr-2" /> Previous
