@@ -720,9 +720,16 @@ const PredictorForm = ({ id }: { id?: string }) => {
                             <SelectValue placeholder="Select floors" />
                           </SelectTrigger>
                           <SelectContent>
-                            {[1, 2, 3, 4, 5, 6].map((floor) => (
+                            {[
+                                'bengaluru',
+                                'mumbai',
+                                'delhi',
+                                'hyderabad',
+                                'pune',
+                                'chennai'
+                            ].map((floor) => (
                               <SelectItem key={floor} value={floor.toString()}>
-                                {floor} Floor{floor > 1 ? "s" : ""}
+                                {floor} Floor{parseInt(floor) > 1 ? "s" : ""}
                               </SelectItem>
                             ))}
                           </SelectContent>
@@ -778,12 +785,18 @@ const PredictorForm = ({ id }: { id?: string }) => {
                             <SelectValue placeholder="Select your city" />
                           </SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="bengaluru">Bengaluru</SelectItem>
-                            <SelectItem value="mumbai">Mumbai</SelectItem>
-                            <SelectItem value="delhi">Delhi</SelectItem>
-                            <SelectItem value="hyderabad">Hyderabad</SelectItem>
-                            <SelectItem value="pune">Pune</SelectItem>
-                            <SelectItem value="chennai">Chennai</SelectItem>
+                            {[
+                                'bengaluru',
+                                'mumbai',
+                                'delhi',
+                                'hyderabad',
+                                'pune',
+                                'chennai'
+                            ].map((city) => (
+                              <SelectItem key={city} value={city}>
+                                {city.charAt(0).toUpperCase() + city.slice(1)}
+                              </SelectItem>
+                            ))}
                           </SelectContent>
                         </Select>
                       </div>
@@ -878,7 +891,7 @@ const PredictorForm = ({ id }: { id?: string }) => {
 ----------------------------*/
 const ResultsDashboard = ({ estimate, formData }: { estimate: EstimateData; formData: FormData }) => {
   // Build PDF blob with updated header and footer
-  const buildPdfBlob = async (): Promise<Blob> => {
+  async function buildPdfBlob(): Promise<Blob> {
     const doc = new jsPDF({ unit: "pt", format: "a4" });
     const pageWidth = doc.internal.pageSize.getWidth();
     const pageHeight = doc.internal.pageSize.getHeight();
@@ -1030,7 +1043,7 @@ const ResultsDashboard = ({ estimate, formData }: { estimate: EstimateData; form
   }
 
   // Share (Web Share API with file when possible, fallback to copy/prompt)
-  const shareEstimate = async () => {
+  async function shareEstimate() {
     try {
       const blob = await buildPdfBlob();
       const file = new File([blob], "vcniti-construction-estimate.pdf", { type: "application/pdf" });
@@ -1073,6 +1086,24 @@ const ResultsDashboard = ({ estimate, formData }: { estimate: EstimateData; form
       }
     }
   };
+
+  // Download (Safari-safe)
+  async function downloadEstimatePDF() {
+    try {
+      const blob = await buildPdfBlob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "vcniti-construction-estimate.pdf";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error("Download failed:", err);
+      alert("Failed to export PDF. See console for details.");
+    }
+  }
 
   const containerVariants = {
     hidden: { opacity: 0 },
