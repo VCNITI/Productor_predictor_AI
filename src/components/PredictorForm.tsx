@@ -989,27 +989,34 @@ const ResultsDashboard = ({ estimate, formData }: { estimate: EstimateData; form
     });
 
     // Add final summary
-    let summaryStartY = (doc.lastAutoTable ? doc.lastAutoTable.finalY : 230) + 20;
-    if (summaryStartY + 120 > pageHeight - margin) { // Check if summary overflows to the next page
+    let finalY = (doc.lastAutoTable ? doc.lastAutoTable.finalY : 230) + 20;
+    // 1. INCREASE BOX HEIGHT to fit the extra line (80 -> 100)
+    const summaryHeight = 100;
+    const requiredSpace = summaryHeight + 50;
+    const footerHeight = 40;
+    if (finalY + requiredSpace > pageHeight - footerHeight) {
       doc.addPage();
       addHeader();
-      summaryStartY = 100; // Reset Y for new page, after header
+      finalY = 100;
     }
 
+    // Calculate Average
+    const avgCost = (estimate.totalLow + estimate.totalHigh) / 2;
+
     doc.setFillColor(230, 247, 255);
-    doc.rect(margin, summaryStartY, pageWidth - 2 * margin, 80, 'F');
+    doc.rect(margin, finalY, pageWidth - 2 * margin, summaryHeight, 'F');
     doc.setFontSize(12);
     doc.setFont("helvetica", "bold");
-    doc.text("Final Estimate Summary", margin + 10, summaryStartY + 20);
-    
+    doc.text("Final Estimate Summary", margin + 10, finalY + 25);
     doc.setFontSize(11);
     doc.setFont("helvetica", "normal");
-    doc.text(`Total Materials: ${estimate.materials.length} items`, margin + 10, summaryStartY + 40);
-    doc.text(`Estimated Cost Range: Rs. ${estimate.totalLow.toLocaleString('en-IN')} – Rs. ${estimate.totalHigh.toLocaleString('en-IN')}`, margin + 10, summaryStartY + 55);
-    doc.text(`AI Confidence Level: ${estimate.confidence}%`, margin + 10, summaryStartY + 70);
+    doc.text(`Total Materials: ${estimate.materials.length} items`, margin + 10, finalY + 45);
+    doc.text(`Estimated Cost Range: Rs. ${estimate.totalLow.toLocaleString('en-IN')} – Rs. ${estimate.totalHigh.toLocaleString('en-IN')}`, margin + 10, finalY + 60);
+    doc.text(`Average Cost: Rs. ${avgCost.toLocaleString('en-IN')}`, margin + 10, finalY + 75);
+    doc.text(`AI Confidence Level: ${estimate.confidence}%`, margin + 10, finalY + 90);
 
     // Add disclaimer
-    let disclaimerY = summaryStartY + 100;
+    let disclaimerY = finalY + summaryHeight + 15;
     if (disclaimerY + 30 > pageHeight - margin) { // Check if disclaimer overflows
       doc.addPage();
       addHeader();
