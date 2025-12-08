@@ -720,16 +720,9 @@ const PredictorForm = ({ id }: { id?: string }) => {
                             <SelectValue placeholder="Select floors" />
                           </SelectTrigger>
                           <SelectContent>
-                            {[
-                                'bengaluru',
-                                'mumbai',
-                                'delhi',
-                                'hyderabad',
-                                'pune',
-                                'chennai'
-                            ].map((floor) => (
+                            {[1, 2, 3, 4, 5, 6].map((floor) => (
                               <SelectItem key={floor} value={floor.toString()}>
-                                {floor} Floor{parseInt(floor) > 1 ? "s" : ""}
+                                {floor} Floor{floor > 1 ? "s" : ""}
                               </SelectItem>
                             ))}
                           </SelectContent>
@@ -992,15 +985,12 @@ const ResultsDashboard = ({ estimate, formData }: { estimate: EstimateData; form
         if (pageNumber > 1) {
           addHeader();
         }
-        
-        addFooter(pageNumber, totalPages);
       }
     });
 
     // Add final summary
-    let summaryStartY = doc.lastAutoTable ? doc.lastAutoTable.finalY + 20 : 400;
-    
-    if (summaryStartY > pageHeight - 120) { // Check if summary overflows to the next page
+    let summaryStartY = (doc.lastAutoTable ? doc.lastAutoTable.finalY : 230) + 20;
+    if (summaryStartY + 120 > pageHeight - margin) { // Check if summary overflows to the next page
       doc.addPage();
       addHeader();
       summaryStartY = 100; // Reset Y for new page, after header
@@ -1020,16 +1010,22 @@ const ResultsDashboard = ({ estimate, formData }: { estimate: EstimateData; form
 
     // Add disclaimer
     let disclaimerY = summaryStartY + 100;
-    // If the disclaimer itself goes off page, add another page
-    if (disclaimerY > pageHeight - margin) {
+    if (disclaimerY + 30 > pageHeight - margin) { // Check if disclaimer overflows
       doc.addPage();
       addHeader();
       disclaimerY = 100; // Reset Y for new page, after header
     }
     doc.setFontSize(8);
     doc.setFont("helvetica", "italic");
-    doc.text("Note: This estimate is generated using AI analysis and current market rates. Actual costs may vary based on", margin, disclaimerY);
-    doc.text("market conditions, supplier negotiations, and specific project requirements.", margin, disclaimerY + 12);
+    doc.text("Note: This estimate is generated using AI analysis and current market rates. Actual costs may vary based on", margin, disclaimerY + 5);
+    doc.text("market conditions, supplier negotiations, and specific project requirements.", margin, disclaimerY + 17);
+
+    // Add footer to all pages after all content is generated
+    const totalPages = doc.internal.getNumberOfPages();
+    for (let i = 1; i <= totalPages; i++) {
+      doc.setPage(i); // Go to page i
+      addFooter(i, totalPages); // Add footer with correct "Page i / N"
+    }
 
     return doc.output("blob");
   };
