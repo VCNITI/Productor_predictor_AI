@@ -1,98 +1,153 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { motion } from "framer-motion";
-import { Button } from './ui/button';
-import { Badge } from "./ui/badge";
-import { Calculator, Clock, Shield } from "lucide-react";
-import { AnimatedCard } from "./ui/AnimatedCard";
-import { Card } from "./ui/card";
+import { ArrowRight, Truck, Brain, HardHat, CheckCircle2 } from "lucide-react";
 
 const Hero = () => {
   return (
-    <div className="relative w-full bg-white overflow-hidden">
-      {/* Soft Purple Background Shapes */}
-      <div className="absolute top-0 left-0 w-[600px] h-[600px] bg-[#a852e5]/25 rounded-full blur-[140px] opacity-60" />
-      <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-[#a852e5]/20 rounded-full blur-[160px] opacity-50" />
-      <div className="absolute top-1/3 right-1/4 w-[350px] h-[350px] bg-[#a852e5]/15 rounded-full blur-[120px] opacity-50" />
+    <section className="relative w-full overflow-hidden bg-white">
+      {/* Background Decor: Architectural Grid Pattern */}
+      <div className="absolute inset-0 z-0 opacity-40">
+        <svg className="h-full w-full" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <pattern id="grid-pattern" width="40" height="40" patternUnits="userSpaceOnUse">
+              <path d="M0 40L40 0H20L0 20M40 40V20L20 40" stroke="#a852e5" strokeWidth="0.5" fill="none" opacity="0.1"/>
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#grid-pattern)" />
+        </svg>
+      </div>
 
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-28 relative z-10">
-        <div className="grid md:grid-cols-2 gap-12 items-center">
-          {/* Left Column */}
-          <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8 }}
-          >
-            <div className="bg-white/60 backdrop-blur-xl border border-[#a852e5]/10 rounded-2xl p-10 shadow-xl">
-              {/* Badge */}
+      {/* Background Blurs for Depth */}
+      <div className="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] bg-[#c58bff]/20 rounded-full blur-3xl" />
+      <div className="absolute bottom-[-10%] left-[-10%] w-[400px] h-[400px] bg-[#a852e5]/10 rounded-full blur-3xl" />
+
+      <div className="relative z-10 max-w-7xl mx-auto px-6 pt-20 pb-24 md:pt-32 md:pb-32 grid lg:grid-cols-2 gap-12 items-center">
+        
+        {/* LEFT COLUMN: Text Content */}
+        <motion.div 
+          initial={{ opacity: 0, x: -50 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.6 }}
+          className="text-left"
+        >
+          {/* Badge */}
+          <div className="inline-flex items-center gap-2 bg-purple-50 border border-purple-100 text-[#a852e5] text-xs font-bold px-4 py-1.5 rounded-full mb-6 shadow-sm">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-purple-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-purple-600"></span>
+            </span>
+            VCNITI Ecosystem Live
+          </div>
+
+          <h1 className="text-5xl md:text-6xl font-extrabold text-gray-900 leading-[1.15] tracking-tight">
+            Smart Construction <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#a852e5] to-[#7c3aed]">
+              Simplified by AI
+            </span>
+          </h1>
+
+          <p className="text-lg text-gray-600 mt-6 leading-relaxed max-w-lg">
+            The all-in-one marketplace for <strong>4-hour material delivery</strong>, accurate BOQ generation, and finding trusted professionals in Bengaluru.
+          </p>
+
+          {/* CTA Buttons */}
+          <div className="flex flex-wrap gap-4 mt-8">
+            <button className="px-8 py-3.5 rounded-xl bg-[#a852e5] text-white font-semibold hover:bg-[#903dd0] transition-all shadow-lg shadow-purple-500/30 flex items-center gap-2 group" onClick={() => window.location.href = "https://www.vcniti.com/collections"}>
+              Order Materials
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </button>
+            <a href="#ai-planner" className="px-8 py-3.5 rounded-xl bg-white border border-gray-200 text-gray-700 font-semibold hover:bg-gray-50 transition-all shadow-sm">
+              Explore AI Tools
+            </a>
+          </div>
+
+          {/* Trust Footnote */}
+          <div className="mt-10 flex items-center gap-6 text-sm text-gray-500 font-medium">
+            <div className="flex items-center gap-2">
+              <CheckCircle2 className="w-4 h-4 text-green-500" /> Genuine Brands
+            </div>
+            <div className="flex items-center gap-2">
+              <CheckCircle2 className="w-4 h-4 text-green-500" /> Verified Pros
+            </div>
+          </div>
+        </motion.div>
+
+        {/* RIGHT COLUMN: Visual Representation (Floating Cards) */}
+        <div className="relative h-full min-h-[400px] flex items-center justify-center lg:justify-end">
+            
+            {/* Abstract Background blob behind cards */}
+            <div className="absolute inset-0 bg-gradient-to-tr from-purple-100 to-white rounded-full opacity-50 blur-2xl transform scale-90" />
+
+            {/* Floating Card Container */}
+            <div className="relative w-full max-w-md">
+              
+              {/* Card 1: Main Feature (Delivery) */}
               <motion.div
-                className="inline-block bg-[#a852e5]/15 text-[#a852e5] text-xs font-semibold px-3 py-1 rounded-full mb-4"
-                whileHover={{ scale: 1.1 }}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+                className="relative z-20 bg-white/80 backdrop-blur-md border border-white/40 p-6 rounded-2xl shadow-xl shadow-purple-900/5 mb-6"
               >
-                AI-Powered Tools
+                <div className="flex items-start justify-between">
+                  <div>
+                    <h3 className="text-lg font-bold text-gray-900">Express Delivery</h3>
+                    <p className="text-sm text-gray-500 mt-1">Cement, Paints & Electricals</p>
+                  </div>
+                  <div className="bg-purple-100 p-2 rounded-lg text-purple-600">
+                    <Truck size={24} />
+                  </div>
+                </div>
+                <div className="mt-4 flex items-center gap-3">
+                    <div className="h-2 w-full bg-gray-100 rounded-full overflow-hidden">
+                        <motion.div 
+                           initial={{ width: 0 }}
+                           animate={{ width: "80%" }}
+                           transition={{ duration: 1.5, delay: 0.5 }}
+                           className="h-full bg-[#a852e5]" 
+                        />
+                    </div>
+                    <span className="text-xs font-bold text-[#a852e5] whitespace-nowrap">4 Hours</span>
+                </div>
               </motion.div>
 
-              {/* Title */}
-              <h1 className="text-4xl md:text-5xl font-bold text-gray-800 leading-tight">
-                VCNITI Building Material Planner
-              </h1>
-
-              {/* Subtitle */}
-              <p className="text-xl text-gray-600 mt-3">
-                Estimate materials & cost in 60 seconds
-              </p>
-
-              {/* Description */}
-              <p className="text-gray-500 mt-6 leading-relaxed">
-                AI-powered Q-commerce platform transforming construction material
-                sourcing. Get accurate BOQ and pricing with brand recommendations,
-                eco-friendly alternatives, and instant supplier connections.
-              </p>
-
-              {/* Find a Professional Box */}
-              <div className="mt-8">
-                <div className="bg-[#f8f5fb] border border-[#a852e5]/20 rounded-lg p-6 shadow-sm">
-                  <h3 className="font-bold text-gray-800">
-                    Find a Professional
-                  </h3>
-                  <p className="text-sm text-gray-600 mt-2">
-                    Coming soon! Quickly connect with verified professionals in your area.
-                    Choose State, City, and Pincode to access contractors, masons, carpenters, electricians,
-                    plumbers, and construction experts.
-                    This feature is launching soon.
-                  </p>
-                </div>
-
-                {/* CTA */}
+              {/* Grid of 2 smaller cards */}
+              <div className="grid grid-cols-2 gap-4">
+                 {/* Card 2: AI Tools */}
                 <motion.div
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.6, delay: 0.4 }}
+                    className="bg-white/90 backdrop-blur-md border border-white/40 p-5 rounded-2xl shadow-lg shadow-purple-900/5"
                 >
-                  <Button
-                    variant="default"
-                    className="mt-6 w-full md:w-auto bg-[#a852e5] hover:bg-[#9340d3] text-white font-bold py-3 px-6 rounded-lg shadow-md"
-                  >
-                    Find a Professional – Coming Soon
-                  </Button>
+                    <div className="bg-blue-50 w-10 h-10 flex items-center justify-center rounded-lg text-blue-600 mb-3">
+                        <Brain size={20} />
+                    </div>
+                    <h4 className="font-bold text-gray-900">AI BOQ</h4>
+                    <p className="text-xs text-gray-500 mt-1">Instant material estimates</p>
+                </motion.div>
+
+                 {/* Card 3: Professionals */}
+                 <motion.div
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.6, delay: 0.5 }}
+                    className="bg-white/90 backdrop-blur-md border border-white/40 p-5 rounded-2xl shadow-lg shadow-purple-900/5"
+                >
+                    <div className="bg-orange-50 w-10 h-10 flex items-center justify-center rounded-lg text-orange-600 mb-3">
+                        <HardHat size={20} />
+                    </div>
+                    <h4 className="font-bold text-gray-900">Find Pros</h4>
+                    <p className="text-xs text-gray-500 mt-1">Architects & Contractors</p>
+                    <p className="text-xs text-gray-500 mt-1">(Coming soon)</p>
                 </motion.div>
               </div>
-            </div>
-          </motion.div>
 
-          {/* Right Column Placeholder */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.85 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="hidden md:flex justify-center items-center"
-          >
-            <div className="w-full h-96 bg-white/40 backdrop-blur-xl border border-[#a852e5]/10 rounded-2xl shadow-md flex items-center justify-center">
-              <p className="text-gray-500">Modern 3D-style construction + AI graphic</p>
             </div>
-          </motion.div>
         </div>
+
       </div>
-    </div>
- );
+    </section>
+  );
 };
 
 export default Hero;

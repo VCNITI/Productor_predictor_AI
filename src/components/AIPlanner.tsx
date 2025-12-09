@@ -1,14 +1,17 @@
 import React from 'react';
 import { HardHat } from 'lucide-react';
 import plannerImage from '../assets/vcniti product planner page.png';
+import { useNavigate } from 'react-router-dom';
 
-interface AIPlannerProps {
-  onUsePlannerClick: () => void;
-}
+const AIPlanner: React.FC = () => {
+  const navigate = useNavigate();
 
-const AIPlanner: React.FC<AIPlannerProps> = ({ onUsePlannerClick }) => {
+  const handleUsePlannerClick = () => {
+    navigate('/planner');
+  };
+
   return (
-    <section className="py-20 sm:py-24 bg-gray-50">
+    <section id="ai-planner" className="py-20 sm:py-24 bg-gray-50">
       <div className="container mx-auto px-4 sm:px-10">
         <div className="flex flex-col md:flex-row-reverse items-center justify-between gap-10">
           <div className="md:w-1/2">
@@ -25,8 +28,9 @@ const AIPlanner: React.FC<AIPlannerProps> = ({ onUsePlannerClick }) => {
               Plan your construction project with our innovative Building Material Planner. Estimate material quantities, costs, and timelines with ease, ensuring your project stays on budget and on schedule.
             </p>
             <a
-              onClick={onUsePlannerClick}
+              onClick={handleUsePlannerClick}
               className="inline-block bg-primary text-white px-8 py-3 rounded-full font-semibold hover:bg-primary-dark transition-transform transform hover:scale-105 shadow-md"
+              style={{ cursor: 'pointer' }}
             >
               Use the Planner
             </a>
