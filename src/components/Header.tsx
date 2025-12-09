@@ -13,10 +13,10 @@ const Header = () => {
     setMobileMenuOpen(false); // Close mobile menu if open
     if (location.pathname === "/") {
       document
-        .getElementById("prediction-form")
+        .getElementById("ai-planner")
         ?.scrollIntoView({ behavior: "smooth" });
     } else {
-      navigate("/#prediction-form");
+      navigate("/#ai-planner");
     }
   };
 
