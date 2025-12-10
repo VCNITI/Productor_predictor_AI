@@ -1,103 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { motion } from "framer-motion";
-import { Calculator, Clock, Shield, FileText, CheckCircle2, ArrowRight, BarChart3, Download } from "lucide-react";
+import { Calculator, Shield, FileText, CheckCircle2, BarChart3, Download } from "lucide-react";
+import SamplePdf from "../assets/Sample-vcniti-construction-estimate.pdf";
 
 const AboutAIPlanner = () => {
-  const [isPdfReady, setIsPdfReady] = useState(false);
-
-  // --- PDF LOGIC (Kept exactly as provided) ---
-  useEffect(() => {
-    const loadScript = (src) => {
-      return new Promise((resolve, reject) => {
-        if (document.querySelector(`script[src="${src}"]`)) {
-          resolve();
-          return;
-        }
-        const script = document.createElement("script");
-        script.src = src;
-        script.onload = resolve;
-        script.onerror = reject;
-        document.body.appendChild(script);
-      });
-    };
-
-    const initPdfLibraries = async () => {
-      try {
-        await loadScript("https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js");
-        if (window.jspdf && window.jspdf.jsPDF) {
-          window.jsPDF = window.jspdf.jsPDF;
-        }
-        await loadScript("https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js");
-        setIsPdfReady(true);
-      } catch (err) {
-        console.error("Failed to load PDF libraries", err);
-      }
-    };
-
-    initPdfLibraries();
-  }, []);
-
   const downloadSampleReport = () => {
-    if (!isPdfReady || !window.jspdf) {
-      alert("PDF Generator is still loading. Please try again in a moment.");
-      return;
-    }
-
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
-
-    if (typeof doc.autoTable !== "function") {
-      alert("Error: PDF Table generator not ready. Please refresh and try again.");
-      return;
-    }
-
-    // --- PDF GENERATION CONTENT (Kept standard) ---
-    doc.setFontSize(16);
-    doc.setFont("helvetica", "bold");
-    doc.setTextColor(41, 128, 185);
-    doc.text("Vcniti Technologies Private Limited", 105, 15, { align: "center" });
-    
-    doc.setFontSize(10);
-    doc.setFont("helvetica", "normal");
-    doc.setTextColor(0, 0, 0);
-    doc.text("CIN No. U47912KA2025PTC205758", 105, 22, { align: "center" });
-    doc.text("E-Mail: info@vcniti.com | Website: www.vcniti.com", 105, 27, { align: "center" });
-    doc.setDrawColor(200, 200, 200);
-    doc.line(14, 36, 196, 36);
-    doc.setFontSize(14);
-    doc.setFont("helvetica", "bold");
-    doc.text("Construction Material Estimate Report", 14, 45);
-
-    // Metadata
-    doc.setFontSize(10);
-    doc.setFont("helvetica", "normal");
-    doc.text("Project Stage: Foundation", 14, 53);
-    doc.text("Total Area: 1200 sq ft", 14, 59);
-    doc.text("Quality Level: Premium", 120, 53);
-    doc.text(`Generated on: ${new Date().toLocaleDateString()}`, 120, 59);
-
-    const tableColumn = ["S.No", "Material", "Quantity", "Unit Cost (Rs.)", "Total (Rs.)"];
-    const tableRows = [
-      ["1", "Cement (UltraTech)", "750 bags", "350 - 400", "2,81,250"],
-      ["2", "Steel (Tata Tiscon)", "1800 kg", "60 - 70", "1,17,000"],
-      ["3", "Coarse Aggregate", "20 m3", "1,200 - 1,500", "27,000"],
-      ["4", "M-Sand", "15 m3", "800 - 1,000", "13,500"],
-      ["5", "Red Bricks", "6000 nos", "15 - 17", "96,000"],
-    ];
-
-    doc.autoTable({
-      head: [tableColumn],
-      body: tableRows,
-      startY: 70,
-      theme: "grid",
-      headStyles: { fillColor: [41, 128, 185], textColor: 255 },
-    });
-
-    const finalY = (doc.lastAutoTable && doc.lastAutoTable.finalY) || 150;
-    doc.text("Total Estimated Cost: Rs. 5,34,750", 14, finalY + 15);
-    doc.save("vcniti-construction-estimate.pdf");
+    const link = document.createElement("a");
+    link.href = SamplePdf;
+    link.download = "Sample-vcniti-construction-estimate.pdf";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
-  // --- END PDF LOGIC ---
 
   return (
     <section className="relative w-full overflow-hidden bg-white py-24">
@@ -164,11 +78,10 @@ const AboutAIPlanner = () => {
 
               <button 
                 onClick={downloadSampleReport}
-                disabled={!isPdfReady}
                 className="px-8 py-3.5 rounded-xl bg-white border border-gray-200 text-gray-700 font-semibold hover:bg-gray-50 transition-all flex items-center justify-center gap-2"
               >
-                {isPdfReady ? <FileText className="w-5 h-5 text-gray-500" /> : <Clock className="w-5 h-5 animate-spin" />}
-                {isPdfReady ? "View Sample Report" : "Loading..."}
+                <FileText className="w-5 h-5 text-gray-500" />
+                View Sample Report
               </button>
             </div>
           </motion.div>

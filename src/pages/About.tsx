@@ -87,14 +87,14 @@ const About = () => {
                     <div className="absolute -inset-4 bg-gradient-to-r from-[#a852e5] to-purple-400 rounded-[3rem] blur-2xl opacity-30 animate-pulse" />
                     
                     {/* The Image Card */}
-                    <div className="relative rounded-[3rem] overflow-hidden shadow-2xl border-4 border-white rotate-2 hover:rotate-0 transition-transform duration-500 ease-out">
+                    <div className="relative rounded-[3rem] overflow-hidden shadow-2xl border-4 border-white ">
                          {/* Overlay Gradient for text readability if needed, or just style */}
                          <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent z-10" />
                          
                          <img 
                             src="https://images.unsplash.com/photo-1541888946425-d81bb19240f5?q=80&w=2070&auto=format&fit=crop" 
                             alt="Modern Construction" 
-                            className="w-full h-[600px] object-cover"
+                            className="w-full h-[400px] object-cover"
                          />
 
                          {/* Floating Badge inside Image */}
