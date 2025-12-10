@@ -140,7 +140,7 @@ const AboutAIPlanner = () => {
             {/* Stats Row */}
             <div className="flex gap-8 mt-8 py-6 border-y border-gray-100">
                 <div>
-                    <div className="text-2xl font-bold text-gray-900">92%</div>
+                    <div className="text-2xl font-bold text-gray-900">95%</div>
                     <div className="text-xs text-gray-500 font-medium uppercase tracking-wide">Accuracy</div>
                 </div>
                 <div>
