@@ -39,7 +39,7 @@ const About = () => {
       <main className="flex-1">
         
         {/* --- 1. HERO SECTION: Split Layout with Rounded Image --- */}
-        <section className="relative pt-24 pb-20 lg:pt-32 px-6 overflow-hidden">
+        <section className="relative pt-10 pb-20 lg:pt-10 px-6 overflow-hidden">
             {/* Background Blob for atmosphere */}
             <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-purple-50 rounded-full blur-3xl opacity-50 -mr-20 -mt-20 pointer-events-none" />
             
@@ -89,7 +89,7 @@ const About = () => {
                     {/* The Image Card */}
                     <div className="relative rounded-[3rem] overflow-hidden shadow-2xl border-4 border-white ">
                          {/* Overlay Gradient for text readability if needed, or just style */}
-                         <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent z-10" />
+                         <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent z-10 " />
                          
                          <img 
                             src="https://images.unsplash.com/photo-1541888946425-d81bb19240f5?q=80&w=2070&auto=format&fit=crop" 

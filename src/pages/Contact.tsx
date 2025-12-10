@@ -84,7 +84,7 @@ const Contact = () => {
     <div className="min-h-screen flex flex-col bg-gray-50/50 font-sans selection:bg-purple-100">
       <Header />
 
-      <main className="flex-1 pt-28 pb-20 px-6">
+      <main className="flex-1 pt-10 pb-20 px-6">
         <div className="max-w-7xl mx-auto">
             
             <div className="grid lg:grid-cols-12 gap-12 lg:gap-24">
