@@ -1,7 +1,8 @@
 import React from 'react';
-import { HardHat } from 'lucide-react';
+import { HardHat, ArrowRight, CheckCircle2 } from 'lucide-react';
 import plannerImage from '../assets/vcniti product planner page.png';
 import { useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
 
 const AIPlanner: React.FC = () => {
   const navigate = useNavigate();
@@ -11,30 +12,71 @@ const AIPlanner: React.FC = () => {
   };
 
   return (
-    <section id="ai-planner" className="py-20 sm:py-24 bg-gray-50">
-      <div className="container mx-auto px-4 sm:px-10">
-        <div className="flex flex-col md:flex-row-reverse items-center justify-between gap-10">
-          <div className="md:w-1/2">
-            <div className="relative">
-              <img src={plannerImage} alt="Building Planner" className="rounded-xl shadow-lg" />
-              <div className="absolute -bottom-4 -left-4 bg-primary p-4 rounded-full text-white shadow-lg">
-                <HardHat size={32} />
-              </div>
+    <section id="ai-planner" className="py-24 relative overflow-hidden bg-white">
+      {/* Background Decor */}
+      <div className="absolute inset-0 bg-gray-50/50">
+        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-purple-100/40 rounded-full blur-3xl -mr-32 -mt-32"></div>
+        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-blue-50/40 rounded-full blur-3xl -ml-32 -mb-32"></div>
+      </div>
+
+      <div className="container mx-auto px-6 relative z-10">
+        <div className="bg-white rounded-[2.5rem] shadow-2xl shadow-purple-900/5 border border-gray-100 p-8 md:p-12 overflow-hidden">
+            <div className="flex flex-col lg:flex-row-reverse items-center gap-16">
+                
+                {/* Image Section */}
+                <div className="lg:w-1/2 relative group">
+                    <div className="absolute inset-0 bg-gradient-to-tr from-[#a852e5] to-purple-400 rounded-2xl blur-xl opacity-20 group-hover:opacity-30 transition-opacity"></div>
+                    <img 
+                        src={plannerImage} 
+                        alt="Building Planner" 
+                        className="relative rounded-2xl shadow-lg border border-white/50 transform transition-transform duration-500 group-hover:scale-[1.02]" 
+                    />
+                    
+                    {/* Floating Badge */}
+                    <div className="absolute -bottom-6 -left-6 bg-white p-4 rounded-2xl shadow-xl flex items-center gap-3 border border-gray-100">
+                        <div className="bg-purple-100 p-2.5 rounded-xl text-[#a852e5]">
+                            <HardHat size={24} />
+                        </div>
+                        <div>
+                            <p className="text-xs text-gray-500 font-bold uppercase">Accuracy</p>
+                            <p className="text-gray-900 font-bold">95% Verified</p>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Text Content */}
+                <div className="lg:w-1/2">
+                    <div className="inline-flex items-center gap-2 bg-purple-50 text-[#a852e5] text-xs font-bold px-3 py-1 rounded-full mb-6">
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#a852e5] animate-pulse"></span>
+                        AI Powered Tool
+                    </div>
+                    
+                    <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 leading-tight mb-6">
+                        Smart Planning for <br/>
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#a852e5] to-purple-600">Smarter Building</span>
+                    </h2>
+                    
+                    <p className="text-lg text-gray-600 mb-8 leading-relaxed">
+                        Stop guessing material quantities. Our AI Planner analyzes your project parameters to generate precise BOQs, cost estimates, and procurement schedules instantly.
+                    </p>
+
+                    <ul className="space-y-3 mb-10">
+                        {['Instant Material Estimation', 'Real-time Cost Analysis', 'Project Timeline Optimization'].map((item, i) => (
+                            <li key={i} className="flex items-center gap-3 text-gray-700 font-medium">
+                                <CheckCircle2 className="w-5 h-5 text-green-500" /> {item}
+                            </li>
+                        ))}
+                    </ul>
+
+                    <a
+                        onClick={handleUsePlannerClick}
+                        className="cursor-pointer inline-flex items-center gap-2 bg-[#a852e5] hover:bg-[#903dd0] text-white px-8 py-4 rounded-xl font-bold shadow-lg shadow-purple-500/30 transition-all hover:-translate-y-1"
+                    >
+                        Start Planning Free <ArrowRight className="w-5 h-5" />
+                    </a>
+                </div>
+
             </div>
-          </div>
-          <div className="md:w-1/2 text-center md:text-left">
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">VCNITI Building Material Planner</h2>
-            <p className="text-lg text-gray-600 mb-8">
-              Plan your construction project with our innovative Building Material Planner. Estimate material quantities, costs, and timelines with ease, ensuring your project stays on budget and on schedule.
-            </p>
-            <a
-              onClick={handleUsePlannerClick}
-              className="inline-block bg-primary text-white px-8 py-3 rounded-full font-semibold hover:bg-primary-dark transition-transform transform hover:scale-105 shadow-md"
-              style={{ cursor: 'pointer' }}
-            >
-              Use the Planner
-            </a>
-          </div>
         </div>
       </div>
     </section>

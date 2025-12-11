@@ -4,7 +4,7 @@ import { ArrowRight, Truck, Brain, HardHat, CheckCircle2 } from "lucide-react";
 
 const Hero = () => {
   return (
-    <section className="relative w-full overflow-hidden bg-white">
+    <section id="home" className="relative w-full overflow-hidden bg-white">
       {/* Background Decor: Architectural Grid Pattern */}
       <div className="absolute inset-0 z-0 opacity-40">
         <svg className="h-full w-full" xmlns="http://www.w3.org/2000/svg">
@@ -21,7 +21,7 @@ const Hero = () => {
       <div className="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] bg-[#c58bff]/20 rounded-full blur-3xl" />
       <div className="absolute bottom-[-10%] left-[-10%] w-[400px] h-[400px] bg-[#a852e5]/10 rounded-full blur-3xl" />
 
-      <div className="relative z-10 max-w-7xl mx-auto px-6 pt-20 pb-24 md:pt-10 md:pb-32 grid lg:grid-cols-2 gap-12 items-center">
+      <div className="relative z-10 max-w-7xl mx-auto px-6 pt-20 pb-24 md:pt-10 md:pb-26 grid lg:grid-cols-2 gap-12 items-center">
         
         {/* LEFT COLUMN: Text Content */}
         <motion.div 
