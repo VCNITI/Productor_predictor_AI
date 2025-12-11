@@ -14,7 +14,7 @@ const AboutAIPlanner = () => {
   };
 
   return (
-    <section className="relative w-full overflow-hidden bg-white py-24">
+    <section className="relative w-full overflow-hidden bg-white py-10">
       
       {/* Background Decor */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
