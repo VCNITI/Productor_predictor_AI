@@ -1,9 +1,9 @@
 // src/types/global.d.ts
 
-import 'jspdf';
-import { UserOptions } from 'jspdf-autotable';
+import "jspdf";
+import { UserOptions } from "jspdf-autotable";
 
-declare module 'jspdf' {
+declare module "jspdf" {
   interface jsPDF {
     autoTable: (options: UserOptions) => void;
     lastAutoTable: {

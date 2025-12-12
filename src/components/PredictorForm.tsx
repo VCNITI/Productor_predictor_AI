@@ -7,7 +7,13 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   Building,
@@ -22,7 +28,7 @@ import {
   Share2,
   ShoppingCart,
   TrendingUp,
-  CheckCircle
+  CheckCircle,
 } from "lucide-react";
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
@@ -77,39 +83,87 @@ interface AiMaterialResponseItem {
 ----------------------------*/
 const formatCurrency = (amount: number): string => {
   // Use a simpler approach to ensure rupee symbol displays correctly
-  const formatted = amount.toLocaleString('en-IN', { maximumFractionDigits: 0 });
+  const formatted = amount.toLocaleString("en-IN", {
+    maximumFractionDigits: 0,
+  });
   return `₹${formatted}`;
 };
 
 const formatCurrencyRange = (low: number, high: number): string => {
-  const lowFormatted = low.toLocaleString('en-IN', { maximumFractionDigits: 0 });
-  const highFormatted = high.toLocaleString('en-IN', { maximumFractionDigits: 0 });
+  const lowFormatted = low.toLocaleString("en-IN", {
+    maximumFractionDigits: 0,
+  });
+  const highFormatted = high.toLocaleString("en-IN", {
+    maximumFractionDigits: 0,
+  });
   return `₹${lowFormatted} - ₹${highFormatted}`;
 };
 
 // Compact currency format for small spaces
 const formatCurrencyCompact = (amount: number): string => {
-  if (amount >= 10000000) { // 1 crore
+  if (amount >= 10000000) {
+    // 1 crore
     return `₹${(amount / 10000000).toFixed(1)}Cr`;
-  } else if (amount >= 100000) { // 1 lakh
+  } else if (amount >= 100000) {
+    // 1 lakh
     return `₹${(amount / 100000).toFixed(1)}L`;
-  } else if (amount >= 1000) { // 1 thousand
+  } else if (amount >= 1000) {
+    // 1 thousand
     return `₹${(amount / 1000).toFixed(0)}K`;
   }
-  return `₹${amount.toLocaleString('en-IN')}`;
+  return `₹${amount.toLocaleString("en-IN")}`;
 };
 
 /* ---------------------------
    Brand DB + helpers
 ----------------------------*/
 const brandDatabase: Record<string, string[]> = {
-  cement: ["UltraTech", "ACC", "Ambuja", "Shree Cement", "JK Cement", "Dalmia Cement"],
-  steel: ["Tata Tiscon", "SAIL", "JSW Steel", "Jindal Steel", "RINL", "Kamdhenu"],
+  cement: [
+    "UltraTech",
+    "ACC",
+    "Ambuja",
+    "Shree Cement",
+    "JK Cement",
+    "Dalmia Cement",
+  ],
+  steel: [
+    "Tata Tiscon",
+    "SAIL",
+    "JSW Steel",
+    "Jindal Steel",
+    "RINL",
+    "Kamdhenu",
+  ],
   sand: ["River Sand", "M-Sand", "Robo Sand", "P Sand", "Crushed Sand"],
-  aggregate: ["20mm Aggregate", "10mm Aggregate", "Blue Metal", "Crushed Stone", "Jelly"],
-  bricks: ["Wienerberger", "Fly Ash Bricks", "Clay Bricks", "AAC Blocks", "Solid Blocks"],
-  tiles: ["Kajaria", "Somany", "Johnson", "Nitco", "H&R Johnson", "RAK Ceramics"],
-  paint: ["Asian Paints", "Berger Paints", "Nerolac", "Dulux", "Shalimar Paints"],
+  aggregate: [
+    "20mm Aggregate",
+    "10mm Aggregate",
+    "Blue Metal",
+    "Crushed Stone",
+    "Jelly",
+  ],
+  bricks: [
+    "Wienerberger",
+    "Fly Ash Bricks",
+    "Clay Bricks",
+    "AAC Blocks",
+    "Solid Blocks",
+  ],
+  tiles: [
+    "Kajaria",
+    "Somany",
+    "Johnson",
+    "Nitco",
+    "H&R Johnson",
+    "RAK Ceramics",
+  ],
+  paint: [
+    "Asian Paints",
+    "Berger Paints",
+    "Nerolac",
+    "Dulux",
+    "Shalimar Paints",
+  ],
   electrical: ["Havells", "Anchor", "Legrand", "Schneider", "L&T", "Finolex"],
   plumbing: ["Jaquar", "Hindware", "Cera", "Parryware", "Kohler", "TOTO"],
   doors: ["Tata Pravesh", "Godrej", "Century Ply", "Greenply", "Merino"],
@@ -117,11 +171,16 @@ const brandDatabase: Record<string, string[]> = {
   roofing: ["Tata BlueScope", "JSW Roofing", "Essar Steel", "Hindalco"],
   insulation: ["Rockwool", "Thermax", "Knauf", "Saint-Gobain", "Owens Corning"],
   glass: ["Asahi Glass", "Guardian Glass", "Pilkington", "Saint-Gobain"],
-  concrete: ["Ready Mix Concrete", "ACC Concrete", "UltraTech RMC", "Dalmia RMC"],
+  concrete: [
+    "Ready Mix Concrete",
+    "ACC Concrete",
+    "UltraTech RMC",
+    "Dalmia RMC",
+  ],
   wooden: ["Greenply", "Century Ply", "Kitply", "Merino", "Sainik Ply"],
   metal: ["Tata Steel", "JSW Steel", "Hindalco", "Vedanta"],
   adhesive: ["Fevicol", "Pidilite", "MYK LATICRETE", "CICO", "Weber"],
-  waterproof: ["Dr. Fixit", "Fosroc", "BASF MasterSeal", "Tremco", "CICO"]
+  waterproof: ["Dr. Fixit", "Fosroc", "BASF MasterSeal", "Tremco", "CICO"],
 };
 
 const getBrandsForMaterial = (category: string): string[] => {
@@ -147,55 +206,63 @@ const generateMockEstimate = (formData: FormData): EstimateData => {
     {
       id: "1",
       category: "Cement",
-      qty: Math.max(1, Math.round((area * floors * 0.12))),
+      qty: Math.max(1, Math.round(area * floors * 0.12)),
       unit: "bags",
       priceLow: 450,
       priceHigh: 520,
       selected: true,
       availableBrands: getBrandsForMaterial("cement"),
       selectedBrand: getBrandsForMaterial("cement")[0],
-      description: "OPC 53 grade cement"
+      description: "OPC 53 grade cement",
     },
     {
       id: "2",
       category: "Steel (TMT)",
-      qty: Math.max(1, Math.round((area * floors * 2.8))),
+      qty: Math.max(1, Math.round(area * floors * 2.8)),
       unit: "kg",
       priceLow: 60,
       priceHigh: 70,
       selected: true,
       availableBrands: getBrandsForMaterial("steel"),
       selectedBrand: getBrandsForMaterial("steel")[0],
-      description: "Fe 500D TMT bars"
+      description: "Fe 500D TMT bars",
     },
     {
       id: "3",
       category: "Sand",
-      qty: Math.max(1, Math.round((area * floors * 0.015))),
+      qty: Math.max(1, Math.round(area * floors * 0.015)),
       unit: "tons",
       priceLow: 2250,
       priceHigh: 3000,
       selected: true,
       availableBrands: getBrandsForMaterial("sand"),
       selectedBrand: getBrandsForMaterial("sand")[0],
-      description: "River sand / M-sand (fine aggregate)"
-    }
+      description: "River sand / M-sand (fine aggregate)",
+    },
   ];
 
   const selectedMaterials = materials.filter((m) => m.selected);
-  const totalLow = selectedMaterials.reduce((s, m) => s + m.priceLow * m.qty, 0);
-  const totalHigh = selectedMaterials.reduce((s, m) => s + m.priceHigh * m.qty, 0);
+  const totalLow = selectedMaterials.reduce(
+    (s, m) => s + m.priceLow * m.qty,
+    0,
+  );
+  const totalHigh = selectedMaterials.reduce(
+    (s, m) => s + m.priceHigh * m.qty,
+    0,
+  );
 
   return {
     totalLow,
     totalHigh,
     confidence: 88,
     materials,
-    reasoning: `Mock estimate for ${formData.stage || "project"} — area ${area} sq ft`
+    reasoning: `Mock estimate for ${formData.stage || "project"} — area ${area} sq ft`,
   };
 };
 
-const callGPT4ForEstimate = async (formData: FormData): Promise<EstimateData> => {
+const callGPT4ForEstimate = async (
+  formData: FormData,
+): Promise<EstimateData> => {
   const prompt = `You are a Senior Construction Cost Estimation Expert (India, 2025) with extensive expertise in RCC structures, city-wise material rates, IS norms, and quantity estimations.
 
 PROJECT INPUT VARIABLES:
@@ -205,7 +272,7 @@ PROJECT INPUT VARIABLES:
 - Floors: ${formData.floors}
 - Quality Level: ${formData.quality}
 - Location: ${formData.city}, India
-- Additional Requirements: ${formData.additionalRequirements || 'None'}
+- Additional Requirements: ${formData.additionalRequirements || "None"}
 
 OUTPUT FORMAT (STRICT) — RETURN ONLY THIS JSON:
 {
@@ -283,53 +350,60 @@ FINAL INSTRUCTION:
 Return ONLY the JSON object. No explanations or text outside JSON.`;
 
   try {
-    const response = await fetch('/api/estimate', {
-      method: 'POST',
+    const response = await fetch("/api/estimate", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({ prompt }),
     });
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.error('API Error:', response.status, errorText);
+      console.error("API Error:", response.status, errorText);
       throw new Error(`API error: ${response.status}`);
     }
 
     const parsedResponse = await response.json();
 
     if (!parsedResponse.materials || !Array.isArray(parsedResponse.materials)) {
-      throw new Error('Invalid materials data from AI');
+      throw new Error("Invalid materials data from AI");
     }
 
-    const materials: Material[] = parsedResponse.materials.map((item: AiMaterialResponseItem, index: number) => ({
-      id: (index + 1).toString(),
-      category: item.category || 'Unknown Material',
-      qty: Number(item.qty) || 1,
-      unit: item.unit || 'units',
-      priceLow: Number(item.priceLow) || 0,
-      priceHigh: Number(item.priceHigh) || 0,
-      selected: item.priority === 'high' || item.priority === 'medium',
-      availableBrands: getBrandsForMaterial(item.category || ''),
-      selectedBrand: getBrandsForMaterial(item.category || '')[0],
-      description: item.description || ''
-    }));
+    const materials: Material[] = parsedResponse.materials.map(
+      (item: AiMaterialResponseItem, index: number) => ({
+        id: (index + 1).toString(),
+        category: item.category || "Unknown Material",
+        qty: Number(item.qty) || 1,
+        unit: item.unit || "units",
+        priceLow: Number(item.priceLow) || 0,
+        priceHigh: Number(item.priceHigh) || 0,
+        selected: item.priority === "high" || item.priority === "medium",
+        availableBrands: getBrandsForMaterial(item.category || ""),
+        selectedBrand: getBrandsForMaterial(item.category || "")[0],
+        description: item.description || "",
+      }),
+    );
 
-    const totalLow = Number(parsedResponse.totalLow) || materials.reduce((sum, m) => sum + (m.priceLow * m.qty), 0);
-    const totalHigh = Number(parsedResponse.totalHigh) || materials.reduce((sum, m) => sum + (m.priceHigh * m.qty), 0);
+    const totalLow =
+      Number(parsedResponse.totalLow) ||
+      materials.reduce((sum, m) => sum + m.priceLow * m.qty, 0);
+    const totalHigh =
+      Number(parsedResponse.totalHigh) ||
+      materials.reduce((sum, m) => sum + m.priceHigh * m.qty, 0);
 
     return {
       totalLow,
       totalHigh,
       confidence: Number(parsedResponse.confidence) || 85,
       materials,
-      reasoning: parsedResponse.reasoning || 'AI-generated estimate based on project requirements'
+      reasoning:
+        parsedResponse.reasoning ||
+        "AI-generated estimate based on project requirements",
     };
-
   } catch (error) {
-    console.error('API call failed:', error);
-    console.log('Falling back to enhanced mock data...');
+    console.error("API call failed:", error);
+    console.log("Falling back to enhanced mock data...");
     return generateMockEstimate(formData);
   }
 };
@@ -341,7 +415,7 @@ const MaterialSelectionStep = ({
   materials,
   onMaterialsChange,
   onNext,
-  onPrev
+  onPrev,
 }: {
   materials: Material[];
   onMaterialsChange: (m: Material[]) => void;
@@ -349,23 +423,35 @@ const MaterialSelectionStep = ({
   onPrev: () => void;
 }) => {
   const toggleMaterial = (materialId: string) => {
-    const updated = materials.map((m) => (m.id === materialId ? { ...m, selected: !m.selected } : m));
+    const updated = materials.map((m) =>
+      m.id === materialId ? { ...m, selected: !m.selected } : m,
+    );
     onMaterialsChange(updated);
   };
 
   const updateBrand = (materialId: string, brand: string) => {
-    const updated = materials.map((m) => (m.id === materialId ? { ...m, selectedBrand: brand } : m));
+    const updated = materials.map((m) =>
+      m.id === materialId ? { ...m, selectedBrand: brand } : m,
+    );
     onMaterialsChange(updated);
   };
 
   const updateQuantity = (materialId: string, qty: number) => {
-    const updated = materials.map((m) => (m.id === materialId ? { ...m, qty } : m));
+    const updated = materials.map((m) =>
+      m.id === materialId ? { ...m, qty } : m,
+    );
     onMaterialsChange(updated);
   };
 
   const selectedMaterials = materials.filter((m) => m.selected);
-  const totalLow = selectedMaterials.reduce((sum, m) => sum + m.priceLow * m.qty, 0);
-  const totalHigh = selectedMaterials.reduce((sum, m) => sum + m.priceHigh * m.qty, 0);
+  const totalLow = selectedMaterials.reduce(
+    (sum, m) => sum + m.priceLow * m.qty,
+    0,
+  );
+  const totalHigh = selectedMaterials.reduce(
+    (sum, m) => sum + m.priceHigh * m.qty,
+    0,
+  );
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -394,7 +480,9 @@ const MaterialSelectionStep = ({
     >
       <motion.div variants={itemVariants} className="text-center space-y-2">
         <h3 className="text-2xl font-semibold">AI-Generated Materials List</h3>
-        <p className="text-muted-foreground">Review, customize, and select your materials</p>
+        <p className="text-muted-foreground">
+          Review, customize, and select your materials
+        </p>
         <Badge variant="secondary" className="mt-2">
           <Bot className="w-4 h-4 mr-1" />
           Powered by GPT
@@ -407,27 +495,41 @@ const MaterialSelectionStep = ({
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
               <div>
                 <p className="text-sm text-muted-foreground">Selected Items</p>
-                <p className="text-2xl font-bold text-primary">{selectedMaterials.length}</p>
+                <p className="text-2xl font-bold text-primary">
+                  {selectedMaterials.length}
+                </p>
               </div>
               <div>
-                <p className="text-sm text-muted-foreground">Total Cost Range</p>
+                <p className="text-sm text-muted-foreground">
+                  Total Cost Range
+                </p>
                 <div className="text-lg font-bold break-words">
                   <div>{formatCurrencyCompact(totalLow)}</div>
-                  <div className="text-sm">to {formatCurrencyCompact(totalHigh)}</div>
+                  <div className="text-sm">
+                    to {formatCurrencyCompact(totalHigh)}
+                  </div>
                 </div>
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Avg. Cost</p>
-                <p className="text-lg font-bold text-green-600">{formatCurrencyCompact((totalLow + totalHigh) / 2)}</p>
+                <p className="text-lg font-bold text-green-600">
+                  {formatCurrencyCompact((totalLow + totalHigh) / 2)}
+                </p>
               </div>
             </div>
           </CardContent>
         </Card>
       </motion.div>
 
-      <motion.div variants={itemVariants} className="space-y-4 max-h-96 overflow-y-auto">
+      <motion.div
+        variants={itemVariants}
+        className="space-y-4 max-h-96 overflow-y-auto"
+      >
         {materials.map((material) => (
-          <Card key={material.id} className={`transition-all ${material.selected ? "border-primary shadow-md" : "border-muted opacity-60"}`}>
+          <Card
+            key={material.id}
+            className={`transition-all ${material.selected ? "border-primary shadow-md" : "border-muted opacity-60"}`}
+          >
             <CardContent className="p-4">
               <div className="flex items-start space-x-4">
                 <Checkbox
@@ -439,10 +541,15 @@ const MaterialSelectionStep = ({
                   <div className="flex justify-between items-start">
                     <div>
                       <h4 className="font-semibold">{material.category}</h4>
-                      {material.description && <p className="text-xs text-muted-foreground">{material.description}</p>}
+                      {material.description && (
+                        <p className="text-xs text-muted-foreground">
+                          {material.description}
+                        </p>
+                      )}
                     </div>
                     <Badge variant="outline" className="shrink-0 text-xs">
-                      {formatCurrencyCompact(material.priceLow)} - {formatCurrencyCompact(material.priceHigh)}
+                      {formatCurrencyCompact(material.priceLow)} -{" "}
+                      {formatCurrencyCompact(material.priceHigh)}
                     </Badge>
                   </div>
 
@@ -458,14 +565,26 @@ const MaterialSelectionStep = ({
                         <Input
                           type="number"
                           value={material.qty}
-                          onChange={(e) => updateQuantity(material.id, parseInt(e.target.value || "0", 10))}
+                          onChange={(e) =>
+                            updateQuantity(
+                              material.id,
+                              parseInt(e.target.value || "0", 10),
+                            )
+                          }
                           className="text-sm"
                         />
-                        <p className="text-xs text-muted-foreground">{material.unit}</p>
+                        <p className="text-xs text-muted-foreground">
+                          {material.unit}
+                        </p>
                       </div>
                       <div className="md:col-span-2">
                         <Label className="text-xs">Preferred Brand</Label>
-                        <Select value={material.selectedBrand} onValueChange={(brand) => updateBrand(material.id, brand)}>
+                        <Select
+                          value={material.selectedBrand}
+                          onValueChange={(brand) =>
+                            updateBrand(material.id, brand)
+                          }
+                        >
                           <SelectTrigger className="text-sm">
                             <SelectValue />
                           </SelectTrigger>
@@ -487,13 +606,25 @@ const MaterialSelectionStep = ({
         ))}
       </motion.div>
 
-      <motion.div variants={itemVariants} className="flex flex-col md:flex-row justify-between items-center pt-4 gap-4 md:gap-2">
-        <Button variant="outline" onClick={onPrev} className="flex items-center w-full md:w-auto justify-center">
+      <motion.div
+        variants={itemVariants}
+        className="flex flex-col md:flex-row justify-between items-center pt-4 gap-4 md:gap-2"
+      >
+        <Button
+          variant="outline"
+          onClick={onPrev}
+          className="flex items-center w-full md:w-auto justify-center"
+        >
           <ArrowLeft className="w-4 h-4 mr-2" />
           Previous
         </Button>
 
-        <Button variant="hero" onClick={onNext} disabled={selectedMaterials.length === 0} className="flex items-center w-full md:w-auto justify-center">
+        <Button
+          variant="hero"
+          onClick={onNext}
+          disabled={selectedMaterials.length === 0}
+          className="flex items-center w-full md:w-auto justify-center"
+        >
           Generate Final Estimate
           <ArrowRight className="w-4 h-4 ml-2" />
         </Button>
@@ -515,9 +646,11 @@ const PredictorForm = ({ id }: { id?: string }) => {
     floors: "",
     quality: "",
     city: "",
-    additionalRequirements: ""
+    additionalRequirements: "",
   });
-  const [aiGeneratedMaterials, setAiGeneratedMaterials] = useState<Material[]>([]);
+  const [aiGeneratedMaterials, setAiGeneratedMaterials] = useState<Material[]>(
+    [],
+  );
   const [showResults, setShowResults] = useState(false);
   const [finalEstimate, setFinalEstimate] = useState<EstimateData | null>(null);
 
@@ -537,8 +670,11 @@ const PredictorForm = ({ id }: { id?: string }) => {
           ...m,
           id: m.id || String(idx + 1),
           selected: typeof m.selected === "boolean" ? m.selected : true,
-          availableBrands: m.availableBrands || getBrandsForMaterial(m.category || ""),
-          selectedBrand: m.selectedBrand || (getBrandsForMaterial(m.category || "")[0] ?? "Generic")
+          availableBrands:
+            m.availableBrands || getBrandsForMaterial(m.category || ""),
+          selectedBrand:
+            m.selectedBrand ||
+            (getBrandsForMaterial(m.category || "")[0] ?? "Generic"),
         }));
         setAiGeneratedMaterials(mats);
         setCurrentStep(6);
@@ -549,8 +685,11 @@ const PredictorForm = ({ id }: { id?: string }) => {
           ...m,
           id: m.id || String(idx + 1),
           selected: typeof m.selected === "boolean" ? m.selected : true,
-          availableBrands: m.availableBrands || getBrandsForMaterial(m.category || ""),
-          selectedBrand: m.selectedBrand || (getBrandsForMaterial(m.category || "")[0] ?? "Generic")
+          availableBrands:
+            m.availableBrands || getBrandsForMaterial(m.category || ""),
+          selectedBrand:
+            m.selectedBrand ||
+            (getBrandsForMaterial(m.category || "")[0] ?? "Generic"),
         }));
         setAiGeneratedMaterials(mats);
         setCurrentStep(6);
@@ -559,15 +698,21 @@ const PredictorForm = ({ id }: { id?: string }) => {
       }
     } else if (currentStep === 6) {
       const selectedMaterials = aiGeneratedMaterials.filter((m) => m.selected);
-      const totalLow = selectedMaterials.reduce((sum, material) => sum + material.priceLow * material.qty, 0);
-      const totalHigh = selectedMaterials.reduce((sum, material) => sum + material.priceHigh * material.qty, 0);
+      const totalLow = selectedMaterials.reduce(
+        (sum, material) => sum + material.priceLow * material.qty,
+        0,
+      );
+      const totalHigh = selectedMaterials.reduce(
+        (sum, material) => sum + material.priceHigh * material.qty,
+        0,
+      );
 
       const estimate: EstimateData = {
         totalLow,
         totalHigh,
         confidence: Math.floor(Math.random() * 15) + 85,
         materials: selectedMaterials,
-        reasoning: `Final estimate based on your selected materials and preferred brands. Costs calculated for ${formData.city} market rates.`
+        reasoning: `Final estimate based on your selected materials and preferred brands. Costs calculated for ${formData.city} market rates.`,
       };
 
       setFinalEstimate(estimate);
@@ -587,8 +732,12 @@ const PredictorForm = ({ id }: { id?: string }) => {
         <div className="text-center space-y-6 py-12">
           <Loader2 className="w-12 h-12 mx-auto animate-spin text-primary" />
           <div className="space-y-2">
-            <h3 className="text-xl font-semibold">AI is analyzing your project...</h3>
-            <p className="text-muted-foreground">Generating personalized material recommendations</p>
+            <h3 className="text-xl font-semibold">
+              AI is analyzing your project...
+            </h3>
+            <p className="text-muted-foreground">
+              Generating personalized material recommendations
+            </p>
           </div>
           <div className="max-w-md mx-auto">
             <Progress value={progress} className="h-2" />
@@ -620,14 +769,36 @@ const PredictorForm = ({ id }: { id?: string }) => {
                   <div className="space-y-6">
                     <div className="text-center space-y-2">
                       <h3 className="text-2xl font-semibold">Project Stage</h3>
-                      <p className="text-muted-foreground">What stage is your project in?</p>
+                      <p className="text-muted-foreground">
+                        What stage is your project in?
+                      </p>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       {[
-                        { value: "foundation", label: "Foundation", desc: "Excavation to plinth level", icon: Layers },
-                        { value: "structure", label: "Structure", desc: "Columns, beams, slabs", icon: Building },
-                        { value: "finishing", label: "Finishing", desc: "Plastering, flooring, painting", icon: Home },
-                        { value: "interiors", label: "Interiors", desc: "Fixtures, fittings, furnishing", icon: Star }
+                        {
+                          value: "foundation",
+                          label: "Foundation",
+                          desc: "Excavation to plinth level",
+                          icon: Layers,
+                        },
+                        {
+                          value: "structure",
+                          label: "Structure",
+                          desc: "Columns, beams, slabs",
+                          icon: Building,
+                        },
+                        {
+                          value: "finishing",
+                          label: "Finishing",
+                          desc: "Plastering, flooring, painting",
+                          icon: Home,
+                        },
+                        {
+                          value: "interiors",
+                          label: "Interiors",
+                          desc: "Fixtures, fittings, furnishing",
+                          icon: Star,
+                        },
                       ].map((s) => (
                         <AnimatedCard
                           key={s.value}
@@ -643,7 +814,9 @@ const PredictorForm = ({ id }: { id?: string }) => {
                               <s.icon className="w-8 h-8 mx-auto text-primary" />
                               <div>
                                 <h4 className="font-semibold">{s.label}</h4>
-                                <p className="text-sm text-muted-foreground">{s.desc}</p>
+                                <p className="text-sm text-muted-foreground">
+                                  {s.desc}
+                                </p>
                               </div>
                             </CardContent>
                           </Card>
@@ -658,13 +831,27 @@ const PredictorForm = ({ id }: { id?: string }) => {
                   <div className="space-y-6">
                     <div className="text-center space-y-2">
                       <h3 className="text-2xl font-semibold">Building Type</h3>
-                      <p className="text-muted-foreground">What type of building are you constructing?</p>
+                      <p className="text-muted-foreground">
+                        What type of building are you constructing?
+                      </p>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                       {[
-                        { value: "residential", label: "Residential", desc: "Houses, apartments" },
-                        { value: "commercial", label: "Commercial", desc: "Offices, shops, warehouses" },
-                        { value: "mixed", label: "Mixed-use", desc: "Residential + commercial" }
+                        {
+                          value: "residential",
+                          label: "Residential",
+                          desc: "Houses, apartments",
+                        },
+                        {
+                          value: "commercial",
+                          label: "Commercial",
+                          desc: "Offices, shops, warehouses",
+                        },
+                        {
+                          value: "mixed",
+                          label: "Mixed-use",
+                          desc: "Residential + commercial",
+                        },
                       ].map((t) => (
                         <AnimatedCard
                           key={t.value}
@@ -680,7 +867,9 @@ const PredictorForm = ({ id }: { id?: string }) => {
                               <Building className="w-8 h-8 mx-auto text-primary" />
                               <div>
                                 <h4 className="font-semibold">{t.label}</h4>
-                                <p className="text-sm text-muted-foreground">{t.desc}</p>
+                                <p className="text-sm text-muted-foreground">
+                                  {t.desc}
+                                </p>
                               </div>
                             </CardContent>
                           </Card>
@@ -695,7 +884,9 @@ const PredictorForm = ({ id }: { id?: string }) => {
                   <div className="space-y-6">
                     <div className="text-center space-y-2">
                       <h3 className="text-2xl font-semibold">Project Size</h3>
-                      <p className="text-muted-foreground">Enter your project dimensions</p>
+                      <p className="text-muted-foreground">
+                        Enter your project dimensions
+                      </p>
                     </div>
                     <div className="max-w-md mx-auto space-y-4">
                       <div className="space-y-2">
@@ -705,16 +896,22 @@ const PredictorForm = ({ id }: { id?: string }) => {
                           type="number"
                           placeholder="e.g., 1200"
                           value={formData.totalAreaSqft}
-                          onChange={(e) => updateFormData("totalAreaSqft", e.target.value)}
+                          onChange={(e) =>
+                            updateFormData("totalAreaSqft", e.target.value)
+                          }
                           className="text-center text-lg"
                         />
-                        <p className="text-xs text-muted-foreground">Minimum 100 sq ft</p>
+                        <p className="text-xs text-muted-foreground">
+                          Minimum 100 sq ft
+                        </p>
                       </div>
                       <div className="space-y-2">
                         <Label htmlFor="floors">Number of Floors</Label>
                         <Select
                           value={formData.floors}
-                          onValueChange={(value) => updateFormData("floors", value)}
+                          onValueChange={(value) =>
+                            updateFormData("floors", value)
+                          }
                         >
                           <SelectTrigger>
                             <SelectValue placeholder="Select floors" />
@@ -736,24 +933,58 @@ const PredictorForm = ({ id }: { id?: string }) => {
                   <div className="space-y-6">
                     <div className="text-center space-y-2">
                       <h3 className="text-2xl font-semibold">Quality Level</h3>
-                      <p className="text-muted-foreground">Choose your material quality preference</p>
+                      <p className="text-muted-foreground">
+                        Choose your material quality preference
+                      </p>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       {[
-                        { value: "economy", label: "Economy", desc: "Basic quality, budget-friendly", price: "₹800-1200/sq ft" },
-                        { value: "standard", label: "Standard", desc: "Good quality, balanced cost", price: "₹1200-1800/sq ft" },
-                        { value: "premium", label: "Premium", desc: "High quality, superior finish", price: "₹1800-2500/sq ft" },
-                        { value: "sustainable", label: "Sustainable", desc: "Eco-friendly, green materials", price: "₹1500-2200/sq ft" }
+                        {
+                          value: "economy",
+                          label: "Economy",
+                          desc: "Basic quality, budget-friendly",
+                          price: "₹800-1200/sq ft",
+                        },
+                        {
+                          value: "standard",
+                          label: "Standard",
+                          desc: "Good quality, balanced cost",
+                          price: "₹1200-1800/sq ft",
+                        },
+                        {
+                          value: "premium",
+                          label: "Premium",
+                          desc: "High quality, superior finish",
+                          price: "₹1800-2500/sq ft",
+                        },
+                        {
+                          value: "sustainable",
+                          label: "Sustainable",
+                          desc: "Eco-friendly, green materials",
+                          price: "₹1500-2200/sq ft",
+                        },
                       ].map((q) => (
-                        <AnimatedCard key={q.value} onClick={() => { updateFormData("quality", q.value); setTimeout(() => nextStep(), 200); }}>
-                          <Card className={`cursor-pointer transition-all h-full ${formData.quality === q.value ? "border-primary shadow-lg" : "hover:border-primary/50 hover:shadow-md"}`}>
+                        <AnimatedCard
+                          key={q.value}
+                          onClick={() => {
+                            updateFormData("quality", q.value);
+                            setTimeout(() => nextStep(), 200);
+                          }}
+                        >
+                          <Card
+                            className={`cursor-pointer transition-all h-full ${formData.quality === q.value ? "border-primary shadow-lg" : "hover:border-primary/50 hover:shadow-md"}`}
+                          >
                             <CardContent className="p-6 space-y-3">
                               <div className="flex items-start justify-between">
                                 <div className="space-y-1">
                                   <h4 className="font-semibold">{q.label}</h4>
-                                  <p className="text-sm text-muted-foreground">{q.desc}</p>
+                                  <p className="text-sm text-muted-foreground">
+                                    {q.desc}
+                                  </p>
                                 </div>
-                                <Badge variant="secondary" className="text-xs">{q.price}</Badge>
+                                <Badge variant="secondary" className="text-xs">
+                                  {q.price}
+                                </Badge>
                               </div>
                             </CardContent>
                           </Card>
@@ -767,24 +998,33 @@ const PredictorForm = ({ id }: { id?: string }) => {
                 return (
                   <div className="space-y-6">
                     <div className="text-center space-y-2">
-                      <h3 className="text-2xl font-semibold">Location & Additional Requirements</h3>
-                      <p className="text-muted-foreground">Final details for AI analysis</p>
+                      <h3 className="text-2xl font-semibold">
+                        Location & Additional Requirements
+                      </h3>
+                      <p className="text-muted-foreground">
+                        Final details for AI analysis
+                      </p>
                     </div>
                     <div className="max-w-md mx-auto space-y-4">
                       <div className="space-y-2">
                         <Label htmlFor="city">City</Label>
-                        <Select value={formData.city} onValueChange={(value) => updateFormData("city", value)}>
+                        <Select
+                          value={formData.city}
+                          onValueChange={(value) =>
+                            updateFormData("city", value)
+                          }
+                        >
                           <SelectTrigger>
                             <SelectValue placeholder="Select your city" />
                           </SelectTrigger>
                           <SelectContent>
                             {[
-                                'bengaluru',
-                                'mumbai',
-                                'delhi',
-                                'hyderabad',
-                                'pune',
-                                'chennai'
+                              "bengaluru",
+                              "mumbai",
+                              "delhi",
+                              "hyderabad",
+                              "pune",
+                              "chennai",
                             ].map((city) => (
                               <SelectItem key={city} value={city}>
                                 {city.charAt(0).toUpperCase() + city.slice(1)}
@@ -795,9 +1035,23 @@ const PredictorForm = ({ id }: { id?: string }) => {
                       </div>
 
                       <div className="space-y-2">
-                        <Label htmlFor="requirements">Additional Requirements (Optional)</Label>
-                        <Input id="requirements" placeholder="e.g., Swimming pool, Solar panels" value={formData.additionalRequirements} onChange={(e) => updateFormData("additionalRequirements", e.target.value)} />
-                        <p className="text-xs text-muted-foreground">Help AI provide more accurate estimates</p>
+                        <Label htmlFor="requirements">
+                          Additional Requirements (Optional)
+                        </Label>
+                        <Input
+                          id="requirements"
+                          placeholder="e.g., Swimming pool, Solar panels"
+                          value={formData.additionalRequirements}
+                          onChange={(e) =>
+                            updateFormData(
+                              "additionalRequirements",
+                              e.target.value,
+                            )
+                          }
+                        />
+                        <p className="text-xs text-muted-foreground">
+                          Help AI provide more accurate estimates
+                        </p>
                       </div>
 
                       <Card className="p-4 bg-gradient-to-r from-blue-50 to-purple-50">
@@ -805,9 +1059,11 @@ const PredictorForm = ({ id }: { id?: string }) => {
                           <Bot className="w-5 h-5 text-primary mt-0.5" />
                           <div className="text-sm">
                             <p className="font-medium">AI Analysis Ready</p>
-                            <p className="text-muted-foreground">VCNITI AI will analyze your requirements and suggest optimal materials</p>
+                            <p className="text-muted-foreground">
+                              VCNITI AI will analyze your requirements and
+                              suggest optimal materials
+                            </p>
                           </div>
-                          
                         </div>
                       </Card>
                     </div>
@@ -815,7 +1071,14 @@ const PredictorForm = ({ id }: { id?: string }) => {
                 );
 
               case 6:
-                return <MaterialSelectionStep materials={aiGeneratedMaterials} onMaterialsChange={setAiGeneratedMaterials} onNext={nextStep} onPrev={() => setCurrentStep(5)} />;
+                return (
+                  <MaterialSelectionStep
+                    materials={aiGeneratedMaterials}
+                    onMaterialsChange={setAiGeneratedMaterials}
+                    onNext={nextStep}
+                    onPrev={() => setCurrentStep(5)}
+                  />
+                );
 
               default:
                 return null;
@@ -836,7 +1099,9 @@ const PredictorForm = ({ id }: { id?: string }) => {
         <Card className="shadow-lg overflow-hidden">
           <CardHeader className="text-center space-y-4">
             <div className="flex items-center justify-center space-x-2">
-              <Badge variant="outline" className="text-xs">Step {currentStep} of {totalSteps}</Badge>
+              <Badge variant="outline" className="text-xs">
+                Step {currentStep} of {totalSteps}
+              </Badge>
             </div>
             <Progress value={progress} className="h-2" />
           </CardHeader>
@@ -845,13 +1110,21 @@ const PredictorForm = ({ id }: { id?: string }) => {
 
             {!isLoading && currentStep > 1 && currentStep < 6 && (
               <div className="flex justify-between items-center mt-8">
-                <Button variant="outline" onClick={prevStep} className="flex items-center">
+                <Button
+                  variant="outline"
+                  onClick={prevStep}
+                  className="flex items-center"
+                >
                   <ArrowLeft className="w-4 h-4 mr-2" /> Previous
                 </Button>
                 {currentStep === 3 && (
                   <Button
                     onClick={nextStep}
-                    disabled={!formData.totalAreaSqft || !formData.floors || parseInt(formData.totalAreaSqft) < 100}
+                    disabled={
+                      !formData.totalAreaSqft ||
+                      !formData.floors ||
+                      parseInt(formData.totalAreaSqft) < 100
+                    }
                     variant="hero"
                     className="flex items-center"
                   >
@@ -882,7 +1155,13 @@ const PredictorForm = ({ id }: { id?: string }) => {
 /* ---------------------------
    ResultsDashboard (with working export & share)
 ----------------------------*/
-const ResultsDashboard = ({ estimate, formData }: { estimate: EstimateData; formData: FormData }) => {
+const ResultsDashboard = ({
+  estimate,
+  formData,
+}: {
+  estimate: EstimateData;
+  formData: FormData;
+}) => {
   // Build PDF blob with updated header and footer
   async function buildPdfBlob(): Promise<Blob> {
     const doc = new jsPDF({ unit: "pt", format: "a4" });
@@ -897,22 +1176,24 @@ const ResultsDashboard = ({ estimate, formData }: { estimate: EstimateData; form
       const companyName = "Vcniti Technologies Private Limited";
       const companyNameWidth = doc.getTextWidth(companyName);
       doc.text(companyName, (pageWidth - companyNameWidth) / 2, 30);
-      
+
       doc.setFontSize(9);
       doc.setFont("helvetica", "normal");
-      
+
       const cinText = "CIN No. – U47912KA2025PTC205758";
       const cinWidth = doc.getTextWidth(cinText);
       doc.text(cinText, (pageWidth - cinWidth) / 2, 45);
-      
-      const contactText = "E-Mail Id – info@vcniti.com, Website - www.vcniti.com, Phone No. –+91 9740059699";
+
+      const contactText =
+        "E-Mail Id – info@vcniti.com, Website - www.vcniti.com, Phone No. –+91 9740059699";
       const contactWidth = doc.getTextWidth(contactText);
       doc.text(contactText, (pageWidth - contactWidth) / 2, 57);
-      
-      const officeText = "Office: 48, Church St, Haridevpur, Shanthala Nagar, Ashok Nagar, Bengaluru, Karnataka 560001";
+
+      const officeText =
+        "Office: 48, Church St, Haridevpur, Shanthala Nagar, Ashok Nagar, Bengaluru, Karnataka 560001";
       const officeWidth = doc.getTextWidth(officeText);
       doc.text(officeText, (pageWidth - officeWidth) / 2, 69);
-      
+
       doc.line(margin, 75, pageWidth - margin, 75);
     };
 
@@ -923,7 +1204,11 @@ const ResultsDashboard = ({ estimate, formData }: { estimate: EstimateData; form
       doc.setFontSize(9);
       doc.setFont("helvetica", "normal");
       doc.text("Generated by Vcniti Technologies", margin, footerY);
-      doc.text(`Page ${pageNumber} / ${totalPages}`, pageWidth - margin - 80, footerY);
+      doc.text(
+        `Page ${pageNumber} / ${totalPages}`,
+        pageWidth - margin - 80,
+        footerY,
+      );
     };
 
     addHeader();
@@ -933,29 +1218,50 @@ const ResultsDashboard = ({ estimate, formData }: { estimate: EstimateData; form
     const titleText = "Construction Material Estimate Report";
     const titleWidth = doc.getTextWidth(titleText);
     doc.text(titleText, (pageWidth - titleWidth) / 2, 100);
-    
+
     doc.setFontSize(10);
     doc.setFont("helvetica", "normal");
-    doc.text(`Project Stage: ${formData.stage?.charAt(0).toUpperCase() + formData.stage?.slice(1) || 'N/A'}`, margin, 120);
-    doc.text(`Building Type: ${formData.buildingType?.charAt(0).toUpperCase() + formData.buildingType?.slice(1) || 'N/A'}`, margin, 135);
+    doc.text(
+      `Project Stage: ${formData.stage?.charAt(0).toUpperCase() + formData.stage?.slice(1) || "N/A"}`,
+      margin,
+      120,
+    );
+    doc.text(
+      `Building Type: ${formData.buildingType?.charAt(0).toUpperCase() + formData.buildingType?.slice(1) || "N/A"}`,
+      margin,
+      135,
+    );
     doc.text(`Total Area: ${formData.totalAreaSqft} sq ft`, margin, 150);
     doc.text(`Number of Floors: ${formData.floors}`, margin, 165);
-    doc.text(`Quality Level: ${formData.quality?.charAt(0).toUpperCase() + formData.quality?.slice(1) || 'N/A'}`, margin, 180);
-    doc.text(`Location: ${formData.city?.charAt(0).toUpperCase() + formData.city?.slice(1) || 'N/A'}`, margin, 195);
-    doc.text(`Generated on: ${new Date().toLocaleString('en-IN')}`, margin, 210);
+    doc.text(
+      `Quality Level: ${formData.quality?.charAt(0).toUpperCase() + formData.quality?.slice(1) || "N/A"}`,
+      margin,
+      180,
+    );
+    doc.text(
+      `Location: ${formData.city?.charAt(0).toUpperCase() + formData.city?.slice(1) || "N/A"}`,
+      margin,
+      195,
+    );
+    doc.text(
+      `Generated on: ${new Date().toLocaleString("en-IN")}`,
+      margin,
+      210,
+    );
 
     // Prepare table data with proper serial numbers and fixed currency formatting
     const tableRows = estimate.materials.map((material, index) => {
-      const unitCost = `Rs. ${material.priceLow.toLocaleString('en-IN')} – Rs. ${material.priceHigh.toLocaleString('en-IN')}`;
-      const totalCost = ((material.priceLow + material.priceHigh) / 2) * material.qty;
-      
+      const unitCost = `Rs. ${material.priceLow.toLocaleString("en-IN")} – Rs. ${material.priceHigh.toLocaleString("en-IN")}`;
+      const totalCost =
+        ((material.priceLow + material.priceHigh) / 2) * material.qty;
+
       return [
         (index + 1).toString(),
         material.category,
-        material.selectedBrand || 'Generic',
+        material.selectedBrand || "Generic",
         `${material.qty} ${material.unit}`,
         unitCost,
-        `Rs. ${totalCost.toLocaleString('en-IN')}`
+        `Rs. ${totalCost.toLocaleString("en-IN")}`,
       ];
     });
 
@@ -964,28 +1270,37 @@ const ResultsDashboard = ({ estimate, formData }: { estimate: EstimateData; form
       startY: 230,
       margin: { top: 130, left: margin, right: margin, bottom: 60 },
       body: tableRows,
-      theme: 'grid',
-      styles: { 
+      theme: "grid",
+      styles: {
         fontSize: 9,
-        cellPadding: 6
+        cellPadding: 6,
       },
-      headStyles: { 
+      headStyles: {
         fillColor: [41, 128, 185],
         textColor: 255,
-        fontStyle: 'bold'
+        fontStyle: "bold",
       },
       alternateRowStyles: {
-        fillColor: [250, 250, 250]
+        fillColor: [250, 250, 250],
       },
-      head: [['S.No.', 'Material', 'Brand', 'Quantity', 'Unit Cost Range', 'Total Cost (Avg)']],
+      head: [
+        [
+          "S.No.",
+          "Material",
+          "Brand",
+          "Quantity",
+          "Unit Cost Range",
+          "Total Cost (Avg)",
+        ],
+      ],
       didDrawPage: (data) => {
         const pageNumber = doc.internal.getCurrentPageInfo().pageNumber;
         const totalPages = doc.internal.getNumberOfPages();
-        
+
         if (pageNumber > 1) {
           addHeader();
         }
-      }
+      },
     });
 
     // Add final summary
@@ -1004,28 +1319,53 @@ const ResultsDashboard = ({ estimate, formData }: { estimate: EstimateData; form
     const avgCost = (estimate.totalLow + estimate.totalHigh) / 2;
 
     doc.setFillColor(230, 247, 255);
-    doc.rect(margin, finalY, pageWidth - 2 * margin, summaryHeight, 'F');
+    doc.rect(margin, finalY, pageWidth - 2 * margin, summaryHeight, "F");
     doc.setFontSize(12);
     doc.setFont("helvetica", "bold");
     doc.text("Final Estimate Summary", margin + 10, finalY + 25);
     doc.setFontSize(11);
     doc.setFont("helvetica", "normal");
-    doc.text(`Total Materials: ${estimate.materials.length} items`, margin + 10, finalY + 45);
-    doc.text(`Estimated Cost Range: Rs. ${estimate.totalLow.toLocaleString('en-IN')} – Rs. ${estimate.totalHigh.toLocaleString('en-IN')}`, margin + 10, finalY + 60);
-    doc.text(`Average Cost: Rs. ${avgCost.toLocaleString('en-IN')}`, margin + 10, finalY + 75);
-    doc.text(`AI Confidence Level: ${estimate.confidence}%`, margin + 10, finalY + 90);
+    doc.text(
+      `Total Materials: ${estimate.materials.length} items`,
+      margin + 10,
+      finalY + 45,
+    );
+    doc.text(
+      `Estimated Cost Range: Rs. ${estimate.totalLow.toLocaleString("en-IN")} – Rs. ${estimate.totalHigh.toLocaleString("en-IN")}`,
+      margin + 10,
+      finalY + 60,
+    );
+    doc.text(
+      `Average Cost: Rs. ${avgCost.toLocaleString("en-IN")}`,
+      margin + 10,
+      finalY + 75,
+    );
+    doc.text(
+      `AI Confidence Level: ${estimate.confidence}%`,
+      margin + 10,
+      finalY + 90,
+    );
 
     // Add disclaimer
     let disclaimerY = finalY + summaryHeight + 15;
-    if (disclaimerY + 30 > pageHeight - margin) { // Check if disclaimer overflows
+    if (disclaimerY + 30 > pageHeight - margin) {
+      // Check if disclaimer overflows
       doc.addPage();
       addHeader();
       disclaimerY = 100; // Reset Y for new page, after header
     }
     doc.setFontSize(8);
     doc.setFont("helvetica", "italic");
-    doc.text("Note: This estimate is generated using AI analysis and current market rates. Actual costs may vary based on", margin, disclaimerY + 5);
-    doc.text("market conditions, supplier negotiations, and specific project requirements.", margin, disclaimerY + 17);
+    doc.text(
+      "Note: This estimate is generated using AI analysis and current market rates. Actual costs may vary based on",
+      margin,
+      disclaimerY + 5,
+    );
+    doc.text(
+      "market conditions, supplier negotiations, and specific project requirements.",
+      margin,
+      disclaimerY + 17,
+    );
 
     // Add footer to all pages after all content is generated
     const totalPages = doc.internal.getNumberOfPages();
@@ -1035,7 +1375,7 @@ const ResultsDashboard = ({ estimate, formData }: { estimate: EstimateData; form
     }
 
     return doc.output("blob");
-  };
+  }
 
   // Define a simple interface for ShareData to avoid 'any'
   interface CustomShareData {
@@ -1049,16 +1389,21 @@ const ResultsDashboard = ({ estimate, formData }: { estimate: EstimateData; form
   async function shareEstimate() {
     try {
       const blob = await buildPdfBlob();
-      const file = new File([blob], "vcniti-construction-estimate.pdf", { type: "application/pdf" });
+      const file = new File([blob], "vcniti-construction-estimate.pdf", {
+        type: "application/pdf",
+      });
       const pageUrl = window.location.href;
       const shareData: CustomShareData = {
         title: "Construction Estimate",
         text: `Estimate: ${formatCurrency(estimate.totalLow)} – ${formatCurrency(estimate.totalHigh)}`,
-        url: pageUrl
+        url: pageUrl,
       };
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      if (navigator.canShare && (navigator as any).canShare({ files: [file] })) {
+      if (
+        navigator.canShare &&
+        (navigator as any).canShare({ files: [file] })
+      ) {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         await (navigator as any).share({ ...shareData, files: [file] });
         return;
@@ -1078,17 +1423,21 @@ const ResultsDashboard = ({ estimate, formData }: { estimate: EstimateData; form
       prompt("Copy this URL:", pageUrl);
     } catch (err) {
       console.error("Share failed:", err);
-      alert("Share failed — fallback to copying link. See console for details.");
+      alert(
+        "Share failed — fallback to copying link. See console for details.",
+      );
       if (navigator.clipboard && navigator.clipboard.writeText) {
         try {
           await navigator.clipboard.writeText(window.location.href);
           alert("URL copied to clipboard");
-        } catch (copyError) { /* Intentionally ignore if clipboard write fails */ }
+        } catch (copyError) {
+          /* Intentionally ignore if clipboard write fails */
+        }
       } else {
         prompt("Copy this URL:", window.location.href);
       }
     }
-  };
+  }
 
   // Download (Safari-safe)
   async function downloadEstimatePDF() {
@@ -1143,11 +1492,18 @@ const ResultsDashboard = ({ estimate, formData }: { estimate: EstimateData; form
             <Bot className="w-4 h-4 mr-2" />
             AI-Generated Estimate
           </Badge>
-          <h1 className="text-4xl font-bold">Your Customized Project Estimate</h1>
-          <p className="text-muted-foreground max-w-2xl mx-auto">{estimate.reasoning}</p>
+          <h1 className="text-4xl font-bold">
+            Your Customized Project Estimate
+          </h1>
+          <p className="text-muted-foreground max-w-2xl mx-auto">
+            {estimate.reasoning}
+          </p>
         </motion.div>
 
-        <motion.div variants={itemVariants} className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <motion.div
+          variants={itemVariants}
+          className="grid grid-cols-1 md:grid-cols-3 gap-6"
+        >
           <AnimatedCard>
             <Card className="shadow-lg border-primary/20 h-full">
               <CardHeader className="text-center">
@@ -1156,9 +1512,13 @@ const ResultsDashboard = ({ estimate, formData }: { estimate: EstimateData; form
               <CardContent className="text-center space-y-2">
                 <div className="text-2xl font-bold text-primary break-words">
                   <div>{formatCurrencyCompact(estimate.totalLow)}</div>
-                  <div className="text-lg">to {formatCurrencyCompact(estimate.totalHigh)}</div>
+                  <div className="text-lg">
+                    to {formatCurrencyCompact(estimate.totalHigh)}
+                  </div>
                 </div>
-                <p className="text-sm text-muted-foreground">{estimate.materials.length} selected materials</p>
+                <p className="text-sm text-muted-foreground">
+                  {estimate.materials.length} selected materials
+                </p>
               </CardContent>
             </Card>
           </AnimatedCard>
@@ -1170,10 +1530,14 @@ const ResultsDashboard = ({ estimate, formData }: { estimate: EstimateData; form
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="text-center">
-                  <div className="text-3xl font-bold text-green-600">{estimate.confidence}%</div>
+                  <div className="text-3xl font-bold text-green-600">
+                    {estimate.confidence}%
+                  </div>
                 </div>
                 <Progress value={estimate.confidence} className="h-3" />
-                <p className="text-xs text-muted-foreground text-center">Based on your selections & market data</p>
+                <p className="text-xs text-muted-foreground text-center">
+                  Based on your selections & market data
+                </p>
               </CardContent>
             </Card>
           </AnimatedCard>
@@ -1185,14 +1549,22 @@ const ResultsDashboard = ({ estimate, formData }: { estimate: EstimateData; form
               </CardHeader>
               <CardContent className="space-y-3">
                 <Button asChild variant="hero" className="w-full" size="sm">
-                  <a href="https://www.vcniti.com/collections" target="_blank" rel="noopener noreferrer">
+                  <a
+                    href="https://www.vcniti.com/collections"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     <ShoppingCart className="w-4 h-4 mr-2" />
                     Proceed to Purchase
                   </a>
                 </Button>
 
                 <div className="grid grid-cols-2 gap-2">
-                  <Button variant="outline" size="sm" onClick={downloadEstimatePDF}>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={downloadEstimatePDF}
+                  >
                     <Download className="w-4 h-4 mr-1" /> Export
                   </Button>
                   <Button variant="outline" size="sm" onClick={shareEstimate}>
@@ -1208,7 +1580,9 @@ const ResultsDashboard = ({ estimate, formData }: { estimate: EstimateData; form
           <Card className="shadow-lg">
             <CardHeader>
               <CardTitle>Selected Materials with Brands</CardTitle>
-              <p className="text-sm text-muted-foreground">Your customized bill of quantities</p>
+              <p className="text-sm text-muted-foreground">
+                Your customized bill of quantities
+              </p>
             </CardHeader>
             <CardContent>
               <div className="overflow-x-auto">
@@ -1217,41 +1591,72 @@ const ResultsDashboard = ({ estimate, formData }: { estimate: EstimateData; form
                     <tr className="border-b">
                       <th className="text-left p-3 font-semibold">S.No.</th>
                       <th className="text-left p-3 font-semibold">Material</th>
-                      <th className="text-left p-3 font-semibold">Selected Brand</th>
+                      <th className="text-left p-3 font-semibold">
+                        Selected Brand
+                      </th>
                       <th className="text-left p-3 font-semibold">Quantity</th>
                       <th className="text-left p-3 font-semibold">Unit Cost</th>
-                      <th className="text-left p-3 font-semibold">Total Cost</th>
+                      <th className="text-left p-3 font-semibold">
+                        Total Cost
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
                     {estimate.materials.map((material, index) => (
-                      <tr key={material.id} className="border-b hover:bg-muted/20">
+                      <tr
+                        key={material.id}
+                        className="border-b hover:bg-muted/20"
+                      >
                         <td className="p-3">{index + 1}</td>
                         <td className="p-3">
                           <div>
-                            <div className="font-medium">{material.category}</div>
-                            {material.description && <div className="text-xs text-muted-foreground">{material.description}</div>}
+                            <div className="font-medium">
+                              {material.category}
+                            </div>
+                            {material.description && (
+                              <div className="text-xs text-muted-foreground">
+                                {material.description}
+                              </div>
+                            )}
                           </div>
                         </td>
                         <td className="p-3">
-                          <Badge variant="secondary">{material.selectedBrand}</Badge>
+                          <Badge variant="secondary">
+                            {material.selectedBrand}
+                          </Badge>
                         </td>
                         <td className="p-3">
-                          <span>{material.qty} {material.unit}</span>
+                          <span>
+                            {material.qty} {material.unit}
+                          </span>
                         </td>
                         <td className="p-3">
-                          <div className="text-sm">{formatCurrencyCompact(material.priceLow)} - {formatCurrencyCompact(material.priceHigh)}</div>
+                          <div className="text-sm">
+                            {formatCurrencyCompact(material.priceLow)} -{" "}
+                            {formatCurrencyCompact(material.priceHigh)}
+                          </div>
                         </td>
                         <td className="p-3">
-                          <div className="font-semibold text-primary">{formatCurrencyCompact(((material.priceLow + material.priceHigh) / 2) * material.qty)}</div>
+                          <div className="font-semibold text-primary">
+                            {formatCurrencyCompact(
+                              ((material.priceLow + material.priceHigh) / 2) *
+                                material.qty,
+                            )}
+                          </div>
                         </td>
                       </tr>
                     ))}
                   </tbody>
                   <tfoot>
                     <tr className="border-t-2 font-bold">
-                      <td colSpan={5} className="p-3 text-right">Total Estimate:</td>
-                      <td className="p-3 text-primary text-lg">{formatCurrencyCompact((estimate.totalLow + estimate.totalHigh) / 2)}</td>
+                      <td colSpan={5} className="p-3 text-right">
+                        Total Estimate:
+                      </td>
+                      <td className="p-3 text-primary text-lg">
+                        {formatCurrencyCompact(
+                          (estimate.totalLow + estimate.totalHigh) / 2,
+                        )}
+                      </td>
                     </tr>
                   </tfoot>
                 </table>
@@ -1260,11 +1665,22 @@ const ResultsDashboard = ({ estimate, formData }: { estimate: EstimateData; form
           </Card>
         </motion.div>
 
-        <motion.div variants={itemVariants} className="flex flex-col md:flex-row justify-center items-center space-y-4 md:space-y-0 md:space-x-4">
-          <Button variant="outline" onClick={() => window.location.reload()} className="w-full md:w-auto">Start New Estimate</Button>
+        <motion.div
+          variants={itemVariants}
+          className="flex flex-col md:flex-row justify-center items-center space-y-4 md:space-y-0 md:space-x-4"
+        >
+          <Button
+            variant="outline"
+            onClick={() => window.location.reload()}
+            className="w-full md:w-auto"
+          >
+            Start New Estimate
+          </Button>
           <Button
             variant="hero"
-            onClick={() => window.location.href = "https://www.vcniti.com/collections"}
+            onClick={() =>
+              (window.location.href = "https://www.vcniti.com/collections")
+            }
             className="w-full md:w-auto"
           >
             <ShoppingCart className="w-4 h-4 mr-2" />
@@ -1275,7 +1691,6 @@ const ResultsDashboard = ({ estimate, formData }: { estimate: EstimateData; form
     </motion.div>
   );
 };
-
 
 /* ---------------------------
    App wrapper
