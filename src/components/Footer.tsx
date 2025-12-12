@@ -180,7 +180,7 @@ const Footer = () => {
                     <MapPin size={16} />
                   </div>
                   <span className="text-gray-500 text-sm leading-relaxed">
-                    48, Church St, Ashok Nagar,
+                    Bhive, Church St, Ashok Nagar,
                     <br />
                     Bengaluru, KA, 560001
                   </span>
@@ -445,7 +445,7 @@ const Footer = () => {
                     </p>
                     <p className="mt-1 text-sm">
                       Bhive, Church St, Haridevpur, Shanthala Nagar, Ashok Nagar,
-                      BHIVE, Bengaluru, KA, 560001, IN
+                      Bengaluru, KA, 560001, IN
                     </p>
                   </div>
                 </div>
