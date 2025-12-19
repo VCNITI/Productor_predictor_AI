@@ -61,8 +61,8 @@ const OtpLogin: React.FC<OtpLoginProps> = ({ isOpen, onClose, onLoginSuccess }) 
                 alert("System Error: SMS services are currently disabled. Please contact support.");
             } else if (error.code === 'auth/invalid-phone-number') {
                 alert("Invalid phone number format.");
-            } else {
-                alert("Failed to send OTP. Please try again later.");
+            } else if (error.code === 'auth/too-many-requests') {
+                alert("Too many requests. Please try again later or use a different number. If you are testing, consider using a fictional phone number from Firebase console.");
             }
             
             // Reset reCAPTCHA so user can try again immediately
