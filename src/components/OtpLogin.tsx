@@ -21,6 +21,41 @@ const OtpLogin: React.FC<OtpLoginProps> = ({ isOpen, onClose, onLoginSuccess }) 
     const [step, setStep] = useState(1);
     const [loading, setLoading] = useState(false);
     const [confirmationResult, setConfirmationResult] = useState<ConfirmationResult | null>(null);
+    const [formattedPhoneNumber, setFormattedPhoneNumber] = useState(''); // New state for formatted phone number
+
+    // Clean up reCAPTCHA when modal closes to prevent "element removed" errors
+    useEffect(() => {
+        if (!isOpen && window.recaptchaVerifier) {
+            window.recaptchaVerifier.clear();
+            window.recaptchaVerifier = undefined;
+        }
+    }, [isOpen]);
+
+    // Function to actually send the OTP via Firebase
+    const sendOtpToFirebase = async (phone: string, appVerifier: RecaptchaVerifier) => {
+        try {
+            const confirmation = await signInWithPhoneNumber(auth, phone, appVerifier);
+            setConfirmationResult(confirmation);
+            setStep(2);
+        } catch (error: any) {
+            console.error("SMS Error:", error);
+            if (error.code === 'auth/billing-not-enabled') {
+                alert("System Error: SMS services are currently disabled. Please contact support.");
+            } else if (error.code === 'auth/invalid-phone-number') {
+                alert("Invalid phone number format.");
+            } else if (error.code === 'auth/too-many-requests') {
+                alert("Too many requests. Please try again later or use a different number. If you are testing, consider using a fictional phone number from Firebase console.");
+            } else {
+                alert("Failed to send OTP. Please try again later.");
+            }
+        } finally {
+            setLoading(false);
+            if (window.recaptchaVerifier) {
+                window.recaptchaVerifier.clear();
+                window.recaptchaVerifier = undefined;
+            }
+        }
+    };
 
     const setupRecaptcha = () => {
         // Prevent duplicate reCAPTCHA instances
@@ -28,11 +63,17 @@ const OtpLogin: React.FC<OtpLoginProps> = ({ isOpen, onClose, onLoginSuccess }) 
             window.recaptchaVerifier = new RecaptchaVerifier(auth, 'sign-in-button', { // Use button ID
                 'size': 'invisible',
                 'callback': (response) => {
-                    // reCAPTCHA solved.
-                    // This callback is triggered when the user successfully completes the reCAPTCHA challenge.
-                    // The actual OTP sending is handled by handleSendOtp after this.
+                    console.log('reCAPTCHA solved, proceeding with OTP sending.');
+                    // reCAPTCHA solved, now send the OTP
+                    if (formattedPhoneNumber) { // Use the stored formatted phone number
+                        sendOtpToFirebase(formattedPhoneNumber, window.recaptchaVerifier!);
+                    } else {
+                        console.error("Formatted phone number not available after reCAPTCHA.");
+                        setLoading(false);
+                    }
                 },
                 'expired-callback': () => {
+                    console.log('reCAPTCHA expired');
                     alert("Verification expired. Please try again.");
                     setLoading(false);
                 }
@@ -45,32 +86,21 @@ const OtpLogin: React.FC<OtpLoginProps> = ({ isOpen, onClose, onLoginSuccess }) 
         setLoading(true);
         
         // Ensure +91 format
-        const formattedPhone = phoneNumber.startsWith('+') ? phoneNumber : `+${phoneNumber.replace(/\D/g, '')}`;
+        const formatted = phoneNumber.startsWith('+') ? phoneNumber : `+${phoneNumber.replace(/\D/g, '')}`;
+        setFormattedPhoneNumber(formatted); // Store formatted number
 
         try {
             setupRecaptcha();
-            const appVerifier = window.recaptchaVerifier!;
-            const confirmation = await signInWithPhoneNumber(auth, formattedPhone, appVerifier);
-            setConfirmationResult(confirmation);
-            setStep(2);
+            // The reCAPTCHA is now set up. Clicking the button will trigger it.
+            // The actual sending of OTP happens in the reCAPTCHA callback.
+            // We just need to ensure the reCAPTCHA is rendered/verified.
+            // For invisible reCAPTCHA bound to a button, the click on the button itself triggers the verification.
+            // There's no explicit call to `recaptchaVerifier.verify()` or `recaptchaVerifier.render()` here,
+            // as the button click mechanism implicitly handles it when using the 'sign-in-button' ID.
+
         } catch (error: any) {
-            console.error("SMS Error:", error);
-            
-            // Handle specific error codes for better feedback
-            if (error.code === 'auth/billing-not-enabled') {
-                alert("System Error: SMS services are currently disabled. Please contact support.");
-            } else if (error.code === 'auth/invalid-phone-number') {
-                alert("Invalid phone number format.");
-            } else if (error.code === 'auth/too-many-requests') {
-                alert("Too many requests. Please try again later or use a different number. If you are testing, consider using a fictional phone number from Firebase console.");
-            }
-            
-            // Reset reCAPTCHA so user can try again immediately
-            if (window.recaptchaVerifier) {
-                window.recaptchaVerifier.clear();
-                window.recaptchaVerifier = undefined;
-            }
-        } finally {
+            console.error("General error during reCAPTCHA setup or initial phase:", error);
+            alert("An error occurred during verification setup. Please try again.");
             setLoading(false);
         }
     };
