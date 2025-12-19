@@ -314,43 +314,50 @@ const FindProfessional = () => {
                   className={`transition-all duration-500 ${!selectedCity ? "opacity-40 grayscale pointer-events-none" : "opacity-100"}`}
                 >
                   <div className="bg-slate-50 rounded-2xl p-4 border border-slate-100">
-                    <div className="flex items-center justify-between mb-4">
-                      <label className="text-xs font-black text-slate-500 uppercase tracking-wider">
-                        3. Refine Search Area
-                      </label>
-                      <div className="flex bg-white rounded-lg p-1 border border-slate-200 shadow-sm">
-                        <button
-                          type="button"
-                          onClick={() => handleSearchModeChange("pincode")}
-                          className={`px-4 py-1.5 rounded-md text-xs font-bold transition-all ${searchMode === "pincode" ? "bg-purple-600 text-white shadow-md" : "text-slate-500 hover:bg-slate-50"}`}
-                        >
-                          Pincode
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => handleSearchModeChange("area")}
-                          className={`px-4 py-1.5 rounded-md text-xs font-bold transition-all ${searchMode === "area" ? "bg-purple-600 text-white shadow-md" : "text-slate-500 hover:bg-slate-50"}`}
-                        >
-                          Locality
-                        </button>
-                      </div>
+                    {/* FIXED: Added items-center and text-center for mobile alignment */}
+                    <div className="flex flex-col sm:flex-row items-center sm:justify-between gap-4 mb-4">
+                        <label className="text-xs font-black text-slate-500 uppercase tracking-wider text-center sm:text-left">
+                            3. Refine Search Area
+                        </label>
+                        
+                        {/* Toggle Switch Container */}
+                        <div className="flex bg-white rounded-lg p-1 border border-slate-200 shadow-sm w-fit mx-auto sm:mx-0">
+                            <button 
+                                type="button" 
+                                onClick={() => handleSearchModeChange('pincode')} 
+                                className={`px-4 py-1.5 rounded-md text-xs font-bold transition-all ${searchMode === 'pincode' ? 'bg-purple-600 text-white shadow-md' : 'text-slate-500 hover:bg-slate-50'}`}
+                            >
+                                Pincode
+                            </button>
+                            <button 
+                                type="button" 
+                                onClick={() => handleSearchModeChange('area')} 
+                                className={`px-4 py-1.5 rounded-md text-xs font-bold transition-all ${searchMode === 'area' ? 'bg-purple-600 text-white shadow-md' : 'text-slate-500 hover:bg-slate-50'}`}
+                            >
+                                Locality
+                            </button>
+                        </div>
                     </div>
-                    {searchMode === "pincode" ? (
-                      <Select
-                        options={pincodes}
-                        value={selectedPincode}
-                        onChange={setSelectedPincode}
-                        placeholder="Type to select Pincode..."
-                        styles={customStyles}
-                      />
-                    ) : (
-                      <Input
-                        placeholder="Enter Area Name (e.g. Indiranagar)"
-                        value={area}
-                        onChange={(e) => setArea(e.target.value)}
-                        className="h-11 rounded-xl border-slate-200 bg-white"
-                      />
-                    )}
+
+                    {/* Input/Select Field */}
+                    <div className="w-full">
+                        {searchMode === 'pincode' ? (
+                            <Select 
+                                options={pincodes} 
+                                value={selectedPincode} 
+                                onChange={setSelectedPincode} 
+                                placeholder="Type to select Pincode..." 
+                                styles={customStyles} 
+                            />
+                        ) : (
+                            <Input 
+                                placeholder="Enter Area Name (e.g. Indiranagar)" 
+                                value={area} 
+                                onChange={(e) => setArea(e.target.value)} 
+                                className="h-11 rounded-xl border-slate-200 bg-white w-full" 
+                            />
+                        )}
+                    </div>
                   </div>
                 </div>
               </div>
