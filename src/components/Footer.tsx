@@ -73,7 +73,7 @@ const Footer = () => {
         <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-[#a852e5] to-transparent opacity-60"></div>
 
         {/* 3. Giant Subtle Watermark (Unique Touch) */}
-        <div className="absolute -bottom-20 -right-20 pointer-events-none select-none opacity-[0.03]">
+        <div className="absolute -bottom-20 right-0  pointer-events-none select-none opacity-[0.03]">
           <h1 className="text-[12rem] md:text-[20rem] font-black leading-none tracking-tighter text-gray-900">
             VCNITI
           </h1>
@@ -175,12 +175,14 @@ const Footer = () => {
                 Reach Us
               </h4>
               <ul className="space-y-4">
-                <li className="flex gap-4">
-                  <div className="mt-1 bg-purple-50 p-1.5 rounded-md text-[#a852e5]">
+                <li className="flex items-start gap-4">
+                  <div className="mt-0.5 bg-purple-50 p-1.5 rounded-md text-[#a852e5] shrink-0">
                     <MapPin size={16} />
                   </div>
                   <span className="text-gray-500 text-sm leading-relaxed">
-                    Bhive, Church St, Ashok Nagar,
+                    VCNITI Technologies Private Limited,Bhive 48, Church St,
+                    <br />
+                    Haridevpur, Shanthala Nagar, Ashok Nagar,
                     <br />
                     Bengaluru, KA, 560001
                   </span>

@@ -1,77 +1,117 @@
 import React from "react";
-import { Users, Lock } from "lucide-react";
+import { Users, ArrowRight, CheckCircle2 } from "lucide-react";
 import professionalImage from "../assets/vcniti find profetional.png";
+import { useNavigate } from "react-router-dom";
 
 const FindProf: React.FC = () => {
+  const navigate = useNavigate();
+
+  const handleFindProsClick = () => {
+    navigate("/find-professionals");
+  };
+
   return (
-    <section id="find-professional" className="py-24 bg-gray-50 relative">
-      <div className="container mx-auto px-6">
-        <div className="flex flex-col lg:flex-row items-center justify-between gap-16">
-          {/* LEFT — Image with "Coming Soon" Overlay */}
-          <div className="lg:w-1/2 relative">
-            <div className="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-white">
-              <img
-                src={professionalImage}
-                alt="Find Professionals"
-                className="w-full h-auto filter grayscale-[30%]"
-              />
-              {/* Overlay */}
-              <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px] flex flex-col items-center justify-center text-white">
-                <div className="bg-white/20 p-4 rounded-full backdrop-blur-md mb-4 border border-white/30">
-                  <Lock size={32} />
+    <section id="find-professional" className="py-20 relative overflow-hidden bg-white">
+      
+      {/* Background Decor (Matching AI Planner style) */}
+      <div className="absolute inset-0 bg-gray-50/50 pointer-events-none">
+        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-purple-100/40 rounded-full blur-3xl -mr-32 -mt-32"></div>
+        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-blue-50/40 rounded-full blur-3xl -ml-32 -mb-32"></div>
+      </div>
+
+      <div className="container mx-auto px-6 relative z-10">
+        
+        {/* --- MAIN CARD CONTAINER --- */}
+        <div className="bg-white rounded-[2.5rem] shadow-2xl shadow-purple-900/5 border border-gray-100 p-8 md:p-12 overflow-hidden">
+          
+          <div className="flex flex-col lg:flex-row items-center justify-between gap-16">
+            
+            {/* LEFT — Image Section */}
+            <div className="lg:w-1/2 relative group">
+              {/* Image Back Glow */}
+              <div className="absolute inset-0 bg-gradient-to-tr from-[#a852e5] to-purple-400 rounded-[2rem] blur-xl opacity-20 group-hover:opacity-30 transition-opacity"></div>
+              
+              <div className="relative rounded-[2rem] overflow-hidden shadow-lg border border-white/50 transform transition-transform duration-500 hover:scale-[1.01]">
+                <img
+                  src={professionalImage}
+                  alt="Find Verified Professionals"
+                  className="w-full h-auto object-cover"
+                />
+                
+                {/* Live Status Badge */}
+                {/* <div className="absolute top-6 left-6 bg-white/95 backdrop-blur-md px-4 py-2 rounded-full flex items-center gap-3 shadow-lg border border-gray-100">
+                    <span className="relative flex h-3 w-3">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+                    </span>
+                    <span className="text-xs font-bold text-green-700 uppercase tracking-wider">Live Network</span>
+                </div> */}
+              </div>
+
+              {/* Floating Stats Card (Bottom Right) */}
+              <div className="absolute -bottom-6 -right-6 bg-white p-4 rounded-2xl shadow-xl flex items-center gap-3 border border-gray-100">
+                <div className="bg-[#a852e5]/10 p-2.5 rounded-xl text-[#a852e5]">
+                  <Users size={24} />
                 </div>
-                <h3 className="text-2xl font-bold">Network Locked</h3>
-                <p className="text-white/80 text-sm mt-2">
-                  Launching Next Month
-                </p>
+                <div>
+                  <p className="text-xs text-gray-500 font-bold uppercase">
+                    Active Pros
+                  </p>
+                  <p className="text-gray-900 font-bold">2,500+</p>
+                </div>
               </div>
             </div>
 
-            {/* Decorative Elements */}
-            <div className="absolute -z-10 top-10 -left-10 w-full h-full border-2 border-[#a852e5]/20 rounded-3xl"></div>
-            <div className="absolute -bottom-6 -right-6 bg-white p-4 rounded-2xl shadow-xl flex items-center gap-3">
-              <div className="bg-blue-50 p-3 rounded-xl text-blue-600">
-                <Users size={24} />
+            {/* RIGHT — Content Section */}
+            <div className="lg:w-1/2">
+              <div className="inline-flex items-center gap-2 bg-[#a852e5]/10 text-[#a852e5] text-xs font-bold px-3 py-1 rounded-full mb-6 border border-[#a852e5]/20">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#a852e5] animate-pulse"></span>
+                Now Available in Bengaluru
               </div>
-              <div>
-                <p className="text-xs text-gray-500 font-bold uppercase">
-                  Database
-                </p>
-                <p className="text-gray-900 font-bold">1000+ Experts</p>
+
+              <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-6 leading-tight">
+                Hire Verified <br />
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#a852e5] to-purple-600">
+                  Construction Experts
+                </span>
+              </h2>
+
+              <p className="text-lg text-gray-600 mb-8 leading-relaxed">
+                Stop searching blindly. Connect instantly with verified Contractors, 
+                Architects, Builders and Engineers. Compare profiles
+                and hire the best talent for your project directly.
+              </p>
+
+              <ul className="space-y-3 mb-10">
+                  {[
+                      "100% Verified Profiles & Background Checks",
+                      "Direct Contact - No Middlemen",
+                      "Compare Quotes & Save Money"
+                  ].map((item, i) => (
+                      <li key={i} className="flex items-center gap-3 text-gray-700 font-medium">
+                          <CheckCircle2 className="w-5 h-5 text-green-500 shrink-0" /> {item}
+                      </li>
+                  ))}
+              </ul>
+
+              <div className="flex flex-wrap gap-4">
+                <button
+                  onClick={handleFindProsClick}
+                  className="
+                    inline-flex items-center gap-2 
+                    bg-[#a852e5] hover:bg-[#903dd0] 
+                    text-white px-8 py-4 rounded-xl 
+                    font-bold shadow-lg shadow-[#a852e5]/30 
+                    transition-all transform hover:-translate-y-1 active:translate-y-0
+                  "
+                >
+                  Find Professionals <ArrowRight size={20} />
+                </button>
+                
+                
               </div>
             </div>
-          </div>
 
-          {/* RIGHT — Info */}
-          <div className="lg:w-1/2">
-            <div className="inline-flex items-center gap-2 bg-gray-200 text-gray-600 text-xs font-bold px-3 py-1 rounded-full mb-6">
-              <span className="w-1.5 h-1.5 rounded-full bg-gray-500"></span>
-              Beta Access
-            </div>
-
-            <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-6 leading-tight">
-              Hire Trusted <br />
-              <span className="text-gray-400">Construction Pros</span>
-            </h2>
-
-            <p className="text-lg text-gray-600 mb-8 leading-relaxed border-l-4 border-gray-200 pl-6">
-              Connect instantly with verified contractors, masons, carpenters,
-              electricians, plumbers, and construction experts in your area. We
-              are currently vetting the best professionals to ensure quality
-              service.
-            </p>
-
-            <div className="flex flex-wrap gap-4">
-              <button
-                disabled
-                className="inline-flex items-center gap-2 bg-gray-900 text-white px-8 py-4 rounded-xl font-bold shadow-md cursor-not-allowed opacity-80"
-              >
-                <Lock size={18} /> Coming Soon
-              </button>
-              <button className="px-8 py-4 rounded-xl font-bold text-gray-600 border border-gray-300 hover:bg-gray-50 transition-colors">
-                Join Waitlist
-              </button>
-            </div>
           </div>
         </div>
       </div>

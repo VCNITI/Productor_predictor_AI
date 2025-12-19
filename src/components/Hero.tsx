@@ -146,7 +146,7 @@ const Hero = () => {
                 <div className="bg-blue-50 w-10 h-10 flex items-center justify-center rounded-lg text-blue-600 mb-3">
                   <Brain size={20} />
                 </div>
-                <h4 className="font-bold text-gray-900">AI BOQ</h4>
+                <h4 className="font-bold text-gray-900">AI Estimater</h4>
                 <p className="text-xs text-gray-500 mt-1">
                   Instant material estimates
                 </p>
