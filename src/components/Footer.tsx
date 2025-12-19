@@ -95,9 +95,7 @@ const Footer = () => {
                 </span>
               </a>
               <p className="text-gray-500 leading-relaxed max-w-sm text-sm">
-                Powering the future of construction procurement with AI-driven
-                insights and a trusted professional marketplace. Built for
-                speed, accuracy, and transparency.
+                VCNITI is a AI Powered Q-commerce platform that enables ultra-fast delivery of construction and interior materials directly to homes and sites. We simplify procurement through real-time tracking, verified manufacturers, transparent pricing, and instant order fulfilment.
               </p>
 
               {/* Social Icons */}
@@ -269,10 +267,10 @@ const Footer = () => {
               <div className="overflow-y-auto p-8 space-y-8">
                 <div className="prose prose-sm md:prose-base max-w-none text-gray-600">
                   <p>
-                    Vcniti operates this store and website, including all
+                    VCNITI operates this store and website, including all
                     related information, content, features, tools, products and
                     services, in order to provide you, the customer, with a
-                    curated shopping experience (the "Services"). Vcniti is
+                    curated shopping experience (the "Services"). VCNITI is
                     powered by Shopify, which enables us to provide the Services
                     to you. This Privacy Policy describes how we collect, use,
                     and disclose your personal information when you visit, use,
