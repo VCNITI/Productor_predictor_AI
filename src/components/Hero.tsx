@@ -66,7 +66,7 @@ const Hero = () => {
             <button
               className="px-8 py-3.5 rounded-xl bg-[#a852e5] text-white font-semibold hover:bg-[#903dd0] transition-all shadow-lg shadow-purple-500/30 flex items-center gap-2 group"
               onClick={() =>
-                (window.location.href = "https://www.vcniti.com/collections")
+                (window.location.href = "https://www.vcniti.com")
               }
             >
               Order Materials
