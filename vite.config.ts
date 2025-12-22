@@ -11,7 +11,7 @@ export default defineConfig(({ mode }) => ({
     allowedHosts: ["vcniti-productai.onrender.com"], // 👈 add your host here
     proxy: {
       "/api": {
-        target: "http://localhost:3001",
+        target: "https://productor-predictor-ai-backend.vercel.app",
         changeOrigin: true,
       },
     },

@@ -24,8 +24,6 @@ import {
   Send,
   MessageSquare,
 } from "lucide-react";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
 import { motion } from "framer-motion";
 
 // --- LOGIC SECTION (UNCHANGED) ---
@@ -89,7 +87,6 @@ const Contact = () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50/50 font-sans selection:bg-purple-100">
-      <Header />
 
       <main className="flex-1 pt-10 pb-20 px-6">
         <div className="max-w-7xl mx-auto">
@@ -372,7 +369,6 @@ const Contact = () => {
         </div>
       </main>
 
-      <Footer />
     </div>
   );
 };

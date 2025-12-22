@@ -22,7 +22,7 @@ const Footer = () => {
     { text: "Home", to: "#home" },
     { text: "Products", to: "#ai-planner" },
     { text: "AI Planner", to: "/planner" },
-    { text: "Find Pros", to: "#find-professional" },
+    { text: "Find Pros", to: "/find-professionals" },
   ];
 
   const companyLinks = [

@@ -12,8 +12,6 @@ import {
   Layers,
   Zap,
 } from "lucide-react";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
 import { motion } from "framer-motion";
 import constructionHero from "@/assets/construction-hero.jpg";
 
@@ -34,7 +32,6 @@ const About = () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-white font-sans selection:bg-purple-100">
-      <Header />
 
       <main className="flex-1">
         {/* --- 1. HERO SECTION: Split Layout with Rounded Image --- */}
@@ -392,7 +389,6 @@ const About = () => {
         </section>
       </main>
 
-      <Footer />
     </div>
   );
 };

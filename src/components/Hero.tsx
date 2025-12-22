@@ -73,12 +73,23 @@ const Hero = () => {
               Order Materials
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </button>
-            <a
-              href="#ai-planner"
-              className="px-8 py-3.5 rounded-xl bg-white border border-gray-200 text-gray-700 font-semibold hover:bg-gray-50 transition-all shadow-sm"
-            >
-              Explore AI Tools
-            </a>
+            <div className="flex items-center gap-4">
+  {/* Button 1: Solid Theme with White Text */}
+  <a
+    href="#ai-planner"
+    className="px-8 py-3.5 rounded-xl bg-transparent border-2 border-[#a852e5] text-[#a852e5] font-bold hover:bg-[#a852e5] hover:text-white transition-colors duration-300 shadow-sm"
+  >
+    AI Planner
+  </a>
+
+  {/* Button 2: Ghost Style with Theme Border */}
+  <a
+    href="#find-professional"
+    className="px-8 py-3.5 rounded-xl bg-transparent border-2 border-[#a852e5] text-[#a852e5] font-bold hover:bg-[#a852e5] hover:text-white transition-colors duration-300 shadow-sm"
+  >
+    Find Pros
+  </a>
+</div>
           </div>
 
           {/* Trust Footnote */}
@@ -166,7 +177,7 @@ const Hero = () => {
                 <p className="text-xs text-gray-500 mt-1">
                   Architects & Contractors
                 </p>
-                <p className="text-xs text-gray-500 mt-1">(Coming soon)</p>
+                
               </motion.div>
             </div>
           </div>

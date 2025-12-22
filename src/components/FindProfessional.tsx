@@ -7,15 +7,21 @@ import {
   Briefcase,
   ChevronRight,
   User,
-  Map,
-  Hash,
   Sparkles,
+  Lock,
 } from "lucide-react";
 import ProfileModal from "./ProfileModal";
 import { Input } from "./ui/input";
 import FindProfessionalbg from "../assets/Background image for find profetion session.png";
 import { motion } from "framer-motion";
+import { useAuth } from "../contexts/AuthContext";
+import { useNavigate, useLocation } from "react-router-dom";
+
 const FindProfessional = () => {
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
+
   // --- STATE & LOGIC ---
   const [searchResults, setSearchResults] = useState([]);
   const [pincodes, setPincodes] = useState([]);
@@ -29,6 +35,73 @@ const FindProfessional = () => {
   const [searched, setSearched] = useState(false);
   const resultsRef = useRef(null);
   const [searchMode, setSearchMode] = useState("pincode");
+
+  const [showAllResults, setShowAllResults] = useState(false);
+  const [isLoginPending, setIsLoginPending] = useState(false);
+
+  // --- 3. RESTORE STATE & SCROLL ON LOAD ---
+  useEffect(() => {
+    const savedState = sessionStorage.getItem("findProfState");
+    if (savedState) {
+      try {
+        const parsed = JSON.parse(savedState);
+        
+        // Restore Data
+        setSearchResults(parsed.searchResults || []);
+        setSelectedCity(parsed.selectedCity);
+        setSelectedPincode(parsed.selectedPincode);
+        setArea(parsed.area || "");
+        setSelectedDesignations(parsed.selectedDesignations || []);
+        setSearchMode(parsed.searchMode || "pincode");
+        setSearched(parsed.searched || false);
+        
+        // Restore "Load More" logic
+        if (parsed.isLoginPending && user) {
+            setShowAllResults(true);
+        }
+
+        // --- NEW: RESTORE SCROLL POSITION ---
+        // If we have search results, scroll to them after a short delay
+        if (parsed.searched) {
+            setTimeout(() => {
+                resultsRef.current?.scrollIntoView({ 
+                    behavior: "smooth", 
+                    block: "start" 
+                });
+            }, 500); // 500ms delay to ensure DOM is fully rendered
+        }
+
+      } catch (e) {
+        console.error("Failed to restore state", e);
+      }
+    }
+  }, [user]); // Added user dependency so it re-checks when user login status settles
+
+  // --- 4. HELPER TO SAVE STATE ---
+  const saveStateToStorage = (overrides = {}) => {
+    const stateToSave = {
+      searchResults,
+      selectedCity,
+      selectedPincode,
+      area,
+      selectedDesignations,
+      searchMode,
+      searched: true,
+      isLoginPending, 
+      ...overrides
+    };
+    sessionStorage.setItem("findProfState", JSON.stringify(stateToSave));
+  };
+
+  // --- EFFECT: AUTO-EXPAND AFTER LOGIN ---
+  useEffect(() => {
+    if (user && isLoginPending) {
+      setShowAllResults(true);
+      setIsLoginPending(false);
+      saveStateToStorage({ isLoginPending: false });
+    }
+  }, [user, isLoginPending]);
+
   // --- OPTIONS ---
   const cityOptions = [{ value: "Bengaluru", label: "Bengaluru" }];
   const designationOptions = [
@@ -58,7 +131,6 @@ const FindProfessional = () => {
     { value: "Valuers Approved", label: "Valuers Approved" },
   ];
 
-  // --- LOAD PINCODES WHEN BENGALURU IS SELECTED ---
   useEffect(() => {
     if (selectedCity && selectedCity.value === "Bengaluru") {
       const bangalorePincodes = [
@@ -85,6 +157,7 @@ const FindProfessional = () => {
       setSelectedPincode(null);
     }
   }, [selectedCity]);
+
   const handleSearchModeChange = (mode) => {
     setSearchMode(mode);
     if (mode === "pincode") {
@@ -93,15 +166,19 @@ const FindProfessional = () => {
       setSelectedPincode(null);
     }
   };
+
   const handleSearch = async (e) => {
     e.preventDefault();
     setSearched(true);
+    setShowAllResults(false);
+    setIsLoginPending(false);
+
     if (!selectedCity) {
       alert("Please select a City.");
       return;
     }
-    const isPincodeSelected = selectedPincode && searchMode === "pincode"; // Check if pincode is selected AND searchMode is pincode
-    const isAreaEntered = area.trim().length > 0 && searchMode === "area"; // Check if area is entered AND searchMode is area
+    const isPincodeSelected = selectedPincode && searchMode === "pincode";
+    const isAreaEntered = area.trim().length > 0 && searchMode === "area";
     const isDesignationSelected = selectedDesignations.length > 0;
 
     if (!isPincodeSelected && !isAreaEntered) {
@@ -110,7 +187,6 @@ const FindProfessional = () => {
       return;
     }
     if (!isDesignationSelected) {
-      // Check if at least one designation is selected
       setSearchResults([]);
       alert(
         `Please select at least one Professional Designation (e.g., Builders, Architects) to search.`,
@@ -123,7 +199,7 @@ const FindProfessional = () => {
       const params = new URLSearchParams();
       if (isPincodeSelected) params.append("pincode", selectedPincode.value);
       else if (isAreaEntered) {
-        params.append("area", area.trim()); // Only append area if it's the selected search mode
+        params.append("area", area.trim());
       }
       params.append(
         "designation",
@@ -135,8 +211,23 @@ const FindProfessional = () => {
       const response = await fetch(searchURL);
       const data = await response.json();
 
-      if (response.ok && Array.isArray(data)) setSearchResults(data);
-      else setSearchResults([]);
+      let newResults = [];
+      if (response.ok && Array.isArray(data)) newResults = data;
+      
+      setSearchResults(newResults);
+      
+      // Save successful search state
+      sessionStorage.setItem("findProfState", JSON.stringify({
+        searchResults: newResults,
+        selectedCity,
+        selectedPincode,
+        area,
+        selectedDesignations,
+        searchMode,
+        searched: true,
+        isLoginPending: false
+      }));
+
     } catch (error) {
       console.error("Error fetching professionals:", error);
       setSearchResults([]);
@@ -160,7 +251,21 @@ const FindProfessional = () => {
     setSelectedProfessional(null);
   };
 
-  // --- STYLES ---
+  const handleLoadMore = () => {
+    if (user) {
+      setShowAllResults(true);
+    } else {
+      setIsLoginPending(true);
+      // Save state with 'pending' flag before navigating
+      saveStateToStorage({ isLoginPending: true });
+      navigate('/login', { state: { from: location } });
+    }
+  };
+
+  const visibleResults = showAllResults
+    ? searchResults
+    : searchResults.slice(0, 3);
+
   const customStyles = {
     control: (provided, state) => ({
       ...provided,
@@ -238,7 +343,6 @@ const FindProfessional = () => {
       id="find-professional"
       className="relative w-full bg-slate-50 pt-16 pb-24 overflow-visible"
     >
-      {/* Background Polish */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div
           className="absolute inset-0 opacity-10"
@@ -278,7 +382,6 @@ const FindProfessional = () => {
               onSubmit={handleSearch}
               className="grid grid-cols-1 lg:grid-cols-12 gap-2"
             >
-              {/* Step 1: City & Professionals */}
               <div className="lg:col-span-8 p-6 sm:p-8 space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
@@ -309,59 +412,54 @@ const FindProfessional = () => {
                     />
                   </div>
                 </div>
-                {/* Step 2: Precise Search Session */}
                 <div
                   className={`transition-all duration-500 ${!selectedCity ? "opacity-40 grayscale pointer-events-none" : "opacity-100"}`}
                 >
                   <div className="bg-slate-50 rounded-2xl p-4 border border-slate-100">
-                    {/* FIXED: Added items-center and text-center for mobile alignment */}
                     <div className="flex flex-col sm:flex-row items-center sm:justify-between gap-4 mb-4">
-                        <label className="text-xs font-black text-slate-500 uppercase tracking-wider text-center sm:text-left">
-                            3. Refine Search Area
-                        </label>
-                        
-                        {/* Toggle Switch Container */}
-                        <div className="flex bg-white rounded-lg p-1 border border-slate-200 shadow-sm w-fit mx-auto sm:mx-0">
-                            <button 
-                                type="button" 
-                                onClick={() => handleSearchModeChange('pincode')} 
-                                className={`px-4 py-1.5 rounded-md text-xs font-bold transition-all ${searchMode === 'pincode' ? 'bg-purple-600 text-white shadow-md' : 'text-slate-500 hover:bg-slate-50'}`}
-                            >
-                                Pincode
-                            </button>
-                            <button 
-                                type="button" 
-                                onClick={() => handleSearchModeChange('area')} 
-                                className={`px-4 py-1.5 rounded-md text-xs font-bold transition-all ${searchMode === 'area' ? 'bg-purple-600 text-white shadow-md' : 'text-slate-500 hover:bg-slate-50'}`}
-                            >
-                                Locality
-                            </button>
-                        </div>
+                      <label className="text-xs font-black text-slate-500 uppercase tracking-wider text-center sm:text-left">
+                        3. Refine Search Area
+                      </label>
+
+                      <div className="flex bg-white rounded-lg p-1 border border-slate-200 shadow-sm w-fit mx-auto sm:mx-0">
+                        <button
+                          type="button"
+                          onClick={() => handleSearchModeChange("pincode")}
+                          className={`px-4 py-1.5 rounded-md text-xs font-bold transition-all ${searchMode === "pincode" ? "bg-purple-600 text-white shadow-md" : "text-slate-500 hover:bg-slate-50"}`}
+                        >
+                          Pincode
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => handleSearchModeChange("area")}
+                          className={`px-4 py-1.5 rounded-md text-xs font-bold transition-all ${searchMode === "area" ? "bg-purple-600 text-white shadow-md" : "text-slate-500 hover:bg-slate-50"}`}
+                        >
+                          Locality
+                        </button>
+                      </div>
                     </div>
 
-                    {/* Input/Select Field */}
                     <div className="w-full">
-                        {searchMode === 'pincode' ? (
-                            <Select 
-                                options={pincodes} 
-                                value={selectedPincode} 
-                                onChange={setSelectedPincode} 
-                                placeholder="Type to select Pincode..." 
-                                styles={customStyles} 
-                            />
-                        ) : (
-                            <Input 
-                                placeholder="Enter Area Name (e.g. Indiranagar)" 
-                                value={area} 
-                                onChange={(e) => setArea(e.target.value)} 
-                                className="h-11 rounded-xl border-slate-200 bg-white w-full" 
-                            />
-                        )}
+                      {searchMode === "pincode" ? (
+                        <Select
+                          options={pincodes}
+                          value={selectedPincode}
+                          onChange={setSelectedPincode}
+                          placeholder="Type to select Pincode..."
+                          styles={customStyles}
+                        />
+                      ) : (
+                        <Input
+                          placeholder="Enter Area Name (e.g. Indiranagar)"
+                          value={area}
+                          onChange={(e) => setArea(e.target.value)}
+                          className="h-11 rounded-xl border-slate-200 bg-white w-full"
+                        />
+                      )}
                     </div>
                   </div>
                 </div>
               </div>
-              {/* Search Trigger Column */}
               <div className="lg:col-span-4 bg-slate-900 rounded-[1.7rem] m-2 flex flex-col items-center justify-center p-8 text-center relative overflow-hidden group">
                 <div className="absolute top-0 right-0 w-32 h-32 bg-purple-500/10 rounded-full -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-700" />
                 <div className="relative z-10">
@@ -386,7 +484,6 @@ const FindProfessional = () => {
             </form>
           </div>
         </motion.div>
-        {/* --- RESULTS GRID (mt-20 adds the gap you requested) --- */}
         <div
           ref={resultsRef}
           className="w-full relative z-10 mt-20 scroll-mt-32"
@@ -423,7 +520,7 @@ const FindProfessional = () => {
               }}
               className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8"
             >
-              {searchResults.map((prof, index) => (
+              {visibleResults.map((prof, index) => (
                 <motion.div
                   key={prof._id}
                   variants={{
@@ -437,22 +534,15 @@ const FindProfessional = () => {
                   onClick={() => openModal(prof)}
                   className="group bg-white rounded-2xl p-6 border border-slate-100 shadow-[0_4px_20px_-10px_rgba(0,0,0,0.1)] hover:shadow-[0_20px_40px_-15px_rgba(168,82,229,0.15)] hover:border-[#a852e5]/30 transition-all duration-300 cursor-pointer flex flex-col h-full relative overflow-hidden"
                 >
-                  {/* Top colored accent line - Fixed to stay hidden until hover */}
                   <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#a852e5] to-purple-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  {/* Card Header */}
                   <div className="flex items-start justify-between mb-5">
-                    <div
-                      className="w-12 h-12 rounded-2xl bg-slate-50 text-slate-600 font-bold text-lg group-hover:bg-[#a852e5]/10 group-hover:text-[#a852e5] flex items-center justify-center transition-colors duration-300"
-                    >
+                    <div className="w-12 h-12 rounded-2xl bg-slate-50 text-slate-600 font-bold text-lg group-hover:bg-[#a852e5]/10 group-hover:text-[#a852e5] flex items-center justify-center transition-colors duration-300">
                       {index + 1}
                     </div>
-                    <span
-                      className="px-3 py-1 rounded-full bg-slate-100 text-slate-500 text-[11px] font-bold uppercase tracking-wider group-hover:bg-[#a852e5]/10 group-hover:text-[#a852e5] transition-colors duration-300"
-                    >
+                    <span className="px-3 py-1 rounded-full bg-slate-100 text-slate-500 text-[11px] font-bold uppercase tracking-wider group-hover:bg-[#a852e5]/10 group-hover:text-[#a852e5] transition-colors duration-300">
                       View Profile
                     </span>
                   </div>
-                  {/* Info */}
                   <div className="flex-1">
                     <h3 className="text-lg font-bold text-slate-800 mb-2 group-hover:text-[#a852e5] transition-colors line-clamp-1">
                       {prof.company_name}
@@ -482,7 +572,6 @@ const FindProfessional = () => {
                       </div>
                     </div>
                   </div>
-                  {/* Footer Action */}
                   <div className="mt-6 pt-4 flex items-center justify-end text-sm font-bold text-[#a852e5] opacity-0 transform translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
                     <span>Details</span>
                     <ChevronRight size={16} className="ml-1" />
@@ -491,6 +580,32 @@ const FindProfessional = () => {
               ))}
             </motion.div>
           )}
+
+          {/* 7. LOAD MORE BUTTON SECTION */}
+          {!loading &&
+            searchResults.length > 3 &&
+            !showAllResults &&
+            searched && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="mt-12 flex justify-center"
+              >
+                <button
+                  type="button"
+                  onClick={handleLoadMore}
+                  className="flex items-center gap-2 px-8 py-3 bg-white text-slate-700 font-bold rounded-full border border-slate-200 shadow-lg hover:shadow-purple-500/10 hover:border-purple-300 hover:text-purple-700 transition-all active:scale-95"
+                >
+                  {user ? (
+                    <>Load More Results</>
+                  ) : (
+                    <>
+                      <Lock size={16} /> Login to View All
+                    </>
+                  )}
+                </button>
+              </motion.div>
+            )}
         </div>
       </div>
       <ProfileModal
