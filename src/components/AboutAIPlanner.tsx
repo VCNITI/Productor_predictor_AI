@@ -71,7 +71,7 @@ const AboutAIPlanner = () => {
             <p className="text-lg text-gray-600 mt-6 leading-relaxed">
               Stop guessing quantities. Our AI analyzes your project
               requirements to generate accurate BOQs, recommend brands, and
-              provide real-time pricing from local suppliers.
+              provide real-time pricing.
             </p>
 
             {/* Stats Row */}
