@@ -17,10 +17,10 @@ const Header: React.FC = () => {
   const getDisplayName = () => {
     if (!user) return "";
     if (user.firstName && user.firstName.trim() !== "") {
-        return `${user.firstName} ${user.lastName || ''}`;
+      return `${user.firstName} ${user.lastName || ''}`;
     }
     if (user.phoneNumber) {
-        return user.phoneNumber;
+      return user.phoneNumber;
     }
     return "Welcome";
   };
@@ -114,10 +114,10 @@ const Header: React.FC = () => {
                     </div>
                   </div>
                 ) : (
+                  /* --- UPDATED DESKTOP LOGIN BUTTON (Matches your style) --- */
                   <Button
-                    onClick={() => navigate('/login')}
                     onClick={() => navigate('/login', { state: { from: location } })}
-                    className="text-sm font-semibold text-gray-600 hover:text-[#a852e5] transition-colors"
+                    className="bg-white border-2 border-[#a852e5] text-[#a852e5] hover:bg-[#a852e5] hover:text-white rounded-xl px-6 font-bold transition-all duration-300"
                   >
                     Login
                   </Button>
@@ -193,12 +193,13 @@ const Header: React.FC = () => {
                       </div>
                     </div>
                   ) : (
+                    /* --- MOBILE LOGIN BUTTON (Matches your snippet exactly) --- */
                     <Button
                       onClick={() => {
                         navigate('/login', { state: { from: location } });
                         setMobileMenuOpen(false);
                       }}
-                      className="w-full bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-xl py-6 text-lg font-bold shadow-sm mb-4"
+                      className="w-full bg-white border-2 border-[#a852e5] text-[#a852e5] hover:bg-[#a852e5] hover:text-white rounded-xl py-3.5 text-lg font-bold transition-all duration-300 mb-4"
                     >
                       Login
                     </Button>
@@ -220,7 +221,7 @@ const Header: React.FC = () => {
         </AnimatePresence>
       </header>
       
-      {/* Spacer to prevent content overlap */}
+      {/* Spacer */}
       <div className="h-20 md:h-24 w-full bg-transparent"></div>
     </>
   );
