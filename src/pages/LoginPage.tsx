@@ -146,8 +146,7 @@ const LoginPage = () => {
             </div>
             <h1 className="text-5xl font-black text-white mb-6">VCNITI</h1>
             <p className="text-xl text-slate-300 font-light leading-relaxed">
-                Powering the future of construction materials. <br/>
-                Connect with professionals instantly.
+                Powering the Future of Buying Construction Materials.               
             </p>
         </div>
       </div>
