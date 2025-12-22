@@ -142,7 +142,7 @@ const LoginPage = () => {
         
         <div className="relative z-10 text-center px-12">
             <div className="w-20 h-20 bg-white/10 backdrop-blur-md rounded-2xl flex items-center justify-center mx-auto mb-8 border border-white/10">
-                <Sparkles className="text-purple-400" size={40} />
+                <img src="/logo.avif" alt="VCNITI Logo" className="w-16 h-16" />
             </div>
             <h1 className="text-5xl font-black text-white mb-6">VCNITI</h1>
             <p className="text-xl text-slate-300 font-light leading-relaxed">

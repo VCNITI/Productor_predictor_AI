@@ -46,7 +46,7 @@ const Hero = () => {
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-purple-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-purple-600"></span>
             </span>
-            VCNITI Ecosystem Live
+            VCNITI Ecosystem
           </div>
 
           <h1 className="text-5xl md:text-6xl font-extrabold text-gray-900 leading-[1.15] tracking-tight">
@@ -57,9 +57,8 @@ const Hero = () => {
           </h1>
 
           <p className="text-lg text-gray-600 mt-6 leading-relaxed max-w-lg">
-            The all-in-one marketplace for{" "}
-            <strong>4-hour material delivery</strong>, accurate BOQ generation,
-            and finding trusted professionals in Bengaluru.
+            From estimate to execution: materials, AI tools, and pros on VCNITI,{" "}
+            <strong>4-hour ultra fast delivery.</strong>
           </p>
 
           {/* CTA Buttons */}
@@ -79,7 +78,7 @@ const Hero = () => {
     href="#ai-planner"
     className="px-8 py-3.5 rounded-xl bg-transparent border-2 border-[#a852e5] text-[#a852e5] font-bold hover:bg-[#a852e5] hover:text-white transition-colors duration-300 shadow-sm"
   >
-    AI Planner
+    AI Estimater
   </a>
 
   {/* Button 2: Ghost Style with Theme Border */}
@@ -98,8 +97,12 @@ const Hero = () => {
               <CheckCircle2 className="w-4 h-4 text-green-500" /> Genuine Brands
             </div>
             <div className="flex items-center gap-2">
+              <CheckCircle2 className="w-4 h-4 text-green-500" /> 95% Accurate Estimates
+            </div>
+            <div className="flex items-center gap-2">
               <CheckCircle2 className="w-4 h-4 text-green-500" /> Verified Pros
             </div>
+            
           </div>
         </motion.div>
 
