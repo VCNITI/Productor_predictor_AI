@@ -21,7 +21,7 @@ const Footer = () => {
 
   const platformLinks = [
     { text: "Home", to: "#home" },
-    { text: "Products", to: "#ai-planner" },
+    { text: "Products", to: "https://www.vcniti.com/collections/all" },
     { text: "AI Planner", to: "/planner" },
     { text: "Find Pros", to: "/find-professionals" },
   ];
@@ -37,6 +37,9 @@ const Footer = () => {
     e: React.MouseEvent<HTMLAnchorElement>,
     targetId: string,
   ) => {
+    if (targetId.startsWith("http")) {
+      return;
+    }
     e.preventDefault();
 
     if (targetId.startsWith("/")) {
@@ -108,7 +111,7 @@ const Footer = () => {
                     Icon: Facebook,
                     href: "https://www.facebook.com/p/Vcniti-61578177582003/",
                   },
-                  { Icon: Twitter, href: "https://x.com/VCNITI_India" },
+                  { Icon: X, href: "https://x.com/VCNITI_India" },
                   {
                     Icon: Linkedin,
                     href: "https://www.linkedin.com/company/vcniti/",
@@ -138,7 +141,7 @@ const Footer = () => {
             {/* Links Column 1 (Span 2) */}
             <div className="lg:col-span-2 lg:col-start-6 space-y-6">
               <h4 className="font-bold text-gray-900 text-sm uppercase tracking-wider">
-                Platform
+                Quick Links
               </h4>
               <ul className="space-y-3">
                 {platformLinks.map((link) => (
