@@ -35,7 +35,7 @@ const AIPlanner: React.FC = () => {
               />
 
               {/* Floating Badge */}
-              <div className="absolute -bottom-6 -left-6 bg-white p-4 rounded-2xl shadow-xl flex items-center gap-3 border border-gray-100">
+              <div className="absolute -bottom-6 -right-6 bg-white p-4 rounded-2xl shadow-xl flex items-center gap-3 border border-gray-100">
                 <div className="bg-purple-100 p-2.5 rounded-xl text-[#a852e5]">
                   <HardHat size={24} />
                 </div>

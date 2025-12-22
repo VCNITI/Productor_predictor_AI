@@ -7,6 +7,7 @@ import {
   Twitter,
   Linkedin,
   Instagram,
+  Youtube,
 } from "lucide-react";
 import { useState } from "react";
 import Logo from "./Logo";
@@ -69,18 +70,20 @@ const Footer = () => {
           }}
         ></div>
 
-        {/* 2. Top Gradient Border Line (The "Brand Line") */}
+        {/* 2. Top Gradient Border Line */}
         <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-[#a852e5] to-transparent opacity-60"></div>
 
-        {/* 3. Giant Subtle Watermark (Unique Touch) */}
-        <div className="absolute -bottom-20 right-0  pointer-events-none select-none opacity-[0.03]">
-          <h1 className="text-[12rem] md:text-[20rem] font-black leading-none tracking-tighter text-gray-900">
+        {/* 3. Giant Subtle Watermark (FIXED) */}
+        <div className="absolute -bottom-0 right-0 pointer-events-none select-none opacity-[0.03] overflow-hidden w-full flex justify-end translate-y-1/4 md:translate-y-[30%]">
+          <h1 className="text-8xl md:text-[20rem] font-black leading-none tracking-tighter text-gray-900 pr-4 md:pr-0">
             VCNITI
           </h1>
         </div>
 
-        <div className="container mx-auto px-6 pt-20 pb-10 relative z-10">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12 lg:gap-8 mb-16">
+        <div className="container mx-auto px-6 pt-20 pb-0 relative z-10">
+          {/* Main Content Grid (FIXED MARGIN) */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12 lg:gap-8 mb-10">
+            
             {/* Brand Column (Span 4) */}
             <div className="lg:col-span-4 space-y-6">
               <a
@@ -113,6 +116,10 @@ const Footer = () => {
                   {
                     Icon: Instagram,
                     href: "https://www.instagram.com/vcniti.india/",
+                  },
+                  {
+                    Icon: Youtube,
+                    href: "https://www.youtube.com/@VCNITITechnologies",
                   },
                 ].map(({ Icon, href }, i) => (
                   <a
@@ -185,13 +192,21 @@ const Footer = () => {
                     Bengaluru, KA, 560001
                   </span>
                 </li>
-                <li className="flex gap-4 items-center">
-                  <div className="bg-purple-50 p-1.5 rounded-md text-[#a852e5]">
-                    <Phone size={16} />
-                  </div>
-                  <span className="text-gray-900 font-semibold text-sm">
-                    +91 9740059699
-                  </span>
+                <li className="w-full">
+              <a 
+                href="tel:+919740059699" 
+                className="flex gap-4 items-center group cursor-pointer"
+              >
+                {/* Icon: Added hover effect */}
+                <div className="bg-purple-50 p-1.5 rounded-md text-[#a852e5] group-hover:bg-purple-100 transition-colors">
+                  <Phone size={16} />
+                </div>
+
+                {/* Text: Added hover color change */}
+               <span className="text-gray-500 text-sm group-hover:text-purple-600 transition-colors font-medium">
+                 +91 9740059699
+               </span>
+              </a>
                 </li>
                 <li className="flex gap-4 items-center">
                   <div className="bg-purple-50 p-1.5 rounded-md text-[#a852e5]">
@@ -201,12 +216,13 @@ const Footer = () => {
                 </li>
               </ul>
             </div>
+            
           </div>
 
           {/* Bottom Bar */}
           <div className="border-t border-gray-100 py-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-medium text-gray-400">
             <p>© 2025 VCNITI Technologies Pvt Ltd.</p>
-            <div className="flex gap-6">
+            <div className="flex flex-wrap justify-center md:justify-start gap-x-6 gap-y-2 text-sm md:text-base">
               <button
                 onClick={() => setShowPrivacy(true)}
                 className="hover:text-[#a852e5] transition-colors"

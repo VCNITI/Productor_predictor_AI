@@ -64,7 +64,7 @@ const Hero = () => {
           {/* CTA Buttons */}
           <div className="flex flex-wrap gap-4 mt-8">
             <button
-              className="px-8 py-3.5 rounded-xl bg-[#a852e5] text-white font-semibold hover:bg-[#903dd0] transition-all shadow-lg shadow-purple-500/30 flex items-center gap-2 group"
+              className="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-[#a852e5] text-white font-semibold hover:bg-[#903dd0] transition-all shadow-lg shadow-purple-500/30 flex items-center justify-center gap-2 group"
               onClick={() =>
                 (window.location.href = "https://www.vcniti.com")
               }
@@ -72,23 +72,20 @@ const Hero = () => {
               Order Materials
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </button>
-            <div className="flex items-center gap-4">
-  {/* Button 1: Solid Theme with White Text */}
-  <a
-    href="#ai-planner"
-    className="px-8 py-3.5 rounded-xl bg-transparent border-2 border-[#a852e5] text-[#a852e5] font-bold hover:bg-[#a852e5] hover:text-white transition-colors duration-300 shadow-sm"
-  >
-    AI Estimater
-  </a>
 
-  {/* Button 2: Ghost Style with Theme Border */}
-  <a
-    href="#find-professional"
-    className="px-8 py-3.5 rounded-xl bg-transparent border-2 border-[#a852e5] text-[#a852e5] font-bold hover:bg-[#a852e5] hover:text-white transition-colors duration-300 shadow-sm"
-  >
-    Find Pros
-  </a>
-</div>
+            <a
+              href="#ai-planner"
+              className="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-transparent border-2 border-[#a852e5] text-[#a852e5] font-bold hover:bg-[#a852e5] hover:text-white transition-colors duration-300 shadow-sm flex items-center justify-center"
+            >
+              AI Estimater
+            </a>
+
+            <a
+              href="#find-professional"
+              className="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-transparent border-2 border-[#a852e5] text-[#a852e5] font-bold hover:bg-[#a852e5] hover:text-white transition-colors duration-300 shadow-sm flex items-center justify-center"
+            >
+              Find Pros
+            </a>
           </div>
 
           {/* Trust Footnote */}
@@ -178,7 +175,7 @@ const Hero = () => {
                 </div>
                 <h4 className="font-bold text-gray-900">Find Pros</h4>
                 <p className="text-xs text-gray-500 mt-1">
-                  Architects & Contractors
+                  Contractors, Architects & more  
                 </p>
                 
               </motion.div>

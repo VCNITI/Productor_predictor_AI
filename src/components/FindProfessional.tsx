@@ -460,27 +460,38 @@ const FindProfessional = () => {
                   </div>
                 </div>
               </div>
-              <div className="lg:col-span-4 bg-slate-900 rounded-[1.7rem] m-2 flex flex-col items-center justify-center p-8 text-center relative overflow-hidden group">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-purple-500/10 rounded-full -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-700" />
-                <div className="relative z-10">
-                  <div className="w-16 h-16 bg-white/10 rounded-2xl flex items-center justify-center mx-auto mb-6 backdrop-blur-md">
-                    <Search className="text-white" size={32} />
-                  </div>
-                  <h4 className="text-white font-bold mb-2">
-                    Ready to Search?
-                  </h4>
-                  <p className="text-slate-400 text-xs mb-8">
-                    We'll find the best matches based on your filters.
-                  </p>
-                  <button
-                    type="submit"
-                    disabled={loading}
-                    className="w-full bg-purple-600 hover:bg-purple-500 text-white font-black py-4 rounded-xl shadow-xl shadow-purple-900/20 transform active:scale-95 transition-all disabled:opacity-50"
-                  >
-                    {loading ? "ANALYZING..." : "START DISCOVERY"}
-                  </button>
-                </div>
-              </div>
+              <div className="lg:col-span-4 lg:bg-slate-900 lg:rounded-[1.7rem] lg:m-2 flex flex-col items-center justify-center lg:p-8 text-center relative overflow-hidden group w-full">
+  
+  {/* DECORATIVE CIRCLE: Hidden on mobile, shown on Large (lg) */}
+  <div className="hidden lg:block absolute top-0 right-0 w-32 h-32 bg-purple-500/10 rounded-full -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-700" />
+
+  <div className="relative z-10 w-full">
+    
+    {/* ICON: Hidden on mobile */}
+    <div className="hidden lg:flex w-16 h-16 bg-white/10 rounded-2xl items-center justify-center mx-auto mb-6 backdrop-blur-md">
+      <Search className="text-white" size={32} />
+    </div>
+
+    {/* TITLE: Hidden on mobile */}
+    <h4 className="hidden lg:block text-white font-bold mb-2">
+      Ready to Search?
+    </h4>
+
+    {/* DESCRIPTION: Hidden on mobile */}
+    <p className="hidden lg:block text-slate-400 text-xs mb-8">
+      We'll find the best matches based on your filters.
+    </p>
+
+    {/* BUTTON: Visible on all screens */}
+    <button
+      type="submit"
+      disabled={loading}
+      className="w-auto px-10 lg:w-full bg-purple-600 hover:bg-purple-500 text-white font-bold py-4 rounded-xl shadow-xl shadow-purple-900/20 transform active:scale-95 transition-all disabled:opacity-50 mb-6 lg:mb-0"
+    >
+      {loading ? "ANALYZING..." : "Find Professionals"}
+    </button>
+  </div>
+</div>
             </form>
           </div>
         </motion.div>
