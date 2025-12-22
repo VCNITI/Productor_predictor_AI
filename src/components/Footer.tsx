@@ -22,7 +22,7 @@ const Footer = () => {
   const platformLinks = [
     { text: "Home", to: "#home" },
     { text: "Products", to: "https://www.vcniti.com/collections/all" },
-    { text: "AI Planner", to: "/planner" },
+    { text: "AI Estimater", to: "/planner" },
     { text: "Find Pros", to: "/find-professionals" },
   ];
 
