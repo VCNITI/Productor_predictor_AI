@@ -17,7 +17,11 @@ const LoginPage = () => {
   const location = useLocation();
   const { login, user } = useAuth();
   
-  const from = location.state?.from?.pathname || "/";
+  // --- FIXED: Construct Full Return Path (Path + Search + Hash) ---
+  const fromLocation = location.state?.from;
+  const from = fromLocation 
+    ? `${fromLocation.pathname}${fromLocation.search || ''}${fromLocation.hash || ''}`
+    : "/";
 
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -26,9 +30,7 @@ const LoginPage = () => {
   const [confirmationResult, setConfirmationResult] = useState<ConfirmationResult | null>(null);
   const recaptchaContainerRef = useRef<HTMLDivElement>(null);
 
-  // 1. FIXED: Run this ONLY ONCE on mount. 
-  // If a user is already logged in when they visit this URL, redirect them.
-  // We removed [user] from dependency array to prevent it from overriding our manual navigation later.
+  // 1. Run only ONCE on mount to check existing session
   useEffect(() => {
     if (user) {
       navigate(from, { replace: true });
@@ -38,7 +40,6 @@ const LoginPage = () => {
   // 2. Initialize Recaptcha
   useEffect(() => {
     const initRecaptcha = async () => {
-      // Check if button exists AND verifier doesn't exist
       if (recaptchaContainerRef.current && !window.recaptchaVerifier) {
         try {
           const verifier = new RecaptchaVerifier(auth, recaptchaContainerRef.current, {
@@ -53,9 +54,7 @@ const LoginPage = () => {
       }
     };
     
-    // Small timeout to ensure DOM is ready
     const timer = setTimeout(initRecaptcha, 500);
-
     return () => {
       clearTimeout(timer);
       if(window.recaptchaVerifier) {
@@ -69,7 +68,7 @@ const LoginPage = () => {
     e.preventDefault();
     setLoading(true);
 
-    let cleanInput = phoneNumber.trim().replace(/["s-]/g, '');
+    let cleanInput = phoneNumber.trim().replace(/[\s-]/g, '');
     let formattedPhone = cleanInput;
 
     if (cleanInput.startsWith('+')) {
@@ -88,7 +87,6 @@ const LoginPage = () => {
     } catch (error: any) {
       console.error(error);
       alert("Error sending OTP: " + error.message);
-      // Removed window.location.reload() to prevent forced refreshes on minor errors
       setLoading(false); 
     } finally {
       setLoading(false);
@@ -101,10 +99,8 @@ const LoginPage = () => {
     if (!confirmationResult) return;
 
     try {
-      // 1. Verify with Firebase
       const result = await confirmationResult.confirm(otp);
       
-      // 2. Sync with Backend
       const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/users/sync`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -116,16 +112,12 @@ const LoginPage = () => {
 
       if(response.ok) {
           const data = await response.json();
-          
-          // 3. Update Context
           login(data.user); 
           
-          // 4. MANUAL NAVIGATION (This now controls the flow)
           if (!data.user.firstName) {
-            // New user (no name) -> Go to Profile
             navigate('/profile', { replace: true });
           } else {
-            // Existing user -> Go back to where they came from (or Home)
+            // Navigate back to the specific previous location
             navigate(from, { replace: true });
           }
       } else {

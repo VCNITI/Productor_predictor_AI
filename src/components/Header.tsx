@@ -116,7 +116,7 @@ const Header: React.FC = () => {
                 ) : (
                   <Button
                     onClick={() => navigate('/login')}
-                    variant="ghost"
+                    onClick={() => navigate('/login', { state: { from: location } })}
                     className="text-sm font-semibold text-gray-600 hover:text-[#a852e5] transition-colors"
                   >
                     Login
@@ -195,7 +195,7 @@ const Header: React.FC = () => {
                   ) : (
                     <Button
                       onClick={() => {
-                        navigate('/login');
+                        navigate('/login', { state: { from: location } });
                         setMobileMenuOpen(false);
                       }}
                       className="w-full bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-xl py-6 text-lg font-bold shadow-sm mb-4"
