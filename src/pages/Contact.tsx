@@ -211,7 +211,7 @@ const Contact = () => {
                             <FormControl>
                               <Input
                                 className="h-12 bg-gray-50 border-gray-200 rounded-xl focus:ring-2 focus:ring-[#a852e5] focus:border-transparent transition-all"
-                                placeholder="John"
+                                placeholder="Sujan"
                                 {...field}
                               />
                             </FormControl>
@@ -230,7 +230,7 @@ const Contact = () => {
                             <FormControl>
                               <Input
                                 className="h-12 bg-gray-50 border-gray-200 rounded-xl focus:ring-2 focus:ring-[#a852e5] focus:border-transparent transition-all"
-                                placeholder="Doe"
+                                placeholder="Y S"
                                 {...field}
                               />
                             </FormControl>
