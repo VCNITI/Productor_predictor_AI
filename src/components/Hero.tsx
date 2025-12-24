@@ -89,7 +89,7 @@ const Hero = () => {
           </div>
 
           {/* Trust Footnote */}
-          <div className="mt-10 flex items-center gap-6 text-sm text-gray-500 font-medium">
+          <div className="mt-10 flex flex-col md:flex-row justify-between gap-6 text-sm text-gray-500 font-medium">
             <div className="flex items-center gap-2">
               <CheckCircle2 className="w-4 h-4 text-green-500" /> Genuine Brands
             </div>

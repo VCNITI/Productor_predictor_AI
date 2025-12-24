@@ -540,6 +540,7 @@ const ResultsDashboard = ({
       body: tableRows,
       theme: "grid",
       head: [["S.No.", "Material", "Brand", "Quantity", "Unit Cost Range", "Total Cost (Avg)"]],
+      headStyles: { fillColor: [168, 82, 229] }, // Apply color to header
       didDrawPage: (data) => {
         if (doc.internal.getCurrentPageInfo().pageNumber > 1) addHeader();
       },
