@@ -119,16 +119,16 @@ const ProfilePage = () => {
         }
     };
 
-    // 5. Verify & Link Account (THE FIX)
+    // 5. Verify & Link Account (UPDATED)
     const verifyAndSave = async () => {
         setLoading(true);
         try {
             if (!confirmObj) return;
 
-            // 👇 CRITICAL CHANGE: Create Credential manually
+            // Create Credential
             const credential = PhoneAuthProvider.credential(confirmObj.verificationId, otp);
             
-            // 👇 LINK the phone to the existing Google User (instead of signing in)
+            // Try to LINK the phone to the current Google User
             await linkWithCredential(auth.currentUser, credential);
             
             // If successful, save to backend
@@ -139,8 +139,12 @@ const ProfilePage = () => {
         } catch (error) {
             console.error("Verification Error:", error);
             
-            if (error.code === 'auth/credential-already-in-use') {
-                alert("This phone number is already linked to another account.");
+            // 👇 HANDLE THE ERROR HERE
+            if (error.code === 'auth/credential-already-in-use' || error.code === 'auth/account-exists-with-different-credential') {
+                alert("This phone number is already registered with another account. Please log out and sign in with this Phone Number directly.");
+                // Optional: You could offer to logout automatically here
+                // logout(); 
+                // navigate('/login');
             } else if (error.code === 'auth/invalid-verification-code') {
                 alert("Invalid OTP code.");
             } else {
