@@ -1,9 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import { User, Save, Loader2, ArrowLeft, LogOut, Phone, Mail, ShieldCheck } from 'lucide-react';
+import { User, Save, Loader2, ArrowLeft, LogOut, Phone, Mail, ShieldCheck, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { auth, RecaptchaVerifier, signInWithPhoneNumber } from '../firebaseConfig';
+import { auth } from '../firebaseConfig'; // Your initialized auth instance
+import { 
+    RecaptchaVerifier, 
+    signInWithPhoneNumber, 
+    PhoneAuthProvider, 
+    linkWithCredential 
+} from 'firebase/auth';
 
 const ProfilePage = () => {
     const { user, updateUser, logout } = useAuth();
@@ -113,19 +119,33 @@ const ProfilePage = () => {
         }
     };
 
-    // 5. Verify & Final Save Logic
+    // 5. Verify & Link Account (THE FIX)
     const verifyAndSave = async () => {
         setLoading(true);
         try {
             if (!confirmObj) return;
-            await confirmObj.confirm(otp); // Firebase Verify
-            await saveToBackend(phoneNumber); // Backend Save
+
+            // 👇 CRITICAL CHANGE: Create Credential manually
+            const credential = PhoneAuthProvider.credential(confirmObj.verificationId, otp);
             
-            setIsVerifying(false); // Hide OTP Input
+            // 👇 LINK the phone to the existing Google User (instead of signing in)
+            await linkWithCredential(auth.currentUser, credential);
+            
+            // If successful, save to backend
+            await saveToBackend(phoneNumber);
+            
+            setIsVerifying(false);
             setOtp('');
         } catch (error) {
             console.error("Verification Error:", error);
-            alert("Invalid OTP code");
+            
+            if (error.code === 'auth/credential-already-in-use') {
+                alert("This phone number is already linked to another account.");
+            } else if (error.code === 'auth/invalid-verification-code') {
+                alert("Invalid OTP code.");
+            } else {
+                alert("Verification failed: " + error.message);
+            }
             setLoading(false);
         }
     };
