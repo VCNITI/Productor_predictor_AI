@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import { User, Save, Loader2, ArrowLeft, LogOut, Phone, Mail, ShieldCheck } from 'lucide-react';
+import { User, Save, Loader2, ArrowLeft, LogOut, Phone, Mail, ShieldCheck, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { auth, RecaptchaVerifier, signInWithPhoneNumber } from '../firebaseConfig';
+// 👇 Added PhoneAuthProvider and linkWithCredential
+import { auth, RecaptchaVerifier, signInWithPhoneNumber, PhoneAuthProvider, linkWithCredential } from '../firebaseConfig';
 
 const ProfilePage = () => {
     const { user, updateUser, logout } = useAuth();
@@ -18,7 +19,7 @@ const ProfilePage = () => {
     // --- UI State ---
     const [loading, setLoading] = useState(false);
     const [successMsg, setSuccessMsg] = useState('');
-    const [isVerifying, setIsVerifying] = useState(false); // Controls Inline OTP display
+    const [isVerifying, setIsVerifying] = useState(false);
     const [otp, setOtp] = useState('');
     const [confirmObj, setConfirmObj] = useState(null);
 
@@ -38,7 +39,7 @@ const ProfilePage = () => {
         }
     }, [user, navigate]);
 
-    // 2. Cleanup Recaptcha on Unmount (Prevents "element removed" error)
+    // 2. Cleanup Recaptcha
     useEffect(() => {
         return () => {
             if (verifierRef.current) {
@@ -49,7 +50,7 @@ const ProfilePage = () => {
         };
     }, []);
 
-    // Helper: Initialize Recaptcha Instance
+    // Helper: Initialize Recaptcha
     const setupRecaptcha = () => {
         if (verifierRef.current) return verifierRef.current;
         if (recaptchaRef.current) {
@@ -62,34 +63,31 @@ const ProfilePage = () => {
         }
     };
 
-    // 3. Handle Main Button Click (Save OR Verify)
+    // 3. Handle Main Button Click
     const handleSubmit = async (e) => {
         e.preventDefault();
         
-        // Mode A: Verify OTP
         if (isVerifying) {
             await verifyAndSave();
             return;
         }
 
-        // Mode B: Initial Save Click
         setLoading(true);
         setSuccessMsg('');
 
         const cleanNewPhone = phoneNumber.replace(/\s+/g, '');
         const cleanOldPhone = (user.phoneNumber || '').replace(/\s+/g, '');
 
-        // CHECK: If Phone changed -> Send OTP
+        // If phone changed, verify it
         if (cleanNewPhone !== cleanOldPhone && cleanNewPhone.length > 9) {
             await sendOtp(cleanNewPhone);
             return;
         }
 
-        // CHECK: If Phone same/empty -> Just Save
         await saveToBackend(phoneNumber);
     };
 
-    // 4. Send OTP Logic
+    // 4. Send OTP
     const sendOtp = async (phoneInput) => {
         try {
             let formatted = phoneInput.startsWith('+') ? phoneInput : `+91${phoneInput}`;
@@ -97,15 +95,15 @@ const ProfilePage = () => {
             const appVerifier = setupRecaptcha();
             if (!appVerifier) throw new Error("Recaptcha setup failed");
 
+            // Request OTP
             const confirmation = await signInWithPhoneNumber(auth, formatted, appVerifier);
             setConfirmObj(confirmation);
-            setIsVerifying(true); // SHOW INLINE OTP INPUT
+            setIsVerifying(true);
             setLoading(false);
         } catch (error) {
             console.error("OTP Error:", error);
             alert("Error sending OTP: " + error.message);
             setLoading(false);
-            // Reset verifier on error
             if (verifierRef.current) {
                 verifierRef.current.clear();
                 verifierRef.current = null;
@@ -113,24 +111,38 @@ const ProfilePage = () => {
         }
     };
 
-    // 5. Verify & Final Save Logic
+    // 5. Verify & Link Account (THE FIX)
     const verifyAndSave = async () => {
         setLoading(true);
         try {
             if (!confirmObj) return;
-            await confirmObj.confirm(otp); // Firebase Verify
-            await saveToBackend(phoneNumber); // Backend Save
+
+            // 👇 CRITICAL CHANGE: Create Credential manually
+            const credential = PhoneAuthProvider.credential(confirmObj.verificationId, otp);
             
-            setIsVerifying(false); // Hide OTP Input
+            // 👇 LINK the phone to the existing Google User (instead of signing in)
+            await linkWithCredential(auth.currentUser, credential);
+            
+            // If successful, save to backend
+            await saveToBackend(phoneNumber);
+            
+            setIsVerifying(false);
             setOtp('');
         } catch (error) {
             console.error("Verification Error:", error);
-            alert("Invalid OTP code");
+            
+            if (error.code === 'auth/credential-already-in-use') {
+                alert("This phone number is already linked to another account.");
+            } else if (error.code === 'auth/invalid-verification-code') {
+                alert("Invalid OTP code.");
+            } else {
+                alert("Verification failed: " + error.message);
+            }
             setLoading(false);
         }
     };
 
-    // 6. Backend Sync Function
+    // 6. Backend Sync
     const saveToBackend = async (finalPhone) => {
         try {
             const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/users/sync`, {
@@ -160,7 +172,7 @@ const ProfilePage = () => {
         }
     };
 
-    // Cancel OTP Mode (e.g., typed wrong number)
+    // Cancel OTP
     const handleCancelOtp = () => {
         setIsVerifying(false);
         setOtp('');
@@ -169,7 +181,6 @@ const ProfilePage = () => {
 
     if (!user) return null;
 
-    // Logic: Lock phone ONLY if they logged in via Phone (no email) AND have a number
     const isPhoneLocked = !!user.phoneNumber && user.phoneNumber.length > 5 && !user.email;
 
     return (
@@ -222,7 +233,7 @@ const ProfilePage = () => {
                                         type="text" 
                                         value={firstName}
                                         onChange={e => setFirstName(e.target.value)}
-                                        disabled={isVerifying} // Lock while verifying
+                                        disabled={isVerifying}
                                         className="w-full p-3.5 bg-slate-50 border border-slate-200 rounded-xl font-bold focus:border-purple-500 focus:bg-white outline-none transition-all text-sm sm:text-base disabled:opacity-50"
                                     />
                                 </div>
@@ -238,7 +249,7 @@ const ProfilePage = () => {
                                 </div>
                             </div>
 
-                            {/* Email - Always Locked */}
+                            {/* Email - Locked */}
                             <div className="space-y-1.5">
                                 <label className="text-xs font-bold text-slate-500 uppercase ml-1">Email Address</label>
                                 <div className="relative">
@@ -274,7 +285,6 @@ const ProfilePage = () => {
                                         value={phoneNumber}
                                         onChange={e => setPhoneNumber(e.target.value)}
                                         placeholder="Add your phone number"
-                                        // Lock if: Phone Login OR Currently Verifying
                                         disabled={isPhoneLocked || isVerifying}
                                         className={`w-full pl-11 pr-4 py-3.5 border rounded-xl font-bold outline-none transition-all text-sm sm:text-base ${
                                             (isPhoneLocked || isVerifying)
@@ -285,7 +295,7 @@ const ProfilePage = () => {
                                 </div>
                             </div>
 
-                            {/* --- INLINE OTP FIELD (Slides Down) --- */}
+                            {/* --- INLINE OTP FIELD --- */}
                             <AnimatePresence>
                                 {isVerifying && (
                                     <motion.div
@@ -316,7 +326,6 @@ const ProfilePage = () => {
                                 )}
                             </AnimatePresence>
 
-                            {/* Action Button */}
                             <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
                                 {successMsg ? (
                                     <span className="text-green-600 font-bold text-xs sm:text-sm animate-pulse">{successMsg}</span>
@@ -335,7 +344,6 @@ const ProfilePage = () => {
 
                         </form>
 
-                        {/* RECAPTCHA CONTAINER (Must remain rendered) */}
                         <div ref={recaptchaRef} className="mt-4"></div>
                     </div>
                 </motion.div>
