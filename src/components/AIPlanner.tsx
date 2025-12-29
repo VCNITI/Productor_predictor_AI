@@ -14,7 +14,8 @@ const AIPlanner: React.FC = () => {
   return (
     <section
       id="ai-planner"
-      className="py-20 relative overflow-hidden bg-white"
+      // --- UPDATED PADDING HERE (py-10 instead of py-20 for mobile) ---
+      className="py-10 md:py-20 relative overflow-hidden bg-white"
     >
       {/* Background Decor */}
       <div className="absolute inset-0 bg-gray-50/50">

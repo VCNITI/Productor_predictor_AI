@@ -11,7 +11,11 @@ const FindProf: React.FC = () => {
   };
 
   return (
-    <section id="find-professional" className="py-20 relative overflow-hidden bg-white">
+    <section 
+      id="find-professional" 
+      // --- UPDATED PADDING HERE (py-10 instead of py-20 for mobile) ---
+      className="py-10 md:py-20 relative overflow-hidden bg-white"
+    >
       
       {/* Background Decor (Matching AI Planner style) */}
       <div className="absolute inset-0 bg-gray-50/50 pointer-events-none">
@@ -37,15 +41,6 @@ const FindProf: React.FC = () => {
                   alt="Find Verified Professionals"
                   className="w-full h-auto object-cover"
                 />
-                
-                {/* Live Status Badge */}
-                {/* <div className="absolute top-6 left-6 bg-white/95 backdrop-blur-md px-4 py-2 rounded-full flex items-center gap-3 shadow-lg border border-gray-100">
-                    <span className="relative flex h-3 w-3">
-                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                      <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
-                    </span>
-                    <span className="text-xs font-bold text-green-700 uppercase tracking-wider">Live Network</span>
-                </div> */}
               </div>
 
               {/* Floating Stats Card (Bottom Right) */}
@@ -107,7 +102,6 @@ const FindProf: React.FC = () => {
                 >
                   Find Professionals <ArrowRight size={20} />
                 </button>
-                
                 
               </div>
             </div>

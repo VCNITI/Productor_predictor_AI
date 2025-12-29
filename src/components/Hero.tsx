@@ -32,7 +32,8 @@ const Hero = () => {
       <div className="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] bg-[#c58bff]/20 rounded-full blur-3xl" />
       <div className="absolute bottom-[-10%] left-[-10%] w-[400px] h-[400px] bg-[#a852e5]/10 rounded-full blur-3xl" />
 
-      <div className="relative z-10 max-w-7xl mx-auto px-6 pt-20 pb-24 md:pt-10 md:pb-26 grid lg:grid-cols-2 gap-12 items-center">
+      {/* --- UPDATED PADDING HERE (pb-8 instead of pb-24) --- */}
+      <div className="relative z-10 max-w-7xl mx-auto px-6 pt-20 pb-8 md:pt-10 md:pb-26 grid lg:grid-cols-2 gap-12 items-center">
         {/* LEFT COLUMN: Text Content */}
         <motion.div
           initial={{ opacity: 0, x: -50 }}
@@ -104,7 +105,8 @@ const Hero = () => {
         </motion.div>
 
         {/* RIGHT COLUMN: Visual Representation (Floating Cards) */}
-        <div className="relative h-full min-h-[400px] flex items-center justify-center lg:justify-end">
+        {/* --- UPDATED MIN-HEIGHT FOR MOBILE (min-h-[300px] instead of 400px) --- */}
+        <div className="relative h-full min-h-[300px] md:min-h-[400px] flex items-center justify-center lg:justify-end">
           {/* Abstract Background blob behind cards */}
           <div className="absolute inset-0 bg-gradient-to-tr from-purple-100 to-white rounded-full opacity-50 blur-2xl transform scale-90" />
 
