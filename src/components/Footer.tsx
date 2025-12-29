@@ -56,7 +56,7 @@ const Footer = () => {
 
         {/* 3. Giant Subtle Watermark (FIXED) */}
         <div className="absolute -bottom-0 right-0 pointer-events-none select-none opacity-[0.03] overflow-hidden w-full flex justify-end translate-y-1/4 md:translate-y-[30%]">
-          <h1 className="text-8xl md:text-[20rem] font-black leading-none tracking-tighter text-gray-900 pr-4 md:pr-0">
+          <h1 className="text-8xl md:text-[20rem] font-black leading-none tracking-tighter  text-gray-900  pr-4 md:pr-0">
             VCNITI
           </h1>
         </div>
@@ -74,7 +74,7 @@ const Footer = () => {
                 <div className="bg-purple-50 p-2.5 rounded-xl border border-purple-100 group-hover:bg-[#a852e5] group-hover:text-white transition-all duration-300">
                   <Logo className="h-8 w-8 text-[#a852e5] group-hover:text-white transition-colors" />
                 </div>
-                <span className="text-2xl font-extrabold tracking-tight text-gray-900">
+                <span className="text-2xl font-bold tracking-tight text-gray-900 group-hover:text-[#a852e5] transition-colors">
                   VCNITI
                 </span>
               </a>
