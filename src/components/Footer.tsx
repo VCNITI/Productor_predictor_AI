@@ -201,7 +201,7 @@ const Footer = () => {
 
           {/* Bottom Bar */}
           <div className="border-t border-gray-100 py-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-medium text-gray-400">
-            <p>© 2025 VCNITI Technologies Pvt Ltd.</p>
+            <p>© 2026 VCNITI Technologies Pvt Ltd.</p>
             <div className="flex flex-wrap justify-center md:justify-start gap-x-6 gap-y-2 text-sm md:text-base">
               <Dialog>
                 <DialogTrigger asChild>
