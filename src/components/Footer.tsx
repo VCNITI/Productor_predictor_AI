@@ -12,6 +12,7 @@ import {
 import Logo from "./Logo";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import { Badge } from "@/components/ui/badge";
 import {
   Dialog,
   DialogContent,
@@ -77,6 +78,9 @@ const Footer = () => {
                 <span className="text-2xl font-bold tracking-tight text-gray-900 group-hover:text-[#a852e5] transition-colors">
                   VCNITI
                 </span>
+                <Badge variant="secondary" className="bg-[#a852e5]/10 text-[#a852e5] hover:bg-[#a852e5]/20 border-[#a852e5]/20 text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 ml-1 pointer-events-none">
+                  Beta
+                </Badge>
               </a>
               <p className="text-gray-500 leading-relaxed max-w-sm text-sm">
                 VCNITI is a AI Powered Q-commerce platform that enables ultra-fast delivery of construction and interior materials directly to homes and sites. We simplify procurement through real-time tracking, verified manufacturers, transparent pricing, and instant order fulfilment.

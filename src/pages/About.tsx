@@ -11,9 +11,16 @@ import {
   Leaf,
   Layers,
   Zap,
+  ShoppingCart,
+  Store,
+  MessageSquare,
+  ArrowRight
 } from "lucide-react";
 import { motion } from "framer-motion";
-import constructionHero from "@/assets/construction-hero.jpg";
+import { Link } from "react-router-dom";
+
+// Replaced import with a constant string to avoid missing asset error
+const constructionHero = "https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=2089&auto=format&fit=crop";
 
 const About = () => {
   // Animation Variants
@@ -73,8 +80,8 @@ const About = () => {
                 variants={fadeIn}
                 className="text-xl text-gray-600 leading-relaxed mb-8"
               >
-                VCNITI is India’s first AI-powered Q-commerce ecosystem. We
-                don't just sell materials; we engineer the supply chain for
+                VCNITI is Bengaluru's fastest construction material platform and India's first AI-powered Q-commerce ecosystem. We
+                don't just sell building materials; we engineer the construction procurement platform for
                 speed, accuracy, and trust.
               </motion.p>
 
@@ -84,8 +91,8 @@ const About = () => {
                   size="lg"
                   className="rounded-full h-14 px-8 bg-gray-900 hover:bg-black text-white text-lg shadow-xl shadow-gray-900/10 transition-transform hover:-translate-y-1"
                 >
-                  <a href="https://www.vcniti.com/">
-                    Explore Platform <ArrowUpRight className="ml-2 w-5 h-5" />
+                  <a href="https://www.vcniti.com/" className="inline-flex items-center gap-2">
+                    Explore Platform <ArrowUpRight className="w-5 h-5" />
                   </a>
                 </Button>
               </motion.div>
@@ -110,6 +117,7 @@ const About = () => {
                   src="https://images.unsplash.com/photo-1541888946425-d81bb19240f5?q=80&w=2070&auto=format&fit=crop"
                   alt="Modern Construction"
                   className="w-full h-[400px] object-cover"
+                  loading="lazy"
                 />
 
                 {/* Floating Badge inside Image */}
@@ -129,6 +137,71 @@ const About = () => {
           </div>
         </section>
 
+        {/* --- RECOGNIZED BY / TRUST BADGES --- */}
+        <section className="py-10 sm:py-14 px-6 border-y border-gray-100 bg-gray-50/50">
+          <div className="max-w-7xl mx-auto">
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="flex flex-col items-center gap-8"
+            >
+              <p className="text-xs font-bold tracking-[0.2em] text-gray-400 uppercase">
+                Recognized By
+              </p>
+              <div className="flex flex-col sm:flex-row items-stretch gap-4 sm:gap-8 w-full sm:w-auto">
+                {/* Startup India / DPIIT Badge */}
+                <div className="flex items-center gap-5 bg-white border border-gray-100 rounded-2xl px-6 py-5 shadow-sm hover:shadow-md transition-shadow">
+                  <div className="w-24 h-24 sm:w-32 sm:h-32 rounded-xl flex items-center justify-center flex-shrink-0 p-2">
+                    <img
+                      src="/DPIIT-header.png"
+                      alt="Startup India - DPIIT Recognized"
+                      className="w-full h-full object-contain"
+                      loading="lazy"
+                    />
+                  </div>
+                  <div className="border-l border-gray-200 pl-4">
+                    <p className="text-sm font-bold text-gray-900 leading-tight">DPIIT Recognized</p>
+                    <p className="text-[11px] text-gray-400">Startup India</p>
+                  </div>
+                </div>
+
+                {/* MSME Badge */}
+                <div className="flex items-center gap-5 bg-white border border-gray-100 rounded-2xl px-6 py-5 shadow-sm hover:shadow-md transition-shadow">
+                  <div className="w-24 h-24 sm:w-32 sm:h-32 rounded-xl flex items-center justify-center flex-shrink-0 p-2">
+                    <img
+                      src="/msme-logo-500x500.webp"
+                      alt="MSME Registered"
+                      className="w-full h-full object-contain"
+                      loading="lazy"
+                    />
+                  </div>
+                  <div className="border-l border-gray-200 pl-4">
+                    <p className="text-sm font-bold text-gray-900 leading-tight">MSME Registered</p>
+                    <p className="text-[11px] text-gray-400">Govt. of India</p>
+                  </div>
+                </div>
+
+                {/* Karnataka Startup Badge */}
+                <div className="flex items-center gap-5 bg-white border border-gray-100 rounded-2xl px-6 py-5 shadow-sm hover:shadow-md transition-shadow">
+                  <div className="w-24 h-24 sm:w-32 sm:h-32 rounded-xl flex items-center justify-center flex-shrink-0 p-2">
+                    <img
+                      src="/site-logo-sticky.png"
+                      alt="Karnataka Startup"
+                      className="w-full h-full object-contain"
+                      loading="lazy"
+                    />
+                  </div>
+                  <div className="border-l border-gray-200 pl-4">
+                    <p className="text-sm font-bold text-gray-900 leading-tight">Startup Karnataka</p>
+                    <p className="text-[11px] text-gray-400">Govt. of Karnataka</p>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        </section>
+
         {/* --- 2. STATS & VISION --- */}
         <section className="py-20 px-6">
           <div className="max-w-7xl mx-auto grid lg:grid-cols-12 gap-12 items-center">
@@ -143,6 +216,7 @@ const About = () => {
                 src={constructionHero}
                 alt="Engineering"
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                loading="lazy"
               />
               <div className="absolute inset-0 bg-gray-900/10 group-hover:bg-gray-900/0 transition-colors" />
 
@@ -187,14 +261,14 @@ const About = () => {
                 .
               </h3>
               <p className="text-gray-600 leading-relaxed text-lg">
-                VCNITI Technologies Private Limited was founded to solve a
+                VCNITI Technologies Private Limited was founded as a building materials startup in Bengaluru to solve a
                 chaotic problem: construction procurement is slow, opaque, and
-                unpredictable.
+                unpredictable. We started in Bengaluru and are proudly serving contractors across the city, from Whitefield to HSR Layout, JP Nagar, and beyond.
               </p>
               <p className="text-gray-600 leading-relaxed">
                 We combine advanced algorithms with real-time market data to
                 provide accurate cost estimates, connect buyers with trusted
-                suppliers, and enable seamless project execution.
+                suppliers, and enable seamless project execution with quick commerce construction delivery in India.
               </p>
 
               <div className="flex gap-4 pt-4 items-center">
@@ -303,9 +377,14 @@ const About = () => {
                   </div>
                   <div className="flex justify-between items-end">
                     <div>
-                      <h3 className="text-2xl font-bold mb-2">
-                        Project Management
-                      </h3>
+                      <div className="flex items-center gap-3 mb-2">
+                        <h3 className="text-2xl font-bold">
+                          Project Management
+                        </h3>
+                        <Badge variant="secondary" className="bg-purple-500/20 text-purple-100 hover:bg-purple-500/30 border border-purple-400/30 text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 pointer-events-none">
+                          Coming Soon
+                        </Badge>
+                      </div>
                       <p className="text-purple-100 max-w-md">
                         End-to-end tracking from foundation to finish. Monitor
                         progress remotely.
@@ -387,6 +466,7 @@ const About = () => {
             </div>
           </div>
         </section>
+
       </main>
 
     </div>
