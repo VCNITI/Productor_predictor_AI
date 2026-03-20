@@ -27,7 +27,7 @@ const Footer = () => {
   const platformLinks = [
     { text: "Home", to: "/" },
     { text: "Store", to: "https://www.vcniti.com" },
-    { text: "AI Estimater", to: "/planner" },
+    { text: "AI Estimator", to: "/planner" },
     { text: "Find Pros", to: "/find-professionals" },
   ];
 
@@ -65,7 +65,7 @@ const Footer = () => {
         <div className="container mx-auto px-6 pt-20 pb-0 relative z-10">
           {/* Main Content Grid (FIXED MARGIN) */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12 lg:gap-8 mb-10">
-            
+
             {/* Brand Column (Span 4) */}
             <div className="lg:col-span-4 space-y-6">
               <a
@@ -177,20 +177,20 @@ const Footer = () => {
                   </span>
                 </li>
                 <li className="w-full">
-              <a 
-                href="tel:+919740059699" 
-                className="flex gap-4 items-center group cursor-pointer"
-              >
-                {/* Icon: Added hover effect */}
-                <div className="bg-purple-50 p-1.5 rounded-md text-[#a852e5] group-hover:bg-purple-100 transition-colors">
-                  <Phone size={16} />
-                </div>
+                  <a
+                    href="tel:+919740059699"
+                    className="flex gap-4 items-center group cursor-pointer"
+                  >
+                    {/* Icon: Added hover effect */}
+                    <div className="bg-purple-50 p-1.5 rounded-md text-[#a852e5] group-hover:bg-purple-100 transition-colors">
+                      <Phone size={16} />
+                    </div>
 
-                {/* Text: Added hover color change */}
-               <span className="text-gray-500 text-sm group-hover:text-purple-600 transition-colors font-medium">
-                 +91 9740059699
-               </span>
-              </a>
+                    {/* Text: Added hover color change */}
+                    <span className="text-gray-500 text-sm group-hover:text-purple-600 transition-colors font-medium">
+                      +91 9740059699
+                    </span>
+                  </a>
                 </li>
                 <li className="flex gap-4 items-center">
                   <div className="bg-purple-50 p-1.5 rounded-md text-[#a852e5]">
@@ -200,7 +200,7 @@ const Footer = () => {
                 </li>
               </ul>
             </div>
-            
+
           </div>
 
           {/* Bottom Bar */}
