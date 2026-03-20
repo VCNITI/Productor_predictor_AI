@@ -78,7 +78,7 @@ const Hero = () => {
               href="#ai-planner"
               className="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-transparent border-2 border-[#a852e5] text-[#a852e5] font-bold hover:bg-[#a852e5] hover:text-white transition-colors duration-300 shadow-sm flex items-center justify-center"
             >
-              AI Estimater
+              AI Estimator
             </a>
 
             <a
@@ -100,7 +100,7 @@ const Hero = () => {
             <div className="flex items-center gap-2">
               <CheckCircle2 className="w-4 h-4 text-green-500" /> Verified Pros
             </div>
-            
+
           </div>
         </motion.div>
 
@@ -158,7 +158,7 @@ const Hero = () => {
                 <div className="bg-blue-50 w-10 h-10 flex items-center justify-center rounded-lg text-blue-600 mb-3">
                   <Brain size={20} />
                 </div>
-                <h4 className="font-bold text-gray-900">AI Estimater</h4>
+                <h4 className="font-bold text-gray-900">AI Estimator</h4>
                 <p className="text-xs text-gray-500 mt-1">
                   Instant material estimates
                 </p>
@@ -176,9 +176,9 @@ const Hero = () => {
                 </div>
                 <h4 className="font-bold text-gray-900">Find Pros</h4>
                 <p className="text-xs text-gray-500 mt-1">
-                  Contractors, Architects & more  
+                  Contractors, Architects & more
                 </p>
-                
+
               </motion.div>
             </div>
           </div>
