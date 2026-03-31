@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { MessageCircle, X, Sparkles } from 'lucide-react';
 
-const CUSTOM_GPT_URL = 'https://chatgpt.com/g/g-69cb74b1ffd4819181166360d6c61c71-vcniti-construction-materials-delivery';
+const CUSTOM_GPT_URL = 'https://chatgpt.com/g/g-69cb74b1ffd4819181166360d6c61c71-vcniti-construction-materials-delivery-beta';
 
 export default function AIAssistantButton() {
     const [isVisible, setIsVisible] = useState(false);
