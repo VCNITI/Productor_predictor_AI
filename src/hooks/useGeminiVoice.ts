@@ -296,7 +296,8 @@ export function useGeminiVoice() {
       setStatus('Connecting...');
       let token;
       
-      const localApiKey = import.meta.env.VITE_GEMINI_API_KEY;
+      const rawKey = import.meta.env.VITE_GEMINI_API_KEY;
+      const localApiKey = rawKey ? rawKey.replace(/['"]/g, '') : undefined;
       
       if (localApiKey) {
         // 🛠 LOCAL DEV MODE: Call Gemini directly if the Vite environment variable is present
