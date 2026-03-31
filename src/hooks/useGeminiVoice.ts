@@ -286,6 +286,10 @@ export function useGeminiVoice() {
       audioContextRef.current.close();
       audioContextRef.current = null;
     }
+    if (wsRef.current) {
+      wsRef.current.close();
+      wsRef.current = null;
+    }
 
     setStatus('Tap to start talking');
     setStatusType('normal');
@@ -294,40 +298,13 @@ export function useGeminiVoice() {
   const connectToGemini = async () => {
     try {
       setStatus('Connecting...');
-      let token;
       
-      const rawKey = import.meta.env.VITE_GEMINI_API_KEY;
-      const localApiKey = rawKey ? rawKey.replace(/['"]/g, '') : undefined;
+      // 🚀 HITS LOCAL VITE MIDDLEWARE OR VERCEL SERVERLESS FUNCTION PERFECTLY
+      const tokenRes = await fetch('/api/token');
+      if (!tokenRes.ok) throw new Error('Failed to get token');
       
-      if (localApiKey) {
-        // 🛠 LOCAL DEV MODE: Call Gemini directly if the Vite environment variable is present
-        const response = await fetch(
-          `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-live-preview:generateEphemeralToken?key=${localApiKey}`,
-          {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              config: {
-                responseModalities: ["AUDIO"],
-                speechConfig: {
-                  voiceConfig: {
-                    prebuiltVoiceConfig: { voiceName: "Kore" }
-                  }
-                }
-              }
-            })
-          }
-        );
-        if (!response.ok) throw new Error('Failed to get local token');
-        const tokenData = await response.json();
-        token = tokenData.token;
-      } else {
-        // 🚀 PRODUCTION MODE: Hit the secure Vercel /api/token endpiont
-        const tokenRes = await fetch('/api/token');
-        if (!tokenRes.ok) throw new Error('Failed to get token');
-        const tokenData = await tokenRes.json();
-        token = tokenData.token;
-      }
+      const tokenData = await tokenRes.json();
+      const token = tokenData.token;
 
       const wsUrl = `wss://generativelanguage.googleapis.com/ws/google.ai.generativelanguage.v1beta.GenerativeService.BidiGenerateContent?key=${token}`;
       wsRef.current = new WebSocket(wsUrl);
@@ -337,7 +314,7 @@ export function useGeminiVoice() {
         
         const setupMsg = {
           setup: {
-            model: "models/gemini-3.1-flash-live-preview",
+            model: "models/gemini-2.0-flash-exp",
             generationConfig: {
               responseModalities: ["AUDIO"],
               speechConfig: {
@@ -417,6 +394,11 @@ export function useGeminiVoice() {
   };
 
   const toggleVoice = () => {
+    if (isListening) {
+      stopListening();
+      return;
+    }
+
     if (!wsRef.current || wsRef.current.readyState !== WebSocket.OPEN) {
       connectToGemini().then(() => {
         setTimeout(() => startListening(), 1000);
@@ -424,11 +406,7 @@ export function useGeminiVoice() {
       return;
     }
 
-    if (isListening) {
-      stopListening();
-    } else {
-      startListening();
-    }
+    startListening();
   };
 
   return {

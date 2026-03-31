@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
-import { Dialog, DialogContent } from './ui/dialog';
-import { Mic, X } from 'lucide-react';
+import { Dialog, DialogContent, DialogTitle, DialogDescription } from './ui/dialog';
+import { Mic, Square, X } from 'lucide-react';
 import { useGeminiVoice } from '../hooks/useGeminiVoice';
 
 interface VoiceAssistantDialogProps {
@@ -38,6 +38,9 @@ export function VoiceAssistantDialog({ isOpen, onOpenChange }: VoiceAssistantDia
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[425px] bg-[#0D1117] border-[#30363D] text-[#F0F6FC] p-0 overflow-hidden hide-close">
+        <DialogTitle className="sr-only">VCNITI Voice Assistant</DialogTitle>
+        <DialogDescription className="sr-only">Speak into your microphone to search VCNITI products and prices.</DialogDescription>
+        
         <div className="flex flex-col items-center justify-center p-6 w-full relative">
           
           <button 
@@ -67,12 +70,16 @@ export function VoiceAssistantDialog({ isOpen, onOpenChange }: VoiceAssistantDia
               onClick={toggleVoice}
               className={`absolute inset-4 rounded-full flex items-center justify-center transition-all duration-300 z-10
                 ${isListening 
-                  ? 'bg-[#1B5E20] text-white' 
+                  ? 'bg-red-500/80 text-white' 
                   : 'bg-[#161B22] text-[#8B949E] hover:bg-[#1C2333]'}`
               }
               disabled={statusType === 'error'}
             >
-              <Mic size={48} className={isListening || isSpeaking ? 'text-white' : 'currentColor'} />
+              {isListening ? (
+                <Square size={24} fill="currentColor" className="text-white" />
+              ) : (
+                <Mic size={48} className={isSpeaking ? 'text-white' : 'currentColor'} />
+              )}
             </button>
           </div>
 
