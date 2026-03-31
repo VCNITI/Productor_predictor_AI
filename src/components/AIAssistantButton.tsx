@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react';
 import { MessageCircle, X, Sparkles } from 'lucide-react';
-import { VoiceAssistantDialog } from './VoiceAssistantDialog';
+
+const CUSTOM_GPT_URL = 'https://chatgpt.com/g/g-69cb74b1ffd4819181166360d6c61c71-vcniti-construction-materials-delivery-beta';
 
 export default function AIAssistantButton() {
     const [isVisible, setIsVisible] = useState(false);
     const [isDismissed, setIsDismissed] = useState(false);
     const [showTooltip, setShowTooltip] = useState(false);
     const [isWebView, setIsWebView] = useState(false);
-    const [isDialogOpen, setIsDialogOpen] = useState(false);
 
     useEffect(() => {
         // Detect if running inside Android/iOS WebView (app) — hide button in app
@@ -33,7 +33,27 @@ export default function AIAssistantButton() {
     const handleClick = (e: React.MouseEvent) => {
         e.preventDefault();
         setShowTooltip(false);
-        setIsDialogOpen(true);
+
+        const ua = navigator.userAgent || '';
+        const isAndroidWebView = /wv|WebView/.test(ua) || (ua.includes('Android') && !ua.includes('Chrome/'));
+        const isIOSWebView = /(iPhone|iPod|iPad).*AppleWebKit(?!.*Safari)/i.test(ua);
+
+        if (isAndroidWebView) {
+            const intentUrl = `intent://${CUSTOM_GPT_URL.replace('https://', '')}#Intent;scheme=https;action=android.intent.action.VIEW;end`;
+            window.location.href = intentUrl;
+        } else if (isIOSWebView) {
+            try {
+                if ((window as any).webkit?.messageHandlers?.openExternal) {
+                    (window as any).webkit.messageHandlers.openExternal.postMessage(CUSTOM_GPT_URL);
+                } else {
+                    window.open(CUSTOM_GPT_URL, '_system');
+                }
+            } catch {
+                window.open(CUSTOM_GPT_URL, '_blank');
+            }
+        } else {
+            window.open(CUSTOM_GPT_URL, '_blank', 'noopener,noreferrer');
+        }
     };
 
     if (isWebView || isDismissed || !isVisible) return null;
@@ -73,11 +93,6 @@ export default function AIAssistantButton() {
                     AI Assistant
                 </span>
             </button>
-
-            <VoiceAssistantDialog 
-                isOpen={isDialogOpen} 
-                onOpenChange={setIsDialogOpen} 
-            />
         </div>
     );
 }
