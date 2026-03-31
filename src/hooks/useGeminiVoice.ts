@@ -294,13 +294,39 @@ export function useGeminiVoice() {
   const connectToGemini = async () => {
     try {
       setStatus('Connecting...');
-      // Use local wrapper if available during dev or direct vercel endpoint
-      // Fetch dynamic token from our serverless function
-      const tokenRes = await fetch('/api/token');
-      if (!tokenRes.ok) throw new Error('Failed to get token');
+      let token;
       
-      const tokenData = await tokenRes.json();
-      const token = tokenData.token;
+      const localApiKey = import.meta.env.VITE_GEMINI_API_KEY;
+      
+      if (localApiKey) {
+        // 🛠 LOCAL DEV MODE: Call Gemini directly if the Vite environment variable is present
+        const response = await fetch(
+          `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-live-preview:generateEphemeralToken?key=${localApiKey}`,
+          {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              config: {
+                responseModalities: ["AUDIO"],
+                speechConfig: {
+                  voiceConfig: {
+                    prebuiltVoiceConfig: { voiceName: "Kore" }
+                  }
+                }
+              }
+            })
+          }
+        );
+        if (!response.ok) throw new Error('Failed to get local token');
+        const tokenData = await response.json();
+        token = tokenData.token;
+      } else {
+        // 🚀 PRODUCTION MODE: Hit the secure Vercel /api/token endpiont
+        const tokenRes = await fetch('/api/token');
+        if (!tokenRes.ok) throw new Error('Failed to get token');
+        const tokenData = await tokenRes.json();
+        token = tokenData.token;
+      }
 
       const wsUrl = `wss://generativelanguage.googleapis.com/ws/google.ai.generativelanguage.v1beta.GenerativeService.BidiGenerateContent?key=${token}`;
       wsRef.current = new WebSocket(wsUrl);
