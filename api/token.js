@@ -10,11 +10,13 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+  const rawKey = process.env.GEMINI_API_KEY;
 
-  if (!GEMINI_API_KEY) {
-    return res.status(500).json({ error: 'GEMINI_API_KEY is not configured on the server environment.' });
+  if (!rawKey) {
+    return res.status(500).json({ error: 'GEMINI_API_KEY is not configured on the Vercel server environment.' });
   }
+
+  const GEMINI_API_KEY = rawKey.replace(/['"]/g, '').trim();
 
   try {
     const response = await fetch(
@@ -35,12 +37,14 @@ export default async function handler(req, res) {
       }
     );
 
+    const text = await response.text();
+    
     if (!response.ok) {
-      console.error('Gemini API error:', response.status);
-      return res.status(500).json({ error: 'Token generation failed' });
+      console.error('Gemini API error:', response.status, text);
+      return res.status(500).json({ error: `Vercel Token Error ${response.status}: ${text || 'Empty response'}` });
     }
 
-    const data = await response.json();
+    const data = JSON.parse(text || '{}');
     return res.status(200).json({ token: data.token });
 
   } catch (error) {
